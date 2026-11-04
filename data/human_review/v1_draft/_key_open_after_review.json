@@ -1,0 +1,478 @@
+{
+ "C01_calver_compare-01": {
+  "seed": "C01_calver_compare",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C01_calver_compare-02": {
+  "seed": "C01_calver_compare",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C01_calver_compare-03": {
+  "seed": "C01_calver_compare",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C01_calver_compare-04": {
+  "seed": "C01_calver_compare",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C01_calver_compare-05": {
+  "seed": "C01_calver_compare",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C01_calver_compare-06": {
+  "seed": "C01_calver_compare",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-01": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-02": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-03": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-04": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-05": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C02_typed_tsv_parser-06": {
+  "seed": "C02_typed_tsv_parser",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C03_index_truncation-01": {
+  "seed": "C03_index_truncation",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C03_index_truncation-02": {
+  "seed": "C03_index_truncation",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C03_index_truncation-03": {
+  "seed": "C03_index_truncation",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C03_index_truncation-04": {
+  "seed": "C03_index_truncation",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C04_grader_assignment-01": {
+  "seed": "C04_grader_assignment",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C04_grader_assignment-02": {
+  "seed": "C04_grader_assignment",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C04_grader_assignment-03": {
+  "seed": "C04_grader_assignment",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C04_grader_assignment-04": {
+  "seed": "C04_grader_assignment",
+  "variant": "analogy-stated-partial",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "partial"
+ },
+ "C04_grader_assignment-05": {
+  "seed": "C04_grader_assignment",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C04_grader_assignment-06": {
+  "seed": "C04_grader_assignment",
+  "variant": "analogy-implied-partial",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "partial"
+ },
+ "C04_grader_assignment-07": {
+  "seed": "C04_grader_assignment",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C04_grader_assignment-08": {
+  "seed": "C04_grader_assignment",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C05_simpson_methods-01": {
+  "seed": "C05_simpson_methods",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C05_simpson_methods-02": {
+  "seed": "C05_simpson_methods",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C05_simpson_methods-03": {
+  "seed": "C05_simpson_methods",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "C05_simpson_methods-04": {
+  "seed": "C05_simpson_methods",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C05_simpson_methods-05": {
+  "seed": "C05_simpson_methods",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "C05_simpson_methods-06": {
+  "seed": "C05_simpson_methods",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-01": {
+  "seed": "D01_stockholm_parking",
+  "variant": "analogy-stated-wrong",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "wrong"
+ },
+ "D01_stockholm_parking-02": {
+  "seed": "D01_stockholm_parking",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-03": {
+  "seed": "D01_stockholm_parking",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-04": {
+  "seed": "D01_stockholm_parking",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-05": {
+  "seed": "D01_stockholm_parking",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-06": {
+  "seed": "D01_stockholm_parking",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D01_stockholm_parking-07": {
+  "seed": "D01_stockholm_parking",
+  "variant": "analogy-implied-wrong",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "wrong"
+ },
+ "D01_stockholm_parking-08": {
+  "seed": "D01_stockholm_parking",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D02_social_norm_library-01": {
+  "seed": "D02_social_norm_library",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D02_social_norm_library-02": {
+  "seed": "D02_social_norm_library",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D02_social_norm_library-03": {
+  "seed": "D02_social_norm_library",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D02_social_norm_library-04": {
+  "seed": "D02_social_norm_library",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D02_social_norm_library-05": {
+  "seed": "D02_social_norm_library",
+  "variant": "analogy-stated-wrong",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "wrong"
+ },
+ "D02_social_norm_library-06": {
+  "seed": "D02_social_norm_library",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D02_social_norm_library-07": {
+  "seed": "D02_social_norm_library",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D02_social_norm_library-08": {
+  "seed": "D02_social_norm_library",
+  "variant": "analogy-implied-wrong",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "wrong"
+ },
+ "D03_group_lending_lab-01": {
+  "seed": "D03_group_lending_lab",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-02": {
+  "seed": "D03_group_lending_lab",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-03": {
+  "seed": "D03_group_lending_lab",
+  "variant": "analogy-implied-partial",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "partial"
+ },
+ "D03_group_lending_lab-04": {
+  "seed": "D03_group_lending_lab",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-05": {
+  "seed": "D03_group_lending_lab",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-06": {
+  "seed": "D03_group_lending_lab",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-07": {
+  "seed": "D03_group_lending_lab",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D03_group_lending_lab-08": {
+  "seed": "D03_group_lending_lab",
+  "variant": "analogy-stated-partial",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "partial"
+ },
+ "D04_abc_makerspace-01": {
+  "seed": "D04_abc_makerspace",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D04_abc_makerspace-02": {
+  "seed": "D04_abc_makerspace",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D04_abc_makerspace-03": {
+  "seed": "D04_abc_makerspace",
+  "variant": "analogy-stated-partial",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "partial"
+ },
+ "D04_abc_makerspace-04": {
+  "seed": "D04_abc_makerspace",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D04_abc_makerspace-05": {
+  "seed": "D04_abc_makerspace",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D04_abc_makerspace-06": {
+  "seed": "D04_abc_makerspace",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D04_abc_makerspace-07": {
+  "seed": "D04_abc_makerspace",
+  "variant": "analogy-implied-partial",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "partial"
+ },
+ "D04_abc_makerspace-08": {
+  "seed": "D04_abc_makerspace",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D05_release_train_portal-01": {
+  "seed": "D05_release_train_portal",
+  "variant": "requirement-stated-full",
+  "role": "requirement",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D05_release_train_portal-02": {
+  "seed": "D05_release_train_portal",
+  "variant": "counter-stated-full",
+  "role": "counter",
+  "cue": "stated",
+  "fit": "full"
+ },
+ "D05_release_train_portal-03": {
+  "seed": "D05_release_train_portal",
+  "variant": "requirement-implied-full",
+  "role": "requirement",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D05_release_train_portal-04": {
+  "seed": "D05_release_train_portal",
+  "variant": "analogy-implied-full",
+  "role": "analogy",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D05_release_train_portal-05": {
+  "seed": "D05_release_train_portal",
+  "variant": "counter-implied-full",
+  "role": "counter",
+  "cue": "implied",
+  "fit": "full"
+ },
+ "D05_release_train_portal-06": {
+  "seed": "D05_release_train_portal",
+  "variant": "analogy-stated-full",
+  "role": "analogy",
+  "cue": "stated",
+  "fit": "full"
+ }
+}
