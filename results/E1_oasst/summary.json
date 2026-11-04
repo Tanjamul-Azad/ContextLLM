@@ -1,0 +1,22 @@
+{
+ "sample": {
+  "source": "OpenAssistant/oasst2",
+  "pages_requested": 150,
+  "pages_fetched": 150,
+  "rows": 15000,
+  "english_user_turns": 2254,
+  "unique_english_user_turns": 2111,
+  "short_turns": 2101,
+  "prefilter_hits": 40
+ },
+ "model_labelled_examples": 31,
+ "by_role": {
+  "requirement": 1,
+  "analogy": 7,
+  "counter-example": 23
+ },
+ "cross_domain": 0,
+ "rate_per_unique_english_turn": 0.0147,
+ "estimate_full_dataset": 265,
+ "note": "Labels come from a 3B model and are not yet hand-checked. The keyword prefilter misses many cases, so counts are a lower bound."
+}

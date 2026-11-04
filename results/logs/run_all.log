@@ -1,0 +1,1188 @@
+=== 2026-11-04 21:33:17 START src/run_behaviour.py qwen2.5-3b
+8 done, 122 to run
+8/122  10s
+16/122  15s
+24/122  27s
+32/122  34s
+40/122  41s
+48/122  48s
+56/122  50s
+64/122  64s
+72/122  71s
+80/122  81s
+88/122  92s
+96/122  106s
+104/122  115s
+112/122  125s
+120/122  133s
+122/122  139s
+scored 130 answers -> F:\UIU\13\Paper\ContextLLM\results\behaviour\qwen2.5-3b
+=== 2026-11-04 21:40:35 END   src/run_behaviour.py qwen2.5-3b (exit 0)
+=== 2026-11-04 21:40:35 START src/logit_lens.py qwen2.5-3b
+P1_helpdesk_triage {'final_diff': {'analogy': 3.44, 'requirement': 7.32, 'counter': 3.38}, 'final_top_token': {'analogy': 'Red', 'requirement': 'Red', 'counter': 'Red'}, 'separation_layer': 25, 'n_layers': 36, 'role_correct_at_output': False}
+P2_drone_pricing {'final_diff': {'analogy': -6.97, 'requirement': -3.36, 'counter': -9.73}, 'final_top_token': {'analogy': 'Flight', 'requirement': 'Flight', 'counter': 'Initial'}, 'separation_layer': 28, 'n_layers': 36, 'role_correct_at_output': False}
+P6_exam_hall_boarding {'final_diff': {'analogy': -1.51, 'requirement': 13.33, 'counter': -6.03}, 'final_top_token': {'analogy': 'Group', 'requirement': 'Zone', 'counter': 'Group'}, 'separation_layer': 23, 'n_layers': 36, 'role_correct_at_output': True}
+C1_window_sum {'final_diff': {'analogy': -7.74, 'requirement': 11.48, 'counter': -6.04}, 'final_top_token': {'analogy': '):\n', 'requirement': '=', 'counter': '):\n'}, 'separation_layer': 25, 'n_layers': 36, 'role_correct_at_output': True}
+C2_retry_backoff {'final_diff': {'analogy': 0.25, 'requirement': 5.0, 'counter': 1.25}, 'final_top_token': {'analogy': '1', 'requirement': '1', 'counter': '1'}, 'separation_layer': 28, 'n_layers': 36, 'role_correct_at_output': False}
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "probes": {
+  "P1_helpdesk_triage": {
+   "final_diff": {
+    "analogy": 3.44,
+    "requirement": 7.32,
+    "counter": 3.38
+   },
+   "final_top_token": {
+    "analogy": "Red",
+    "requirement": "Red",
+    "counter": "Red"
+   },
+   "separation_layer": 25,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  },
+  "P2_drone_pricing": {
+   "final_diff": {
+    "analogy": -6.97,
+    "requirement": -3.36,
+    "counter": -9.73
+   },
+   "final_top_token": {
+    "analogy": "Flight",
+    "requirement": "Flight",
+    "counter": "Initial"
+   },
+   "separation_layer": 28,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  },
+  "P6_exam_hall_boarding": {
+   "final_diff": {
+    "analogy": -1.51,
+    "requirement": 13.33,
+    "counter": -6.03
+   },
+   "final_top_token": {
+    "analogy": "Group",
+    "requirement": "Zone",
+    "counter": "Group"
+   },
+   "separation_layer": 23,
+   "n_layers": 36,
+   "role_correct_at_output": true
+  },
+  "C1_window_sum": {
+   "final_diff": {
+    "analogy": -7.74,
+    "requirement": 11.48,
+    "counter": -6.04
+   },
+   "final_top_token": {
+    "analogy": "):\n",
+    "requirement": "=",
+    "counter": "):\n"
+   },
+   "separation_layer": 25,
+   "n_layers": 36,
+   "role_correct_at_output": true
+  },
+  "C2_retry_backoff": {
+   "final_diff": {
+    "analogy": 0.25,
+    "requirement": 5.0,
+    "counter": 1.25
+   },
+   "final_top_token": {
+    "analogy": "1",
+    "requirement": "1",
+    "counter": "1"
+   },
+   "separation_layer": 28,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  }
+ },
+ "probes_with_clear_separation": "5 of 5"
+}
+=== 2026-11-04 21:40:53 END   src/logit_lens.py qwen2.5-3b (exit 0)
+=== 2026-11-04 21:40:53 START src/contamination.py qwen2.5-3b 60
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "dataset": "openai/gsm8k test, 60 questions from offset 487",
+ "guided_completion": {
+  "mean_rouge_l_guided": 0.278,
+  "mean_rouge_l_general": 0.305,
+  "share_near_verbatim_guided(>=0.75)": 0.0,
+  "share_near_verbatim_general(>=0.75)": 0.017
+ },
+ "min_k_prob(k=20%)": {
+  "mean_original": -8.919,
+  "mean_paraphrase": -7.004,
+  "share_original_scores_higher_than_its_paraphrase": 0.167,
+  "mean_our_fresh_seed_texts": -9.418
+ },
+ "rule": "Flag the source if more than 5% of items come back near word for word, or if originals score clearly higher than paraphrases.",
+ "flag_source": false
+}
+=== 2026-11-04 21:42:21 END   src/contamination.py qwen2.5-3b 60 (exit 0)
+=== 2026-11-04 21:42:22 START src/run_behaviour.py qwen2.5-7b-4bit
+0 done, 130 to run
+Traceback (most recent call last):
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 113, in <module>
+    main()
+    ~~~~^^
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 76, in main
+    tok, model = load(a.model)
+                 ~~~~^^^^^^^^^
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 42, in load
+    model = AutoModelForCausalLM.from_pretrained(name, **kw)
+  File "F:\Python\Lib\site-packages\transformers\models\auto\auto_factory.py", line 387, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\modeling_utils.py", line 4034, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ~~~~~~~~~~~~~~~~^
+        config, quantization_config, device_map, weights_only, user_agent
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\quantizers\auto.py", line 342, in get_hf_quantizer
+    hf_quantizer.validate_environment(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        device_map=device_map,
+        ^^^^^^^^^^^^^^^^^^^^^^
+        weights_only=weights_only,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\quantizers\quantizer_bnb_4bit.py", line 62, in validate_environment
+    raise ImportError(
+        f"Using `bitsandbytes` 4-bit quantization requires bitsandbytes: `pip install -U bitsandbytes>={BITSANDBYTES_MIN_VERSION}`"
+    )
+ImportError: Using `bitsandbytes` 4-bit quantization requires bitsandbytes: `pip install -U bitsandbytes>=0.46.1`
+=== 2026-11-04 21:42:31 END   src/run_behaviour.py qwen2.5-7b-4bit (exit 1)
+=== 2026-11-04 21:42:31 START src/run_behaviour.py llama3.1-8b-4bit
+0 done, 130 to run
+Traceback (most recent call last):
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 113, in <module>
+    main()
+    ~~~~^^
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 76, in main
+    tok, model = load(a.model)
+                 ~~~~^^^^^^^^^
+  File "F:\UIU\13\Paper\ContextLLM\src\run_behaviour.py", line 42, in load
+    model = AutoModelForCausalLM.from_pretrained(name, **kw)
+  File "F:\Python\Lib\site-packages\transformers\models\auto\auto_factory.py", line 387, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\modeling_utils.py", line 4034, in from_pretrained
+    hf_quantizer, config, device_map = get_hf_quantizer(
+                                       ~~~~~~~~~~~~~~~~^
+        config, quantization_config, device_map, weights_only, user_agent
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\quantizers\auto.py", line 342, in get_hf_quantizer
+    hf_quantizer.validate_environment(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        device_map=device_map,
+        ^^^^^^^^^^^^^^^^^^^^^^
+        weights_only=weights_only,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "F:\Python\Lib\site-packages\transformers\quantizers\quantizer_bnb_4bit.py", line 62, in validate_environment
+    raise ImportError(
+        f"Using `bitsandbytes` 4-bit quantization requires bitsandbytes: `pip install -U bitsandbytes>={BITSANDBYTES_MIN_VERSION}`"
+    )
+ImportError: Using `bitsandbytes` 4-bit quantization requires bitsandbytes: `pip install -U bitsandbytes>=0.46.1`
+=== 2026-11-04 21:42:41 END   src/run_behaviour.py llama3.1-8b-4bit (exit 1)
+=== 2026-11-04 21:42:41 START src/wildchat_mine.py 150 qwen2.5-3b
+page 1/150  candidates 2
+page 2/150  candidates 4
+page 3/150  candidates 7
+page 4/150  candidates 10
+page 5/150  candidates 10
+page 6/150  candidates 10
+page 7/150  candidates 12
+page 8/150  candidates 22
+page 9/150  candidates 22
+page 10/150  candidates 25
+page 11/150  candidates 25
+page 12/150  candidates 26
+page 13/150  candidates 26
+page 14/150  candidates 29
+page 15/150  candidates 30
+page 16/150  candidates 30
+page 17/150  candidates 30
+page 18/150  candidates 31
+page 19/150  candidates 31
+page 20/150  candidates 31
+page 21/150  candidates 32
+page 22/150  candidates 34
+page 23/150  candidates 34
+page 24/150  candidates 36
+page 25/150  candidates 38
+page 26/150  candidates 39
+page 27/150  candidates 39
+page 28/150  candidates 41
+page 29/150  candidates 44
+page 30/150  candidates 48
+page 31/150  candidates 50
+page 32/150  candidates 50
+page 33/150  candidates 51
+page 34/150  candidates 52
+page 35/150  candidates 53
+page 36/150  candidates 54
+page 37/150  candidates 55
+page 38/150  candidates 55
+page 39/150  candidates 56
+page 40/150  candidates 56
+page 41/150  candidates 56
+page 42/150  candidates 56
+page 43/150  candidates 57
+page 44/150  candidates 58
+page 45/150  candidates 60
+page 46/150  candidates 60
+page 47/150  candidates 61
+page 48/150  candidates 62
+page 49/150  candidates 62
+page 50/150  candidates 63
+page 51/150  candidates 63
+page 52/150  candidates 63
+page 53/150  candidates 67
+page 54/150  candidates 68
+page 55/150  candidates 71
+page 56/150  candidates 71
+page 57/150  candidates 71
+page 58/150  candidates 71
+page 59/150  candidates 71
+page 60/150  candidates 71
+page 61/150  candidates 71
+page 62/150  candidates 72
+page 63/150  candidates 73
+page 64/150  candidates 74
+page 65/150  candidates 74
+page 66/150  candidates 75
+page 67/150  candidates 75
+page 68/150  candidates 77
+page 69/150  candidates 77
+page 70/150  candidates 77
+page 71/150  candidates 77
+page 72/150  candidates 79
+page 73/150  candidates 80
+page 74/150  candidates 83
+page 75/150  candidates 83
+page 76/150  candidates 88
+page 77/150  candidates 89
+page 78/150  candidates 89
+page 79/150  candidates 90
+page 80/150  candidates 91
+page 81/150  candidates 92
+page 82/150  candidates 98
+page 83/150  candidates 100
+page 84/150  candidates 101
+page 85/150  candidates 101
+page 86/150  candidates 102
+page 87/150  candidates 103
+page 88/150  candidates 103
+page 89/150  candidates 103
+page 90/150  candidates 103
+page 91/150  candidates 104
+page 92/150  candidates 106
+page 93/150  candidates 106
+page 94/150  candidates 107
+page 95/150  candidates 107
+page 96/150  candidates 107
+page 97/150  candidates 107
+page 98/150  candidates 107
+page 99/150  candidates 107
+page 100/150  candidates 110
+page 101/150  candidates 112
+page 102/150  candidates 112
+page 103/150  candidates 114
+page 104/150  candidates 114
+page 105/150  candidates 115
+page 106/150  candidates 117
+page 107/150  candidates 118
+page 108/150  candidates 119
+page 109/150  candidates 121
+page 110/150  candidates 121
+page 111/150  candidates 121
+page 112/150  candidates 123
+page 113/150  candidates 123
+page 114/150  candidates 124
+page 115/150  candidates 124
+page 116/150  candidates 124
+page 117/150  candidates 126
+page 118/150  candidates 126
+page 119/150  candidates 129
+page 120/150  candidates 130
+page 121/150  candidates 132
+page 122/150  candidates 132
+page 123/150  candidates 135
+page 124/150  candidates 140
+page 125/150  candidates 140
+page 126/150  candidates 141
+page 127/150  candidates 142
+page 128/150  candidates 143
+page 129/150  candidates 145
+page 130/150  candidates 146
+page 131/150  candidates 147
+page 132/150  candidates 147
+page 133/150  candidates 147
+page 134/150  candidates 148
+page 135/150  candidates 150
+page 136/150  candidates 151
+page 137/150  candidates 153
+page 138/150  candidates 154
+page 139/150  candidates 156
+page 140/150  candidates 158
+page 141/150  candidates 158
+page 142/150  candidates 158
+page 143/150  candidates 164
+page 144/150  candidates 166
+page 145/150  candidates 168
+page 146/150  candidates 169
+page 147/150  candidates 170
+page 148/150  candidates 170
+page 149/150  candidates 172
+page 150/150  candidates 174
+{
+ "sample": {
+  "pages_requested": 150,
+  "pages_fetched": 150,
+  "conversations": 15000,
+  "english": 8467,
+  "unique_english_user_turns": 13266,
+  "short_turns": 12228,
+  "prefilter_hits": 174
+ },
+ "model_labelled_examples": 138,
+ "by_role": {
+  "requirement": 9,
+  "analogy": 11,
+  "counter-example": 118
+ },
+ "cross_domain": 0,
+ "rate_per_unique_english_turn": 0.0104,
+ "estimate_full_english_set": 7709,
+ "note": "Labels come from a 3B model and are not yet hand-checked. The keyword prefilter misses many cases, so counts are a lower bound."
+}
+=== 2026-11-04 21:53:53 END   src/wildchat_mine.py 150 qwen2.5-3b (exit 0)
+=== 2026-11-04 21:53:53 START src/analyze.py
+qwen2.5-3b E4 47% -> 33% | E5 gap 60% [30, 90] | E6 47% vs 40%
+=== 2026-11-04 21:53:54 END   src/analyze.py (exit 0)
+=== ALL DONE 2026-11-04 21:53:54
+=== 2026-11-04 21:54:03 START src/run_behaviour.py qwen2.5-7b-4bit
+0 done, 130 to run
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+8/130  9s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+16/130  22s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+24/130  36s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+32/130  74s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+40/130  107s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+48/130  125s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+56/130  142s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+64/130  150s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+72/130  173s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+80/130  204s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+88/130  219s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+96/130  235s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+104/130  259s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+112/130  270s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+120/130  281s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+128/130  291s
+Both `max_new_tokens` (=512) and `max_length`(=32768) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+130/130  302s
+scored 130 answers -> F:\UIU\13\Paper\ContextLLM\results\behaviour\qwen2.5-7b-4bit
+=== 2026-11-04 22:00:12 END   src/run_behaviour.py qwen2.5-7b-4bit (exit 0)
+=== 2026-11-04 22:00:12 START src/run_behaviour.py llama3.1-8b-4bit
+0 done, 130 to run
+=== 2026-11-04 22:00:29 END   src/run_behaviour.py llama3.1-8b-4bit (exit 139)
+=== 2026-11-04 22:00:29 START src/wildchat_mine.py 150 qwen2.5-3b oasst
+page 1/150  candidates 0
+page 2/150  candidates 0
+page 3/150  candidates 0
+page 4/150  candidates 0
+page 5/150  candidates 0
+page 6/150  candidates 0
+page 7/150  candidates 0
+page 8/150  candidates 0
+page 9/150  candidates 0
+page 10/150  candidates 1
+page 11/150  candidates 1
+page 12/150  candidates 1
+page 13/150  candidates 2
+page 14/150  candidates 2
+page 15/150  candidates 2
+page 16/150  candidates 2
+page 17/150  candidates 2
+page 18/150  candidates 2
+page 19/150  candidates 2
+page 20/150  candidates 2
+page 21/150  candidates 2
+page 22/150  candidates 3
+page 23/150  candidates 3
+page 24/150  candidates 3
+page 25/150  candidates 3
+page 26/150  candidates 3
+page 27/150  candidates 3
+page 28/150  candidates 3
+page 29/150  candidates 3
+page 30/150  candidates 3
+page 31/150  candidates 3
+page 32/150  candidates 7
+page 33/150  candidates 7
+page 34/150  candidates 8
+page 35/150  candidates 8
+page 36/150  candidates 8
+page 37/150  candidates 8
+page 38/150  candidates 8
+page 39/150  candidates 9
+page 40/150  candidates 9
+page 41/150  candidates 9
+page 42/150  candidates 9
+page 43/150  candidates 10
+page 44/150  candidates 10
+page 45/150  candidates 10
+page 46/150  candidates 10
+page 47/150  candidates 10
+page 48/150  candidates 10
+page 49/150  candidates 10
+page 50/150  candidates 11
+page 51/150  candidates 11
+page 52/150  candidates 11
+page 53/150  candidates 12
+page 54/150  candidates 13
+page 55/150  candidates 13
+page 56/150  candidates 14
+page 57/150  candidates 14
+page 58/150  candidates 14
+page 59/150  candidates 14
+page 60/150  candidates 14
+page 61/150  candidates 14
+page 62/150  candidates 14
+page 63/150  candidates 15
+page 64/150  candidates 16
+page 65/150  candidates 18
+page 66/150  candidates 19
+page 67/150  candidates 20
+page 68/150  candidates 20
+page 69/150  candidates 20
+page 70/150  candidates 20
+page 71/150  candidates 20
+page 72/150  candidates 20
+page 73/150  candidates 20
+page 74/150  candidates 21
+page 75/150  candidates 21
+page 76/150  candidates 23
+page 77/150  candidates 24
+page 78/150  candidates 25
+page 79/150  candidates 25
+page 80/150  candidates 25
+page 81/150  candidates 25
+page 82/150  candidates 25
+page 83/150  candidates 25
+page 84/150  candidates 25
+page 85/150  candidates 26
+page 86/150  candidates 26
+page 87/150  candidates 26
+page 88/150  candidates 26
+page 89/150  candidates 26
+page 90/150  candidates 26
+page 91/150  candidates 26
+page 92/150  candidates 26
+page 93/150  candidates 26
+page 94/150  candidates 27
+page 95/150  candidates 27
+page 96/150  candidates 28
+page 97/150  candidates 28
+page 98/150  candidates 28
+page 99/150  candidates 28
+page 100/150  candidates 28
+page 101/150  candidates 30
+page 102/150  candidates 30
+page 103/150  candidates 30
+page 104/150  candidates 30
+page 105/150  candidates 30
+page 106/150  candidates 30
+page 107/150  candidates 30
+page 108/150  candidates 30
+page 109/150  candidates 32
+page 110/150  candidates 32
+page 111/150  candidates 32
+page 112/150  candidates 32
+page 113/150  candidates 33
+page 114/150  candidates 34
+page 115/150  candidates 34
+page 116/150  candidates 34
+page 117/150  candidates 34
+page 118/150  candidates 34
+page 119/150  candidates 34
+page 120/150  candidates 34
+page 121/150  candidates 34
+page 122/150  candidates 34
+page 123/150  candidates 34
+page 124/150  candidates 34
+page 125/150  candidates 34
+page 126/150  candidates 34
+page 127/150  candidates 34
+page 128/150  candidates 34
+page 129/150  candidates 34
+page 130/150  candidates 35
+page 131/150  candidates 35
+page 132/150  candidates 35
+page 133/150  candidates 35
+page 134/150  candidates 35
+page 135/150  candidates 35
+page 136/150  candidates 35
+page 137/150  candidates 36
+page 138/150  candidates 36
+page 139/150  candidates 36
+page 140/150  candidates 37
+page 141/150  candidates 38
+page 142/150  candidates 39
+page 143/150  candidates 39
+page 144/150  candidates 39
+page 145/150  candidates 39
+page 146/150  candidates 40
+page 147/150  candidates 40
+page 148/150  candidates 40
+page 149/150  candidates 40
+page 150/150  candidates 40
+{
+ "sample": {
+  "source": "OpenAssistant/oasst2",
+  "pages_requested": 150,
+  "pages_fetched": 150,
+  "rows": 15000,
+  "english_user_turns": 2254,
+  "unique_english_user_turns": 2111,
+  "short_turns": 2101,
+  "prefilter_hits": 40
+ },
+ "model_labelled_examples": 31,
+ "by_role": {
+  "requirement": 1,
+  "analogy": 7,
+  "counter-example": 23
+ },
+ "cross_domain": 0,
+ "rate_per_unique_english_turn": 0.0147,
+ "estimate_full_dataset": 265,
+ "note": "Labels come from a 3B model and are not yet hand-checked. The keyword prefilter misses many cases, so counts are a lower bound."
+}
+=== 2026-11-04 22:09:50 END   src/wildchat_mine.py 150 qwen2.5-3b oasst (exit 0)
+=== 2026-11-04 22:09:50 START src/analyze.py
+qwen2.5-3b E4 47% -> 33% | E5 gap 60% [30, 90] | E6 47% vs 40%
+qwen2.5-7b-4bit E4 40% -> 30% | E5 gap 30% [-10, 70] | E6 40% vs 43%
+=== 2026-11-04 22:09:51 END   src/analyze.py (exit 0)
+=== 2026-11-04 22:09:51 START src/make_results.py
+{
+ "models": [
+  "qwen2.5-3b",
+  "qwen2.5-7b-4bit"
+ ],
+ "E1": {
+  "wildchat": {
+   "sample": {
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "conversations": 15000,
+    "english": 8467,
+    "unique_english_user_turns": 13266,
+    "short_turns": 12228,
+    "prefilter_hits": 174
+   },
+   "labelled_examples_in_sample": 138,
+   "by_role": {
+    "requirement": 9,
+    "analogy": 11,
+    "counter-example": 118
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 7709,
+   "pass": true
+  },
+  "oasst": {
+   "sample": {
+    "source": "OpenAssistant/oasst2",
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "rows": 15000,
+    "english_user_turns": 2254,
+    "unique_english_user_turns": 2111,
+    "short_turns": 2101,
+    "prefilter_hits": 40
+   },
+   "labelled_examples_in_sample": 31,
+   "by_role": {
+    "requirement": 1,
+    "analogy": 7,
+    "counter-example": 23
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 265,
+   "pass": false
+  }
+ },
+ "E2": {
+  "status": "not run: needs two human annotators (data/E2_annotation_sheet.csv)"
+ },
+ "E3": {
+  "flag_gsm8k": false,
+  "guided": {
+   "mean_rouge_l_guided": 0.278,
+   "mean_rouge_l_general": 0.305,
+   "share_near_verbatim_guided(>=0.75)": 0.0,
+   "share_near_verbatim_general(>=0.75)": 0.017
+  },
+  "min_k": {
+   "mean_original": -8.919,
+   "mean_paraphrase": -7.004,
+   "share_original_scores_higher_than_its_paraphrase": 0.167,
+   "mean_our_fresh_seed_texts": -9.418
+  }
+ },
+ "E4": {
+  "qwen2.5-3b": {
+   "pass": false,
+   "failure_plain": 0.4666666666666667,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.7
+   ],
+   "failure_explicit": 0.33333333333333337,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5333333333333333
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.4
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.4,
+   "constraint_broken_plain": 0.1333333333333333
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "failure_plain": 0.4,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.5666666666666667
+   ],
+   "failure_explicit": 0.30000000000000004,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.4,
+    "requirement": 0.6,
+    "counter": 0.19999999999999996
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.30000000000000004,
+   "constraint_broken_plain": 0.1333333333333333
+  }
+ },
+ "E5": {
+  "qwen2.5-3b": {
+   "pass": true,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.7,
+    "counter": 0.1
+   },
+   "role_gap_requirement_minus_counter": 0.6,
+   "role_gap_ci": [
+    0.3,
+    0.9
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.6
+   }
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.5,
+    "counter": 0.2
+   },
+   "role_gap_requirement_minus_counter": 0.3,
+   "role_gap_ci": [
+    -0.09999999999999998,
+    0.7
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.6,
+    "requirement": 0.4,
+    "counter": 0.8
+   }
+  }
+ },
+ "E6": {
+  "qwen2.5-3b": {
+   "pass": true,
+   "failure_single": 0.4666666666666667,
+   "failure_multi": 0.4,
+   "multi_ci": [
+    0.19999999999999996,
+    0.6
+   ]
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": true,
+   "failure_single": 0.4,
+   "failure_multi": 0.43333333333333335,
+   "multi_ci": [
+    0.23333333333333328,
+    0.6333333333333333
+   ]
+  }
+ },
+ "E7": {
+  "probes_with_clear_separation": 5,
+  "n_probes": 5,
+  "pass": true,
+  "probes": {
+   "P1_helpdesk_triage": {
+    "final_diff": {
+     "analogy": 3.44,
+     "requirement": 7.32,
+     "counter": 3.38
+    },
+    "final_top_token": {
+     "analogy": "Red",
+     "requirement": "Red",
+     "counter": "Red"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P2_drone_pricing": {
+    "final_diff": {
+     "analogy": -6.97,
+     "requirement": -3.36,
+     "counter": -9.73
+    },
+    "final_top_token": {
+     "analogy": "Flight",
+     "requirement": "Flight",
+     "counter": "Initial"
+    },
+    "separation_layer": 28,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P6_exam_hall_boarding": {
+    "final_diff": {
+     "analogy": -1.51,
+     "requirement": 13.33,
+     "counter": -6.03
+    },
+    "final_top_token": {
+     "analogy": "Group",
+     "requirement": "Zone",
+     "counter": "Group"
+    },
+    "separation_layer": 23,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C1_window_sum": {
+    "final_diff": {
+     "analogy": -7.74,
+     "requirement": 11.48,
+     "counter": -6.04
+    },
+    "final_top_token": {
+     "analogy": "):\n",
+     "requirement": "=",
+     "counter": "):\n"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C2_retry_backoff": {
+    "final_diff": {
+     "analogy": 0.25,
+     "requirement": 5.0,
+     "counter": 1.25
+    },
+    "final_top_token": {
+     "analogy": "1",
+     "requirement": "1",
+     "counter": "1"
+    },
+    "separation_layer": 28,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   }
+  }
+ }
+}
+=== 2026-11-04 22:09:51 END   src/make_results.py (exit 0)
+=== PART2 DONE 2026-11-04 22:09:51
+=== 2026-11-04 22:10:04 START src/run_behaviour.py llama3.1-8b-4bit
+0 done, 130 to run
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+8/130  15s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+16/130  49s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+24/130  69s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+32/130  129s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+40/130  168s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+48/130  203s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+56/130  239s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+64/130  246s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+72/130  277s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+80/130  306s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+88/130  343s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+96/130  375s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+104/130  401s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+112/130  419s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+120/130  441s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+128/130  463s
+Both `max_new_tokens` (=512) and `max_length`(=131072) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+130/130  483s
+scored 130 answers -> F:\UIU\13\Paper\ContextLLM\results\behaviour\llama3.1-8b-4bit
+=== 2026-11-04 22:21:45 END   src/run_behaviour.py llama3.1-8b-4bit (exit 0)
+=== 2026-11-04 22:21:45 START src/analyze.py
+llama3.1-8b-4bit E4 47% -> 27% | E5 gap 50% [20, 80] | E6 47% vs 43%
+qwen2.5-3b E4 47% -> 33% | E5 gap 60% [30, 90] | E6 47% vs 40%
+qwen2.5-7b-4bit E4 40% -> 30% | E5 gap 30% [-10, 70] | E6 40% vs 43%
+=== 2026-11-04 22:21:46 END   src/analyze.py (exit 0)
+=== 2026-11-04 22:21:46 START src/make_results.py
+{
+ "models": [
+  "llama3.1-8b-4bit",
+  "qwen2.5-3b",
+  "qwen2.5-7b-4bit"
+ ],
+ "E1": {
+  "wildchat": {
+   "sample": {
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "conversations": 15000,
+    "english": 8467,
+    "unique_english_user_turns": 13266,
+    "short_turns": 12228,
+    "prefilter_hits": 174
+   },
+   "labelled_examples_in_sample": 138,
+   "by_role": {
+    "requirement": 9,
+    "analogy": 11,
+    "counter-example": 118
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 7709,
+   "pass": true
+  },
+  "oasst": {
+   "sample": {
+    "source": "OpenAssistant/oasst2",
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "rows": 15000,
+    "english_user_turns": 2254,
+    "unique_english_user_turns": 2111,
+    "short_turns": 2101,
+    "prefilter_hits": 40
+   },
+   "labelled_examples_in_sample": 31,
+   "by_role": {
+    "requirement": 1,
+    "analogy": 7,
+    "counter-example": 23
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 265,
+   "pass": false
+  }
+ },
+ "E2": {
+  "status": "not run: needs two human annotators (data/E2_annotation_sheet.csv)"
+ },
+ "E3": {
+  "flag_gsm8k": false,
+  "guided": {
+   "mean_rouge_l_guided": 0.278,
+   "mean_rouge_l_general": 0.305,
+   "share_near_verbatim_guided(>=0.75)": 0.0,
+   "share_near_verbatim_general(>=0.75)": 0.017
+  },
+  "min_k": {
+   "mean_original": -8.919,
+   "mean_paraphrase": -7.004,
+   "share_original_scores_higher_than_its_paraphrase": 0.167,
+   "mean_our_fresh_seed_texts": -9.418
+  }
+ },
+ "E4": {
+  "llama3.1-8b-4bit": {
+   "pass": false,
+   "failure_plain": 0.4666666666666667,
+   "failure_plain_ci": [
+    0.30000000000000004,
+    0.6666666666666667
+   ],
+   "failure_explicit": 0.2666666666666667,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.4
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.4,
+    "requirement": 0.7,
+    "counter": 0.30000000000000004
+   },
+   "leak_plain": 0.06666666666666667,
+   "missed_transfer_plain": 0.33333333333333337,
+   "constraint_broken_plain": 0.2666666666666667
+  },
+  "qwen2.5-3b": {
+   "pass": false,
+   "failure_plain": 0.4666666666666667,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.7
+   ],
+   "failure_explicit": 0.33333333333333337,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5333333333333333
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.4
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.4,
+   "constraint_broken_plain": 0.1333333333333333
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "failure_plain": 0.4,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.5666666666666667
+   ],
+   "failure_explicit": 0.30000000000000004,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.4,
+    "requirement": 0.6,
+    "counter": 0.19999999999999996
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.30000000000000004,
+   "constraint_broken_plain": 0.1333333333333333
+  }
+ },
+ "E5": {
+  "llama3.1-8b-4bit": {
+   "pass": true,
+   "copied_marker_plain": {
+    "analogy": 0.1,
+    "requirement": 0.5,
+    "counter": 0.0
+   },
+   "role_gap_requirement_minus_counter": 0.5,
+   "role_gap_ci": [
+    0.2,
+    0.8
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.6,
+    "requirement": 0.3,
+    "counter": 0.7
+   }
+  },
+  "qwen2.5-3b": {
+   "pass": true,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.7,
+    "counter": 0.1
+   },
+   "role_gap_requirement_minus_counter": 0.6,
+   "role_gap_ci": [
+    0.3,
+    0.9
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.6
+   }
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.5,
+    "counter": 0.2
+   },
+   "role_gap_requirement_minus_counter": 0.3,
+   "role_gap_ci": [
+    -0.09999999999999998,
+    0.7
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.6,
+    "requirement": 0.4,
+    "counter": 0.8
+   }
+  }
+ },
+ "E6": {
+  "llama3.1-8b-4bit": {
+   "pass": true,
+   "failure_single": 0.4666666666666667,
+   "failure_multi": 0.43333333333333335,
+   "multi_ci": [
+    0.23333333333333328,
+    0.6333333333333333
+   ]
+  },
+  "qwen2.5-3b": {
+   "pass": true,
+   "failure_single": 0.4666666666666667,
+   "failure_multi": 0.4,
+   "multi_ci": [
+    0.19999999999999996,
+    0.6
+   ]
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": true,
+   "failure_single": 0.4,
+   "failure_multi": 0.43333333333333335,
+   "multi_ci": [
+    0.23333333333333328,
+    0.6333333333333333
+   ]
+  }
+ },
+ "E7": {
+  "probes_with_clear_separation": 5,
+  "n_probes": 5,
+  "pass": true,
+  "probes": {
+   "P1_helpdesk_triage": {
+    "final_diff": {
+     "analogy": 3.44,
+     "requirement": 7.32,
+     "counter": 3.38
+    },
+    "final_top_token": {
+     "analogy": "Red",
+     "requirement": "Red",
+     "counter": "Red"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P2_drone_pricing": {
+    "final_diff": {
+     "analogy": -6.97,
+     "requirement": -3.36,
+     "counter": -9.73
+    },
+    "final_top_token": {
+     "analogy": "Flight",
+     "requirement": "Flight",
+     "counter": "Initial"
+    },
+    "separation_layer": 28,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P6_exam_hall_boarding": {
+    "final_diff": {
+     "analogy": -1.51,
+     "requirement": 13.33,
+     "counter": -6.03
+    },
+    "final_top_token": {
+     "analogy": "Group",
+     "requirement": "Zone",
+     "counter": "Group"
+    },
+    "separation_layer": 23,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C1_window_sum": {
+    "final_diff": {
+     "analogy": -7.74,
+     "requirement": 11.48,
+     "counter": -6.04
+    },
+    "final_top_token": {
+     "analogy": "):\n",
+     "requirement": "=",
+     "counter": "):\n"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C2_retry_backoff": {
+    "final_diff"
+=== 2026-11-04 22:21:46 END   src/make_results.py (exit 0)
+=== PART3 DONE

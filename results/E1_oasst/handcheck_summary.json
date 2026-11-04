@@ -1,0 +1,13 @@
+{
+ "sample_size": 40,
+ "hand_true_examples": 12,
+ "hand_precision_of_prefilter": 0.3,
+ "hand_roles": {
+  "requirement": 8,
+  "analogy": 2,
+  "counter-example": 2
+ },
+ "corrected_rate_per_unique_turn": 0.0057,
+ "corrected_estimate_full_dataset": 102,
+ "note": "All 40 keyword candidates hand-checked (first pass). Both counter-examples reject the assistant's own earlier answer, in multi-turn chats."
+}

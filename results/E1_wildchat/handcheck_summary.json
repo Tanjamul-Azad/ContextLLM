@@ -1,0 +1,14 @@
+{
+ "sample_size": 45,
+ "hand_true_examples": 10,
+ "hand_precision_of_prefilter": 0.222,
+ "hand_roles": {
+  "requirement": 9,
+  "analogy": 1,
+  "counter-example": 0
+ },
+ "model_labeller_agreement_with_hand": 0.422,
+ "corrected_rate_per_unique_turn": 0.0029,
+ "corrected_estimate_full_dataset": 2160,
+ "note": "First-pass hand check of a random 45 of 174 keyword candidates. The 3B labeller is not reliable (it calls most turns counter-examples); use hand labels or a stronger labeller."
+}

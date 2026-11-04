@@ -1,0 +1,300 @@
+{
+ "models": [
+  "llama3.1-8b-4bit",
+  "qwen2.5-3b",
+  "qwen2.5-7b-4bit"
+ ],
+ "E1": {
+  "wildchat": {
+   "sample": {
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "conversations": 15000,
+    "english": 8467,
+    "unique_english_user_turns": 13266,
+    "short_turns": 12228,
+    "prefilter_hits": 174
+   },
+   "labelled_examples_in_sample": 138,
+   "by_role": {
+    "requirement": 9,
+    "analogy": 11,
+    "counter-example": 118
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 7709,
+   "pass": true
+  },
+  "oasst": {
+   "sample": {
+    "source": "OpenAssistant/oasst2",
+    "pages_requested": 150,
+    "pages_fetched": 150,
+    "rows": 15000,
+    "english_user_turns": 2254,
+    "unique_english_user_turns": 2111,
+    "short_turns": 2101,
+    "prefilter_hits": 40
+   },
+   "labelled_examples_in_sample": 31,
+   "by_role": {
+    "requirement": 1,
+    "analogy": 7,
+    "counter-example": 23
+   },
+   "cross_domain": 0,
+   "estimate_full_dataset": 265,
+   "pass": false
+  }
+ },
+ "E2": {
+  "status": "not run: needs two human annotators (data/E2_annotation_sheet.csv)"
+ },
+ "E3": {
+  "flag_gsm8k": false,
+  "guided": {
+   "mean_rouge_l_guided": 0.278,
+   "mean_rouge_l_general": 0.305,
+   "share_near_verbatim_guided(>=0.75)": 0.0,
+   "share_near_verbatim_general(>=0.75)": 0.017
+  },
+  "min_k": {
+   "mean_original": -8.919,
+   "mean_paraphrase": -7.004,
+   "share_original_scores_higher_than_its_paraphrase": 0.167,
+   "mean_our_fresh_seed_texts": -9.418
+  }
+ },
+ "E4": {
+  "llama3.1-8b-4bit": {
+   "pass": false,
+   "failure_plain": 0.4666666666666667,
+   "failure_plain_ci": [
+    0.30000000000000004,
+    0.6666666666666667
+   ],
+   "failure_explicit": 0.2666666666666667,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.4
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.4,
+    "requirement": 0.7,
+    "counter": 0.30000000000000004
+   },
+   "leak_plain": 0.06666666666666667,
+   "missed_transfer_plain": 0.33333333333333337,
+   "constraint_broken_plain": 0.2666666666666667
+  },
+  "qwen2.5-3b": {
+   "pass": false,
+   "failure_plain": 0.4666666666666667,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.7
+   ],
+   "failure_explicit": 0.33333333333333337,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5333333333333333
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.4
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.4,
+   "constraint_broken_plain": 0.1333333333333333
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "failure_plain": 0.4,
+   "failure_plain_ci": [
+    0.23333333333333328,
+    0.5666666666666667
+   ],
+   "failure_explicit": 0.30000000000000004,
+   "failure_explicit_ci": [
+    0.1333333333333333,
+    0.5
+   ],
+   "failure_by_role_plain": {
+    "analogy": 0.4,
+    "requirement": 0.6,
+    "counter": 0.19999999999999996
+   },
+   "leak_plain": 0.16666666666666666,
+   "missed_transfer_plain": 0.30000000000000004,
+   "constraint_broken_plain": 0.1333333333333333
+  }
+ },
+ "E5": {
+  "llama3.1-8b-4bit": {
+   "pass": true,
+   "copied_marker_plain": {
+    "analogy": 0.1,
+    "requirement": 0.5,
+    "counter": 0.0
+   },
+   "role_gap_requirement_minus_counter": 0.5,
+   "role_gap_ci": [
+    0.2,
+    0.8
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.6,
+    "requirement": 0.3,
+    "counter": 0.7
+   }
+  },
+  "qwen2.5-3b": {
+   "pass": true,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.7,
+    "counter": 0.1
+   },
+   "role_gap_requirement_minus_counter": 0.6,
+   "role_gap_ci": [
+    0.3,
+    0.9
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.5,
+    "requirement": 0.5,
+    "counter": 0.6
+   }
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": false,
+   "copied_marker_plain": {
+    "analogy": 0.2,
+    "requirement": 0.5,
+    "counter": 0.2
+   },
+   "role_gap_requirement_minus_counter": 0.3,
+   "role_gap_ci": [
+    -0.09999999999999998,
+    0.7
+   ],
+   "joint_by_role_plain": {
+    "analogy": 0.6,
+    "requirement": 0.4,
+    "counter": 0.8
+   }
+  }
+ },
+ "E6": {
+  "llama3.1-8b-4bit": {
+   "pass": true,
+   "failure_single": 0.4666666666666667,
+   "failure_multi": 0.43333333333333335,
+   "multi_ci": [
+    0.23333333333333328,
+    0.6333333333333333
+   ]
+  },
+  "qwen2.5-3b": {
+   "pass": true,
+   "failure_single": 0.4666666666666667,
+   "failure_multi": 0.4,
+   "multi_ci": [
+    0.19999999999999996,
+    0.6
+   ]
+  },
+  "qwen2.5-7b-4bit": {
+   "pass": true,
+   "failure_single": 0.4,
+   "failure_multi": 0.43333333333333335,
+   "multi_ci": [
+    0.23333333333333328,
+    0.6333333333333333
+   ]
+  }
+ },
+ "E7": {
+  "probes_with_clear_separation": 5,
+  "n_probes": 5,
+  "pass": true,
+  "probes": {
+   "P1_helpdesk_triage": {
+    "final_diff": {
+     "analogy": 3.44,
+     "requirement": 7.32,
+     "counter": 3.38
+    },
+    "final_top_token": {
+     "analogy": "Red",
+     "requirement": "Red",
+     "counter": "Red"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P2_drone_pricing": {
+    "final_diff": {
+     "analogy": -6.97,
+     "requirement": -3.36,
+     "counter": -9.73
+    },
+    "final_top_token": {
+     "analogy": "Flight",
+     "requirement": "Flight",
+     "counter": "Initial"
+    },
+    "separation_layer": 28,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   },
+   "P6_exam_hall_boarding": {
+    "final_diff": {
+     "analogy": -1.51,
+     "requirement": 13.33,
+     "counter": -6.03
+    },
+    "final_top_token": {
+     "analogy": "Group",
+     "requirement": "Zone",
+     "counter": "Group"
+    },
+    "separation_layer": 23,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C1_window_sum": {
+    "final_diff": {
+     "analogy": -7.74,
+     "requirement": 11.48,
+     "counter": -6.04
+    },
+    "final_top_token": {
+     "analogy": "):\n",
+     "requirement": "=",
+     "counter": "):\n"
+    },
+    "separation_layer": 25,
+    "n_layers": 36,
+    "role_correct_at_output": true
+   },
+   "C2_retry_backoff": {
+    "final_diff": {
+     "analogy": 0.25,
+     "requirement": 5.0,
+     "counter": 1.25
+    },
+    "final_top_token": {
+     "analogy": "1",
+     "requirement": "1",
+     "counter": "1"
+    },
+    "separation_layer": 28,
+    "n_layers": 36,
+    "role_correct_at_output": false
+   }
+  }
+ }
+}

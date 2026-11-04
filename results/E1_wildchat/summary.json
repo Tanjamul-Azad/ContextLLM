@@ -1,0 +1,21 @@
+{
+ "sample": {
+  "pages_requested": 150,
+  "pages_fetched": 150,
+  "conversations": 15000,
+  "english": 8467,
+  "unique_english_user_turns": 13266,
+  "short_turns": 12228,
+  "prefilter_hits": 174
+ },
+ "model_labelled_examples": 138,
+ "by_role": {
+  "requirement": 9,
+  "analogy": 11,
+  "counter-example": 118
+ },
+ "cross_domain": 0,
+ "rate_per_unique_english_turn": 0.0104,
+ "estimate_full_english_set": 7709,
+ "note": "Labels come from a 3B model and are not yet hand-checked. The keyword prefilter misses many cases, so counts are a lower bound."
+}

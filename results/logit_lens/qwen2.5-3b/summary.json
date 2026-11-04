@@ -1,0 +1,81 @@
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "probes": {
+  "P1_helpdesk_triage": {
+   "final_diff": {
+    "analogy": 3.44,
+    "requirement": 7.32,
+    "counter": 3.38
+   },
+   "final_top_token": {
+    "analogy": "Red",
+    "requirement": "Red",
+    "counter": "Red"
+   },
+   "separation_layer": 25,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  },
+  "P2_drone_pricing": {
+   "final_diff": {
+    "analogy": -6.97,
+    "requirement": -3.36,
+    "counter": -9.73
+   },
+   "final_top_token": {
+    "analogy": "Flight",
+    "requirement": "Flight",
+    "counter": "Initial"
+   },
+   "separation_layer": 28,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  },
+  "P6_exam_hall_boarding": {
+   "final_diff": {
+    "analogy": -1.51,
+    "requirement": 13.33,
+    "counter": -6.03
+   },
+   "final_top_token": {
+    "analogy": "Group",
+    "requirement": "Zone",
+    "counter": "Group"
+   },
+   "separation_layer": 23,
+   "n_layers": 36,
+   "role_correct_at_output": true
+  },
+  "C1_window_sum": {
+   "final_diff": {
+    "analogy": -7.74,
+    "requirement": 11.48,
+    "counter": -6.04
+   },
+   "final_top_token": {
+    "analogy": "):\n",
+    "requirement": "=",
+    "counter": "):\n"
+   },
+   "separation_layer": 25,
+   "n_layers": 36,
+   "role_correct_at_output": true
+  },
+  "C2_retry_backoff": {
+   "final_diff": {
+    "analogy": 0.25,
+    "requirement": 5.0,
+    "counter": 1.25
+   },
+   "final_top_token": {
+    "analogy": "1",
+    "requirement": "1",
+    "counter": "1"
+   },
+   "separation_layer": 28,
+   "n_layers": 36,
+   "role_correct_at_output": false
+  }
+ },
+ "probes_with_clear_separation": "5 of 5"
+}

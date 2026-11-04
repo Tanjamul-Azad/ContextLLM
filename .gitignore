@@ -1,0 +1,5 @@
+# raw WildChat user text and other material that must not be published
+local_only/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

@@ -1,0 +1,18 @@
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "dataset": "openai/gsm8k test, 60 questions from offset 487",
+ "guided_completion": {
+  "mean_rouge_l_guided": 0.278,
+  "mean_rouge_l_general": 0.305,
+  "share_near_verbatim_guided(>=0.75)": 0.0,
+  "share_near_verbatim_general(>=0.75)": 0.017
+ },
+ "min_k_prob(k=20%)": {
+  "mean_original": -8.919,
+  "mean_paraphrase": -7.004,
+  "share_original_scores_higher_than_its_paraphrase": 0.167,
+  "mean_our_fresh_seed_texts": -9.418
+ },
+ "rule": "Flag the source if more than 5% of items come back near word for word, or if originals score clearly higher than paraphrases.",
+ "flag_source": false
+}
