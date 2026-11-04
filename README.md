@@ -47,3 +47,9 @@ Each step's start, end and output is logged in `results/logs/run_all.log`. Gener
 ## Data policy
 
 Raw WildChat user text is never committed. It stays in `local_only/` (git-ignored) for hand-checking; the repository keeps only conversation hashes, lengths and labels. WildChat is released under ODC-BY.
+
+## Environment notes
+
+- Tested with torch 2.6.0+cu124, torchvision 0.21.0+cu124, transformers 5.5.0, bitsandbytes 0.49.2, Python 3.13, Windows, RTX 4060 (8GB).
+- torchvision must match torch. A mismatched one (we had 0.26 with torch 2.6) breaks `transformers` imports; [src/_compat.py](src/_compat.py) then blocks it, which does not change any text result. After installing the matching version, Qwen2.5-3B reproduced 16 of 16 saved answers exactly (`python -I scripts/recheck_identical.py qwen2.5-3b`).
+- Loading the 4-bit 7B/8B models needs free system RAM. With about 6.5GB free, Windows crashed while memory-mapping the weights; close other programs or restart before running them.

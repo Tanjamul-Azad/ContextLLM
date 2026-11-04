@@ -1,14 +1,17 @@
 """Import before transformers.
 
-On the lab PC the installed torchvision fails to load its C ops
-("operator torchvision::nms does not exist"), which breaks transformers' model
-imports. These scripts need no vision code, so torchvision is blocked.
+If torchvision is installed but does not match torch (it fails with
+"operator torchvision::nms does not exist"), transformers cannot import models.
+These scripts need no vision code, so in that case torchvision is blocked.
+With a matching torchvision this file does nothing.
 """
 import sys
 
-sys.modules.setdefault("torchvision", None)
+try:
+    import torchvision  # noqa: F401
+except Exception:
+    sys.modules["torchvision"] = None
+    import transformers.utils.import_utils as _iu
 
-import transformers.utils.import_utils as _iu  # noqa: E402
-
-_iu.is_torchvision_available = lambda: False
-_iu.is_torchvision_v2_available = lambda: False
+    _iu.is_torchvision_available = lambda: False
+    _iu.is_torchvision_v2_available = lambda: False
