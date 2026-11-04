@@ -19,6 +19,7 @@ This project tests whether models use an example according to its role, finds wh
 | [docs/proposal.md](docs/proposal.md) | Research proposal (updated with sir's feedback) |
 | [docs/feasibility-sprint.md](docs/feasibility-sprint.md) | One-week go / no-go plan (5–11 Nov 2026) and pass marks |
 | [docs/related-work-deep-read.md](docs/related-work-deep-read.md) | Full reading of the 10 closest papers |
+| [docs/paper-protocol.md](docs/paper-protocol.md) | Paper protocol: claims, hypotheses, pass marks, benchmark rules (draft until frozen) |
 | [docs/compute-plan.md](docs/compute-plan.md) | GPU and credit plan |
 | [src/seeds.py](src/seeds.py) | Pilot seeds: 10 tasks × 3 roles, with automatic checks |
 | [src/checks.py](src/checks.py) | Scoring: format, target rules, transfer, leakage, copied pattern |

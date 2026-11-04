@@ -1,0 +1,108 @@
+{
+  "audit_date": "2026-11-05",
+  "models": {
+    "llama3.1-8b-4bit": {
+      "saved_answers": 130,
+      "independent_seed_count": 10,
+      "unique_scored_item_ids": 130,
+      "raw_and_scored_ids_match": true,
+      "duplicate_raw_item_ids": 0,
+      "plain_single_n": 30,
+      "plain_single_fail_n": 14,
+      "plain_single_failure_rate_as_scored": 0.4666666666666667,
+      "explicit_single_n": 30,
+      "explicit_single_fail_n": 8,
+      "explicit_single_failure_rate_as_scored": 0.26666666666666666,
+      "plain_format_failure_n": 0,
+      "explicit_format_failure_n": 0,
+      "old_E4_pass_rule_met": false,
+      "interpretation": "Recomputed from saved scores, not independently re-generated; scoring validity remains unverified."
+    },
+    "qwen2.5-3b": {
+      "saved_answers": 130,
+      "independent_seed_count": 10,
+      "unique_scored_item_ids": 130,
+      "raw_and_scored_ids_match": true,
+      "duplicate_raw_item_ids": 0,
+      "plain_single_n": 30,
+      "plain_single_fail_n": 14,
+      "plain_single_failure_rate_as_scored": 0.4666666666666667,
+      "explicit_single_n": 30,
+      "explicit_single_fail_n": 10,
+      "explicit_single_failure_rate_as_scored": 0.3333333333333333,
+      "plain_format_failure_n": 0,
+      "explicit_format_failure_n": 0,
+      "old_E4_pass_rule_met": false,
+      "interpretation": "Recomputed from saved scores, not independently re-generated; scoring validity remains unverified."
+    },
+    "qwen2.5-7b-4bit": {
+      "saved_answers": 130,
+      "independent_seed_count": 10,
+      "unique_scored_item_ids": 130,
+      "raw_and_scored_ids_match": true,
+      "duplicate_raw_item_ids": 0,
+      "plain_single_n": 30,
+      "plain_single_fail_n": 12,
+      "plain_single_failure_rate_as_scored": 0.4,
+      "explicit_single_n": 30,
+      "explicit_single_fail_n": 9,
+      "explicit_single_failure_rate_as_scored": 0.3,
+      "plain_format_failure_n": 0,
+      "explicit_format_failure_n": 2,
+      "old_E4_pass_rule_met": false,
+      "interpretation": "Recomputed from saved scores, not independently re-generated; scoring validity remains unverified."
+    }
+  },
+  "handcheck_files": {
+    "wildchat": {
+      "rows_in_handcheck_file": 45,
+      "positives_in_handcheck_file": 10,
+      "positive_roles": {
+        "analogy": 1,
+        "requirement": 9,
+        "counter-example": 0
+      },
+      "annotation_provenance": "File label names do not establish who annotated them; independent human verification is pending.",
+      "population_prevalence_claim": "Not established: keyword-selected, length-filtered and deduplicated candidate sample; missed positives not audited."
+    },
+    "oasst": {
+      "rows_in_handcheck_file": 40,
+      "positives_in_handcheck_file": 12,
+      "positive_roles": {
+        "analogy": 2,
+        "requirement": 8,
+        "counter-example": 2
+      },
+      "annotation_provenance": "File label names do not establish who annotated them; independent human verification is pending.",
+      "population_prevalence_claim": "Not established: keyword-selected, length-filtered and deduplicated candidate sample; missed positives not audited."
+    }
+  },
+  "confirmed_scoring_mismatch": {
+    "seed": "P5_newsletter_headlines",
+    "prompt_rules": "Rules: exactly 3 headlines; at most 10 words each.",
+    "transfer_check": [
+      [
+        "json_all_words_le",
+        "headlines[]",
+        8
+      ]
+    ],
+    "issue": "Prompt allows ten words; analogy checker requires at most eight. Nine/ten-word answers can be penalized without a matching instruction."
+  },
+  "additional_design_issues": [
+    "Plain P1 asks for inspiration but its gold bans colour names; that prohibition is only explicit in the explicit variant. Human adjudication is required.",
+    "checks.score marks invalid format as leakage. Report format failure separately from source-detail import.",
+    "E5 requirement-minus-counter marker gap is a role-response sanity check, not proof of useful analogical transfer or of a role-specific failure.",
+    "Logit lens uses a supplied answer prefix and hand-picked token sets on five seeds from one model. It does not locate a causal failure layer or identify harmful neurons.",
+    "GSM8K membership diagnostics do not certify newly constructed seed cards; rewriting and negative detection results do not establish non-membership."
+  ],
+  "source_file_sha256": {
+    "results\\behaviour\\llama3.1-8b-4bit\\scored.jsonl": "8f0e96894eca518af7fb3fca967599cc0fe14a50eb416d16c3bac109b68e6d74",
+    "results\\behaviour\\llama3.1-8b-4bit\\generations.jsonl": "4cc9cdc7700e3dcdc894fa444081eea072e5ae055b840b1d3ce8488900087757",
+    "results\\behaviour\\qwen2.5-3b\\scored.jsonl": "5d371b6794e2e04ddc4e576faaba2f1346027efdec833af2324891821776ae69",
+    "results\\behaviour\\qwen2.5-3b\\generations.jsonl": "96cc5e44e37c2ddc80d44bfcb7151e6f3f8a9bbeb09ae09ca1ea3ababa1dedc3",
+    "results\\behaviour\\qwen2.5-7b-4bit\\scored.jsonl": "66e42b2eb49d61620885432036e47a885ef3a75f23bfae24646a1cb37e037375",
+    "results\\behaviour\\qwen2.5-7b-4bit\\generations.jsonl": "5ece73236f636b5dccb813e9b4571371a9b2c323a7cd26c455499aa1662a8876"
+  },
+  "decision": "REVISE AND CONTINUE FEASIBILITY ONLY. No main-paper go/freeze conclusion follows yet."
+}

@@ -1,0 +1,64 @@
+{
+  "version": "calibration_v0.1",
+  "created": "2026-11-05",
+  "purpose": "Legacy prompt/gold design calibration; not confirmatory evaluation",
+  "human_annotation_completed": false,
+  "cards": [
+    {
+      "card_id": "C01",
+      "legacy_seed_id": "P1_helpdesk_triage",
+      "construction_role_NOT_human_gold": "analogy",
+      "wording": "plain",
+      "prompt_sha256": "dff0f9da7548c88cde1e865e46d522d41b08ece24df85696fa89593b991a35c2"
+    },
+    {
+      "card_id": "C02",
+      "legacy_seed_id": "P2_drone_pricing",
+      "construction_role_NOT_human_gold": "requirement",
+      "wording": "plain",
+      "prompt_sha256": "94fff27ed6d6579ca2e229dd68b1ef9099fc1f0d44edd8188f0ef9abee6ec33f"
+    },
+    {
+      "card_id": "C03",
+      "legacy_seed_id": "P3_incident_andon",
+      "construction_role_NOT_human_gold": "counter",
+      "wording": "plain",
+      "prompt_sha256": "baa49f15ac5f58419d60d6987f6e31ac9ffb7564394b6d86521cd4b7fe6fae0c"
+    },
+    {
+      "card_id": "C04",
+      "legacy_seed_id": "P4_workshop_survivorship",
+      "construction_role_NOT_human_gold": "analogy",
+      "wording": "plain",
+      "prompt_sha256": "73f93b43b8757f778079441a279fe4b2b598ad2af43c79eb91eb978715648def"
+    },
+    {
+      "card_id": "C05",
+      "legacy_seed_id": "P5_newsletter_headlines",
+      "construction_role_NOT_human_gold": "analogy",
+      "wording": "plain",
+      "prompt_sha256": "b6981ab4a52a40b39333d3e23dc2f6982431e6ac1a3df71fdcef72306f366df9"
+    },
+    {
+      "card_id": "C06",
+      "legacy_seed_id": "P6_exam_hall_boarding",
+      "construction_role_NOT_human_gold": "requirement",
+      "wording": "plain",
+      "prompt_sha256": "e09e234cd1c7812a786d42bdd17d5fd0e57dfc9caa83e7cc5a0f5e96d7bd3f93"
+    },
+    {
+      "card_id": "C07",
+      "legacy_seed_id": "C1_window_sum",
+      "construction_role_NOT_human_gold": "counter",
+      "wording": "plain",
+      "prompt_sha256": "473aa70eb7312cc0088a71077ae675cf3b6d06bfdb42a83a7d90f51622e1e879"
+    },
+    {
+      "card_id": "C08",
+      "legacy_seed_id": "C2_retry_backoff",
+      "construction_role_NOT_human_gold": "analogy",
+      "wording": "plain",
+      "prompt_sha256": "a85371fe23a7407842ba40e19aec2b619462cb7b01e516a205b5aaee862a9773"
+    }
+  ]
+}
