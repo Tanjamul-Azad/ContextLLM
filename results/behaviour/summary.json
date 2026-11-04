@@ -624,7 +624,7 @@
     "format_ok": 0.9,
     "constraint_ok": 0.8,
     "transfer_ok": 0.7,
-    "leak": 0.2,
+    "leak": 0.1111111111111111,
     "joint": 0.5,
     "copied_marker": 0.2
    },
@@ -636,7 +636,7 @@
     "format_ok": 0.9,
     "constraint_ok": 0.8,
     "transfer_ok": 0.8,
-    "leak": 0.1,
+    "leak": 0.0,
     "joint": 0.7,
     "copied_marker": 0.2
    },
@@ -684,7 +684,7 @@
     "format_ok": 0.9,
     "constraint_ok": 0.8,
     "transfer_ok": 0.7,
-    "leak": 0.2,
+    "leak": 0.1111111111111111,
     "joint": 0.6,
     "copied_marker": 0.7
    },

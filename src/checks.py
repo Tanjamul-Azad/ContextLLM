@@ -221,8 +221,8 @@ def score(output, seed, role):
         (trans if kind == "transfer" else leaks).append(r)
     marker = run_check(seed["marker"], ans, seed)[0] if ans["format_ok"] else False
     res["transfer_ok"] = ans["format_ok"] and all(p for p, _ in trans)
-    res["leak"] = (not ans["format_ok"]) or any(not p for p, _ in leaks)
-    res["joint"] = res["constraint_ok"] and res["transfer_ok"] and not res["leak"]
+    res["leak"] = None if not ans["format_ok"] else any(not p for p, _ in leaks)
+    res["joint"] = res["constraint_ok"] and res["transfer_ok"] and res["leak"] is False
     res["marker"] = marker
     detail["transfer"] = [list(map(str, t)) for t in trans]
     detail["leakage"] = [list(map(str, x)) for x in leaks]

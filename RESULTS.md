@@ -1,6 +1,17 @@
 # Pilot results (4 November 2026)
 
-**Verdict: go, with two gaps to close this week.** All three models fail on 40–47% of plain prompts, and stating the relation outright does not fix it. In two of three models the role clearly changes what gets copied. Inside the model, the roles split at layers 23–28 of 36. The gaps: the seeds have not yet been checked by a second annotator (E2), and 10 seeds is a small set.
+**Verdict after audit: revise and continue the feasibility work; no main-paper go yet.** The pilot shows the pipeline works and that models often import the wrong parts of an example (40–47% of plain prompts fail as scored). But a read-only audit on 5 November ([results/audit_2026-11-05/](results/audit_2026-11-05/README.md)) found problems in the checks themselves, so these numbers are exploratory, not confirmed failure rates.
+
+**Known problems (from the audit):**
+
+- P5: the prompt allows 10 words, but the analogy check required 8 or fewer. The check was stricter than the instruction.
+- P1, plain analogy: the prompt only says "for inspiration", yet the check bans colour names. That ban is stated only in the explicit variant, so the plain case needs human adjudication.
+- A format failure was also counted as leakage. These must be reported separately.
+- E5's copy-rate gap shows the model reacts to the role; it does not prove useful transfer.
+- E7 is a logit-lens reading on 5 hand-picked probes in one model. It shows where the roles' curves separate, not a causal failure layer or harmful neurons.
+- E1 hand-check labels need an independent second annotator; they do not give population prevalence.
+
+The tables below are kept as recorded, with these caveats. New pass marks apply only to new held-out seeds ([docs/paper-protocol.md](docs/paper-protocol.md)).
 
 All numbers below come from files in [results/](results/). Every raw prompt and answer is saved, so any number can be traced back.
 
@@ -14,7 +25,7 @@ All numbers below come from files in [results/](results/). Every raw prompt and 
 | E4 | Do models fail? | Plain wording: 47% / 40% / 47% fail (Qwen-3B / Qwen-7B / Llama-8B). Explicit wording: 33% / 30% / 27% | 25%+ fail, and explicit halves it | Failure is real; explicit wording helps but does not halve it |
 | E5 | Does the role matter? | Copy-rate gap, requirement minus counter: 60 [30, 90], 30 [-10, 70], 50 [20, 80] points | 15+ points, interval above 0 | Pass for Qwen-3B and Llama-8B; not for Qwen-7B |
 | E6 | Is it more than multi-turn drift? | Single-turn failure 40–47%; multi-turn 40–43% | Failure appears in single-turn | Pass |
-| E7 | Is there a layer signal? | The roles split at layers 23–28 of 36 in all 5 probes; the final answer was role-correct in 2 of 5 | Clear split in 3 of 5 | Pass |
+| E7 | Is there a layer signal? | The roles' logit-lens curves separate at layers 23–28 of 36 in all 5 probes; the final answer was role-correct in 2 of 5 | Clear split in 3 of 5 | Met as read-out only; not causal evidence |
 
 Intervals are 95% bootstrap over seeds.
 
@@ -69,7 +80,7 @@ Full tables: [results/behaviour/summary.md](results/behaviour/summary.md). Per s
 
 ![Layer scan, code seed](results/logit_lens/qwen2.5-3b/C1_window_sum.png)
 
-At the token where the answer either copies the example or not (here: does `k` get the example's default of 7?), we read every layer's guess. Up to about layer 23 all three roles look the same. After that the requirement curve rises towards copying and the other two fall. So the role is only used in the last third of the network. The layer-level work (patching, switching off parts) should focus on layers 23–36.
+At the token where the answer either copies the example or not (here: does `k` get the example's default of 7?), we read every layer's guess. Up to about layer 23 all three roles look the same. After that the requirement curve rises towards copying and the other two fall. This is a read-out, not a cause: it suggests where to look, and the causal tests (patching, ablation with random controls) must check it on new seeds.
 
 | Probe | Layer where roles split | Role-correct at the output? |
 | --- | --- | --- |

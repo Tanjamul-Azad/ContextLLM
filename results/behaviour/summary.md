@@ -92,12 +92,12 @@ Where plain answers fail: leaked a detail 17%, missed the needed transfer 30%, b
 | Role | Wording | Turns | n | Format | Rules kept | Transfer right | Leaked | Joint | Copied pattern |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | analogy | plain | single | 10 | 100% | 90% | 80% | 10% | 60% | 20% |
-| analogy | plain | multi | 10 | 90% | 80% | 70% | 20% | 50% | 20% |
-| analogy | explicit | single | 10 | 90% | 80% | 80% | 10% | 70% | 20% |
+| analogy | plain | multi | 10 | 90% | 80% | 70% | 11% | 50% | 20% |
+| analogy | explicit | single | 10 | 90% | 80% | 80% | 0% | 70% | 20% |
 | analogy | explicit | multi | 10 | 100% | 80% | 90% | 10% | 60% | 20% |
 | requirement | plain | single | 10 | 100% | 80% | 50% | 40% | 40% | 50% |
 | requirement | plain | multi | 10 | 100% | 80% | 60% | 40% | 50% | 60% |
-| requirement | explicit | single | 10 | 90% | 80% | 70% | 20% | 60% | 70% |
+| requirement | explicit | single | 10 | 90% | 80% | 70% | 11% | 60% | 70% |
 | requirement | explicit | multi | 10 | 100% | 90% | 90% | 0% | 80% | 100% |
 | counter | plain | single | 10 | 100% | 90% | 80% | 0% | 80% | 20% |
 | counter | plain | multi | 10 | 100% | 90% | 70% | 0% | 70% | 20% |

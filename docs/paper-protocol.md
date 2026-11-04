@@ -58,6 +58,8 @@ Multiple comparisons: Holm correction across H1–H5's primary tests.
 - [ ] The gold specification lists what must transfer, what must not, and the target rules, each with an automatic check.
 - [ ] Realism rated 4 or 5 out of 5 by both annotators.
 - [ ] Implied-cue variants make up half of all variants.
+- [ ] Every check matches something the prompt or the role actually implies; a stricter check than the instruction is a seed error (pilot P5).
+- [ ] Where a plain (implied) variant leaves a detail ambiguous, two annotators adjudicate it before it is scored (pilot P1).
 
 **Sources and quotas.** No source may supply more than 40% of seeds.
 
@@ -89,14 +91,14 @@ Decoding: greedy for main results. A robustness subset of 300 items is also run 
 
 ## 5. Behavioural study
 
-- **Metrics.** Primary: joint success. Secondary: appropriate transfer, detail leakage, constraint retention, copy-rate gap by role.
+- **Metrics.** Format failure is reported separately and never counted as leakage. Primary: joint success. Secondary: appropriate transfer, detail leakage, constraint retention, copy-rate gap by role.
 - **Baselines inside the study.** A no-example version of every task, and a relation-stated version.
 - **Statistics.** Seed-level bootstrap, 10,000 resamples. Paired permutation tests for within-seed comparisons. Effect sizes are always reported with intervals.
 - **Error analysis.** 100 failed answers, sampled at random and labelled by type.
 
 ## 6. Mechanism study
 
-1. **Logit lens and tuned lens** on matched role pairs (dev split).
+1. **Logit lens and tuned lens** on matched role pairs (dev split). These are read-outs only; no claim of a causal layer rests on them.
 2. **Linear probes** for role on every layer, with lexical controls: the same role words in a neutral context.
 3. **Activation patching**, by layer and then by head, between pairs that differ only in role.
 4. **Ablation** of the top-k components chosen on dev, evaluated on test, with k ∈ {1, 5, 10, 1% of the layer}.
