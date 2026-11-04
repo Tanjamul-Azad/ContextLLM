@@ -1,0 +1,1348 @@
+{
+  "id": "D04_abc_makerspace",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "decision",
+  "domain": "operations / inventory control",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "ABC inventory classification (Dickie, General Electric, 1951; standard textbook method)",
+    "references": [
+      {
+        "citation": "Dickie, H. F. (1951). ABC inventory analysis shoots for dollars, not pennies. Factory Management and Maintenance 109(7), 92-94."
+      },
+      {
+        "citation": "Silver, E. A., Pyke, D. F., Thomas, D. J. (2016). Inventory and Production Management in Supply Chains, 4th ed. CRC Press.",
+        "doi": "10.1201/9781315374406"
+      },
+      {
+        "citation": "ABC analysis (overview with references).",
+        "url": "https://en.wikipedia.org/wiki/ABC_analysis"
+      }
+    ],
+    "provenance_group_id": "PG-abc-inventory",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our university makerspace buys nine kinds of consumables. Annual spend last year (BDT): PLA filament 180,000; resin 110,000; acrylic sheet 52,000; solder wire 21,000; sandpaper 13,000; glue sticks 9,000; zip ties 6,500; fire blanket 5,000; eye-wash cartridges 3,500. Two technicians share stock checks, and checking everything weekly takes too long. Decide how often each item is checked.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Give every one of the nine items exactly one check frequency: weekly, monthly or quarterly.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "json_len_between",
+              "items",
+              9,
+              9
+            ]
+          },
+          {
+            "id": "R1b",
+            "spec": [
+              "json_map_in",
+              "items",
+              "item",
+              "frequency",
+              {
+                "PLA filament": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "resin": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "acrylic sheet": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "solder wire": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "sandpaper": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "glue sticks": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "zip ties": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "fire blanket": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ],
+                "eye-wash cartridges": [
+                  "weekly",
+                  "monthly",
+                  "quarterly"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "At most 3 items may be checked weekly.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "json_count_value_le",
+              "items",
+              "frequency",
+              "weekly",
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Explain the method in method_summary in at most 40 words.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "json_all_words_le",
+              "method_summary",
+              40
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with JSON only, in this shape: {\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly, monthly or quarterly\"}], \"method_summary\": \"...\"}"
+  },
+  "source_example": {
+    "text": "ABC analysis is a standard way to decide how much attention each stock item deserves. It is usually credited to H. Ford Dickie of General Electric, who described it in 1951 under the slogan \"shoot for dollars, not pennies\". The method rests on the Pareto pattern: a few items account for most of the money spent. A typical textbook example is a hardware wholesaler with ten stock items. The wholesaler first lists each item's annual spend in US dollars, for example 60,000 dollars for door hinges and 300 dollars for rubber washers. It then sorts the items from the largest annual spend to the smallest. Next it adds up the spend item by item and works out the running share of the total. An item is class A if the running share, including that item, is at most 80 percent. It is class B if the running share is above 80 and at most 95 percent. All remaining items are class C. In the example, two items, hinges and deadbolts, make up 78 percent of spend and become class A. Four items make up the next 16 percent and become class B. The last four items, including washers and wall plugs, share the final 6 percent and become class C. Class A items are counted every week in a cycle count, class B items every month and class C items once a quarter. The wholesaler also sets tighter reorder points for class A items and orders them more often in smaller lots. Class C items are ordered in large lots twice a year, because their total value is small. Managers like the method because it is simple and needs only one number per item. Its known weakness is that annual spend is the only criterion. A cheap item can still be critical, for example a spare part whose absence stops a machine. Some firms therefore add a criticality class or move critical items up by hand. Silver, Pyke and Thomas describe the method and these refinements in their textbook on inventory management.",
+    "length": "long",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "US-dollar amounts",
+        "leak_terms": [
+          "dollars"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Hardware items",
+        "leak_terms": [
+          "hinges",
+          "deadbolts",
+          "washers",
+          "wall plugs"
+        ],
+        "control": {
+          "from": "hinges",
+          "to": "handles",
+          "leak_terms": [
+            "handles",
+            "deadbolts",
+            "washers",
+            "wall plugs"
+          ]
+        }
+      },
+      {
+        "id": "I3",
+        "text": "Origin: Dickie at General Electric",
+        "leak_terms": [
+          "Dickie",
+          "General Electric"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "Ordering in large lots twice a year",
+        "leak_terms": [
+          "twice a year",
+          "reorder points"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "The wholesaler setting",
+        "leak_terms": [
+          "wholesaler"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "annual spend per item",
+        "source_quote": "annual spend in US dollars",
+        "target_quote": "Annual spend last year (BDT)"
+      },
+      {
+        "feature": "how often stock is checked",
+        "source_quote": "counted every week",
+        "target_quote": "how often each item is checked"
+      },
+      {
+        "feature": "weekly / monthly / quarterly frequencies",
+        "source_quote": "every month and class C items once a quarter",
+        "target_quote": "weekly, monthly or quarterly"
+      },
+      {
+        "feature": "several items of very different value",
+        "source_quote": "a hardware wholesaler with ten stock items",
+        "target_quote": "nine kinds of consumables"
+      }
+    ]
+  },
+  "relation": "Give the items that carry most of the spend the most frequent checks.",
+  "marker": {
+    "what": "frequency ordered by spend alone",
+    "spec": [
+      "json_monotone_map",
+      "items",
+      "item",
+      "frequency",
+      [
+        "PLA filament",
+        "resin",
+        "acrylic sheet",
+        "solder wire",
+        "sandpaper",
+        "glue sticks",
+        "zip ties",
+        "fire blanket",
+        "eye-wash cartridges"
+      ],
+      [
+        "weekly",
+        "monthly",
+        "quarterly"
+      ]
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "A colleague from the business school suggested ABC analysis. Borrow the idea, not the details: work from our own spend figures and limits.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_monotone_map",
+            "items",
+            "item",
+            "frequency",
+            [
+              "PLA filament",
+              "resin",
+              "acrylic sheet",
+              "solder wire",
+              "sandpaper",
+              "glue sticks",
+              "zip ties",
+              "fire blanket",
+              "eye-wash cartridges"
+            ],
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ]
+          ],
+          "what": "Higher spend never gets a less frequent check",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_map_rank_cmp",
+            "items",
+            "item",
+            "frequency",
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ],
+            "PLA filament",
+            "<",
+            "zip ties"
+          ],
+          "what": "The top-spend item is checked more often than a low-spend one",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Class A items are counted every week"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "A colleague from the business school sent me this when I asked how to plan our stock checks:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_monotone_map",
+            "items",
+            "item",
+            "frequency",
+            [
+              "PLA filament",
+              "resin",
+              "acrylic sheet",
+              "solder wire",
+              "sandpaper",
+              "glue sticks",
+              "zip ties",
+              "fire blanket",
+              "eye-wash cartridges"
+            ],
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ]
+          ],
+          "what": "Higher spend never gets a less frequent check",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_map_rank_cmp",
+            "items",
+            "item",
+            "frequency",
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ],
+            "PLA filament",
+            "<",
+            "zip ties"
+          ],
+          "what": "The top-spend item is checked more often than a low-spend one",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Class A items are counted every week"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our audit office requires ABC analysis exactly as described below: the same 80 and 95 percent cut-offs, with class A weekly, class B monthly and class C quarterly. Apply it to our figures and copy nothing else.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "PLA filament": [
+                "weekly"
+              ],
+              "resin": [
+                "weekly"
+              ],
+              "acrylic sheet": [
+                "monthly"
+              ],
+              "solder wire": [
+                "monthly"
+              ],
+              "sandpaper": [
+                "monthly"
+              ],
+              "glue sticks": [
+                "quarterly"
+              ],
+              "zip ties": [
+                "quarterly"
+              ],
+              "fire blanket": [
+                "quarterly"
+              ],
+              "eye-wash cartridges": [
+                "quarterly"
+              ]
+            }
+          ],
+          "what": "Frequencies equal the exact 80/95 cut-off classes computed from our spend",
+          "basis": {
+            "type": "stated",
+            "quote": "the same 80 and 95 percent cut-offs"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our audit office has adopted the ABC procedure below word for word, and its inspectors will recompute our classes from the spend figures.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "PLA filament": [
+                "weekly"
+              ],
+              "resin": [
+                "weekly"
+              ],
+              "acrylic sheet": [
+                "monthly"
+              ],
+              "solder wire": [
+                "monthly"
+              ],
+              "sandpaper": [
+                "monthly"
+              ],
+              "glue sticks": [
+                "quarterly"
+              ],
+              "zip ties": [
+                "quarterly"
+              ],
+              "fire blanket": [
+                "quarterly"
+              ],
+              "eye-wash cartridges": [
+                "quarterly"
+              ]
+            }
+          ],
+          "what": "Frequencies equal the exact 80/95 cut-off classes computed from our spend",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "adopted the ABC procedure below word for word"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Last year our previous manager used ABC analysis, described below, on spend alone. The cheap fire blanket and eye-wash cartridges then went unchecked for months, and one cartridge was found expired. Do not decide on spend alone; safety items must be checked at least monthly.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "fire blanket": [
+                "weekly",
+                "monthly"
+              ],
+              "eye-wash cartridges": [
+                "weekly",
+                "monthly"
+              ]
+            }
+          ],
+          "what": "Fire blanket and eye-wash checked at least monthly",
+          "basis": {
+            "type": "stated",
+            "quote": "safety items must be checked at least monthly"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Last year our previous manager used the ABC analysis below on spend alone. The cheap fire blanket and eye-wash cartridges then went unchecked for months, and one cartridge was found expired.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "fire blanket": [
+                "weekly",
+                "monthly"
+              ],
+              "eye-wash cartridges": [
+                "weekly",
+                "monthly"
+              ]
+            }
+          ],
+          "what": "Fire blanket and eye-wash are not left to quarterly checks",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "went unchecked for months"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-stated-partial",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "partial",
+      "text": "A colleague from the business school suggested ABC analysis. Borrow the idea, not the details, and apply it where our safety rule leaves room.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_monotone_map",
+            "items",
+            "item",
+            "frequency",
+            [
+              "PLA filament",
+              "resin",
+              "acrylic sheet",
+              "solder wire",
+              "sandpaper",
+              "glue sticks",
+              "zip ties"
+            ],
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ]
+          ],
+          "what": "Among non-safety items, higher spend never gets a less frequent check",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_map_rank_cmp",
+            "items",
+            "item",
+            "frequency",
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ],
+            "PLA filament",
+            "<",
+            "zip ties"
+          ],
+          "what": "The top-spend item is checked more often than a low-spend one",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T3",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "fire blanket": [
+                "weekly"
+              ],
+              "eye-wash cartridges": [
+                "weekly"
+              ]
+            }
+          ],
+          "what": "Safety items weekly, as our rule says",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "Safety items (fire blanket, eye-wash cartridges) must be checked weekly, whatever they cost.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "json_map_in",
+                "items",
+                "item",
+                "frequency",
+                {
+                  "fire blanket": [
+                    "weekly"
+                  ],
+                  "eye-wash cartridges": [
+                    "weekly"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The safety rule fixes two items; the spend relation applies to the other seven."
+    },
+    {
+      "id": "analogy-implied-partial",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "partial",
+      "text": "A colleague from the business school sent me this when I asked how to plan our stock checks:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_monotone_map",
+            "items",
+            "item",
+            "frequency",
+            [
+              "PLA filament",
+              "resin",
+              "acrylic sheet",
+              "solder wire",
+              "sandpaper",
+              "glue sticks",
+              "zip ties"
+            ],
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ]
+          ],
+          "what": "Among non-safety items, higher spend never gets a less frequent check",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_map_rank_cmp",
+            "items",
+            "item",
+            "frequency",
+            [
+              "weekly",
+              "monthly",
+              "quarterly"
+            ],
+            "PLA filament",
+            "<",
+            "zip ties"
+          ],
+          "what": "The top-spend item is checked more often than a low-spend one",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Class A items are counted every week"
+          }
+        },
+        {
+          "id": "T3",
+          "spec": [
+            "json_map_in",
+            "items",
+            "item",
+            "frequency",
+            {
+              "fire blanket": [
+                "weekly"
+              ],
+              "eye-wash cartridges": [
+                "weekly"
+              ]
+            }
+          ],
+          "what": "Safety items weekly, as our rule says",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No dollar amounts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No hardware items",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Dickie / General Electric",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No twice-a-year lots or reorder points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No wholesaler",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "Safety items (fire blanket, eye-wash cartridges) must be checked weekly, whatever they cost.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "json_map_in",
+                "items",
+                "item",
+                "frequency",
+                {
+                  "fire blanket": [
+                    "weekly"
+                  ],
+                  "eye-wash cartridges": [
+                    "weekly"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The safety rule fixes two items; the spend relation applies to the other seven."
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft; a wrong-fit target would need items whose spend says nothing about risk, which this task does not have."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "analogy-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "analogy-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "requirement-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "requirement-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "counter-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"monthly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"monthly\"}], \"method_summary\": \"Items are ranked by spend, but the fire blanket and eye-wash cartridges are checked monthly because they are safety items.\"}",
+    "counter-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"monthly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"monthly\"}], \"method_summary\": \"Items are ranked by spend, but the fire blanket and eye-wash cartridges are checked monthly because they are safety items.\"}",
+    "analogy-stated-partial": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"monthly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"quarterly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"weekly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"weekly\"}], \"method_summary\": \"Safety items are checked weekly; the other items are ranked by spend, with the biggest spend checked most often.\"}",
+    "analogy-implied-partial": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"monthly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"quarterly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"weekly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"weekly\"}], \"method_summary\": \"Safety items are checked weekly; the other items are ranked by spend, with the biggest spend checked most often.\"}"
+  },
+  "copy_answers": {
+    "analogy-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Class A, like hinges and deadbolts at the wholesaler, gets a weekly cycle count; class C is ordered twice a year. Shoot for dollars, not pennies.\"}",
+    "analogy-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Class A, like hinges and deadbolts at the wholesaler, gets a weekly cycle count; class C is ordered twice a year. Shoot for dollars, not pennies.\"}",
+    "requirement-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Class A, like hinges and deadbolts at the wholesaler, gets a weekly cycle count; class C is ordered twice a year. Shoot for dollars, not pennies.\"}",
+    "requirement-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Class A, like hinges and deadbolts at the wholesaler, gets a weekly cycle count; class C is ordered twice a year. Shoot for dollars, not pennies.\"}",
+    "counter-stated-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "counter-implied-full": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "analogy-stated-partial": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}",
+    "analogy-implied-partial": "{\"items\": [{\"item\": \"PLA filament\", \"frequency\": \"weekly\"}, {\"item\": \"resin\", \"frequency\": \"weekly\"}, {\"item\": \"acrylic sheet\", \"frequency\": \"monthly\"}, {\"item\": \"solder wire\", \"frequency\": \"monthly\"}, {\"item\": \"sandpaper\", \"frequency\": \"monthly\"}, {\"item\": \"glue sticks\", \"frequency\": \"quarterly\"}, {\"item\": \"zip ties\", \"frequency\": \"quarterly\"}, {\"item\": \"fire blanket\", \"frequency\": \"quarterly\"}, {\"item\": \"eye-wash cartridges\", \"frequency\": \"quarterly\"}], \"method_summary\": \"Items are ranked by last year's spend; the few items that make up most of the spend are checked most often, low-spend items least often.\"}"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "Cumulative spend shares: 45.0, 72.5, 85.5, 90.75, 94.0, 96.25, 97.9, 99.1, 100 percent, so the 80/95 classes are unambiguous (closest margin 1 point, sandpaper). The I4 leak terms ('reorder point', 'twice a year') could appear in a sensible plan; they are ambiguous under implied cues and annotators may drop them. The textbook DOI should be checked."
+}

@@ -1,0 +1,26 @@
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "source": "natural_instructions",
+ "dataset": "jayelm/natural-instructions (default/test), task definitions, 50 distinct tasks",
+ "n": 50,
+ "item_sampling_seed": 7,
+ "max_new_tokens": {
+  "completion": 192,
+  "paraphrase": 422
+ },
+ "guided_completion": {
+  "mean_rouge_l_guided": 0.188,
+  "mean_rouge_l_general": 0.193,
+  "share_near_verbatim_guided(>=0.75)": 0.0,
+  "share_near_verbatim_general(>=0.75)": 0.0
+ },
+ "min_k_prob(k=20%)": {
+  "mean_original": -5.968,
+  "mean_paraphrase": -7.026,
+  "share_original_scores_higher_than_its_paraphrase": 0.7,
+  "mean_our_fresh_seed_texts": -9.418
+ },
+ "rule": "Flag if guided near-verbatim share (ROUGE-L >= 0.75) > 0.05, or original > paraphrase in > 70% of pairs.",
+ "flag_reasons": [],
+ "flag_source": false
+}

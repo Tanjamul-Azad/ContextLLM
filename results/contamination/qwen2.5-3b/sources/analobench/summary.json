@@ -1,0 +1,26 @@
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "source": "analobench",
+ "dataset": "jhu-clsp/AnaloBench (T1S10-Full/train), gold 10-sentence stories, 50 distinct",
+ "n": 50,
+ "item_sampling_seed": 7,
+ "max_new_tokens": {
+  "completion": 196,
+  "paraphrase": 446
+ },
+ "guided_completion": {
+  "mean_rouge_l_guided": 0.145,
+  "mean_rouge_l_general": 0.15,
+  "share_near_verbatim_guided(>=0.75)": 0.0,
+  "share_near_verbatim_general(>=0.75)": 0.0
+ },
+ "min_k_prob(k=20%)": {
+  "mean_original": -6.25,
+  "mean_paraphrase": -6.223,
+  "share_original_scores_higher_than_its_paraphrase": 0.36,
+  "mean_our_fresh_seed_texts": -9.418
+ },
+ "rule": "Flag if guided near-verbatim share (ROUGE-L >= 0.75) > 0.05, or original > paraphrase in > 70% of pairs.",
+ "flag_reasons": [],
+ "flag_source": false
+}

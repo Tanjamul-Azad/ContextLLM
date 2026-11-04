@@ -1,0 +1,510 @@
+{
+  "id": "C03_index_truncation",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "code",
+  "domain": "numerical computing / finance",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "Vancouver Stock Exchange index truncation error (1982-1983)",
+    "references": [
+      {
+        "citation": "Quinn, K. (1983). Ever had problems rounding off figures? This stock exchange has. The Wall Street Journal, 8 November 1983, p. 37."
+      },
+      {
+        "citation": "Huckle, T. Collection of software bugs (Vancouver Stock Exchange entry).",
+        "url": "https://www5.in.tum.de/~huckle/bugse.html"
+      }
+    ],
+    "provenance_group_id": "PG-vancouver-index",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our solar mini-grid cooperative in Sunamganj publishes a tariff index. It starts at a given value and changes by a percentage after every meter-reading batch, about 40 times a day. Write a Python function update_index(start, changes) that applies the percentage changes in order and returns the list of index values after each change.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "A change of 1.0 means the index rises by 1 percent; return one value per change, in order.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "py_test",
+              "BASIC"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Each returned value has at most 3 decimal places.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "THREE_DP"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "source_example": {
+    "text": "In January 1982 the Vancouver Stock Exchange launched a new stock index with a starting value of 1000.000. The index was recalculated after every trade, about 3,000 times a day. Each time, the new value was cut to three decimal places instead of being rounded. Cutting off digits always pushes the value down, by about half of the last digit on average. The loss was tiny for one trade, but it added up over thousands of trades a day. By November 1983 the index stood near 524.811, although the market had not fallen anything like that much. Consultants traced the problem, and the exchange recalculated the index from the original prices. Overnight the corrected index stood at about 1098.892. The case is often cited in numerical-analysis teaching as a warning about repeated truncation. The code below reproduces the original update rule.\n\n```python\nimport math\n\n\ndef next_index(index, pct_change):\n    \"\"\"Vancouver-style update: apply one change, then cut to 3 decimals.\"\"\"\n    raw = index * (1 + pct_change / 100)\n    return math.floor(raw * 1000) / 1000\n\n\ndef run_day(index, changes):\n    for c in changes:\n        index = next_index(index, c)\n    return index\n```",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Vancouver exchange names",
+        "leak_terms": [
+          "Vancouver",
+          "exchange"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Stock-trading vocabulary",
+        "leak_terms": [
+          "stock",
+          "trade",
+          "trades"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "The historical index values",
+        "leak_regex": "\\b1000\\.000\\b|\\b524\\.811\\b|\\b1098\\.892\\b",
+        "control": {
+          "from": "524.811",
+          "to": "531.204",
+          "leak_regex": "\\b1000\\.000\\b|\\b531\\.204\\b|\\b1098\\.892\\b"
+        }
+      },
+      {
+        "id": "I4",
+        "text": "Source function names",
+        "leak_terms": [
+          "run_day",
+          "next_index"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "an index updated by percentage changes",
+        "source_quote": "recalculated after every trade",
+        "target_quote": "changes by a percentage after every meter-reading batch"
+      },
+      {
+        "feature": "three decimal places",
+        "source_quote": "three decimal places",
+        "target_quote": "at most 3 decimal places"
+      },
+      {
+        "feature": "many updates a day",
+        "source_quote": "about 3,000 times a day",
+        "target_quote": "about 40 times a day"
+      },
+      {
+        "feature": "a fixed starting value",
+        "source_quote": "a starting value of 1000.000",
+        "target_quote": "starts at a given value"
+      }
+    ]
+  },
+  "relation": "Repeated truncation of a running value makes it drift downward; keep precision and round only what is shown.",
+  "marker": {
+    "what": "truncate after every update",
+    "spec": [
+      "py_test",
+      "TRUNCATED"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our auditors replicate the index by hand with the rule below, so keep that rule exactly: cut each new value to three decimals after every change, never round.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "TRUNCATED"
+          ],
+          "what": "Cut to three decimals after every change",
+          "basis": {
+            "type": "stated",
+            "quote": "cut each new value to three decimals after every change"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Vancouver / exchange names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No stock-trading words",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No historical index values",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No source function names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The cooperative's founding bylaws copied their index rule word for word from the 1982 rule below, and the auditors check every published value against it.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "TRUNCATED"
+          ],
+          "what": "Cut to three decimals after every change",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "copied their index rule word for word"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Vancouver / exchange names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No stock-trading words",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No historical index values",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No source function names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "A treasurer sent me the story below as a warning. Don't let our index drift like this one did.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NO_DRIFT"
+          ],
+          "what": "No systematic drift after 3,000 updates (within 0.05 of exact)",
+          "basis": {
+            "type": "stated",
+            "quote": "Don't let our index drift like this one did."
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Vancouver / exchange names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No stock-trading words",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No historical index values",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No source function names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "A treasurer sent me the story below after our first month of index values.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NO_DRIFT"
+          ],
+          "what": "No systematic drift after 3,000 updates (within 0.05 of exact)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "sent me the story below"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Vancouver / exchange names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No stock-trading words",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No historical index values",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No source function names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "full",
+      "reason": "The source is a failure story; reading it as inspiration to copy is unnatural, so no analogy variants (dataset-construction step 4 allows fewer roles)."
+    },
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "The source is a failure story; reading it as inspiration to copy is unnatural, so no analogy variants (dataset-construction step 4 allows fewer roles)."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "The source is a failure story; reading it as inspiration to copy is unnatural, so no analogy variants (dataset-construction step 4 allows fewer roles)."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "requirement-stated-full": "```python\nimport math\n\n\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v = math.floor(v * (1 + c / 100) * 1000) / 1000\n        values.append(v)\n    return values\n```",
+    "requirement-implied-full": "```python\nimport math\n\n\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v = math.floor(v * (1 + c / 100) * 1000) / 1000\n        values.append(v)\n    return values\n```",
+    "counter-stated-full": "```python\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v *= 1 + c / 100\n        values.append(round(v, 3))\n    return values\n```",
+    "counter-implied-full": "```python\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v *= 1 + c / 100\n        values.append(round(v, 3))\n    return values\n```"
+  },
+  "copy_answers": {
+    "requirement-stated-full": "```python\nimport math\n\n\ndef next_index(index, pct_change):\n    \"\"\"Vancouver-style update: apply one change, then cut to 3 decimals.\"\"\"\n    raw = index * (1 + pct_change / 100)\n    return math.floor(raw * 1000) / 1000\n\n\ndef update_index(start, changes):\n    out = []\n    for c in changes:\n        start = next_index(start, c)\n        out.append(start)\n    return out\n```",
+    "requirement-implied-full": "```python\nimport math\n\n\ndef next_index(index, pct_change):\n    \"\"\"Vancouver-style update: apply one change, then cut to 3 decimals.\"\"\"\n    raw = index * (1 + pct_change / 100)\n    return math.floor(raw * 1000) / 1000\n\n\ndef update_index(start, changes):\n    out = []\n    for c in changes:\n        start = next_index(start, c)\n        out.append(start)\n    return out\n```",
+    "counter-stated-full": "```python\nimport math\n\n\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v = math.floor(v * (1 + c / 100) * 1000) / 1000\n        values.append(v)\n    return values\n```",
+    "counter-implied-full": "```python\nimport math\n\n\ndef update_index(start, changes):\n    values, v = [], start\n    for c in changes:\n        v = math.floor(v * (1 + c / 100) * 1000) / 1000\n        values.append(v)\n    return values\n```"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The 0.05 drift bound in NO_DRIFT is a judgement: truncation drifts by about 1.5 over the 3,000 test updates, rounding-and-carrying by about 0.02, exact by under 0.001. Annotators must confirm the bound is not stricter than 'don't let it drift'. The implied counter cue ('sent me the story below') is weak; it may need adjudication. 'exchange' and 'trade' could appear in harmless comments.",
+  "func": "update_index",
+  "tests": {
+    "BASIC": "r = update_index(100.0, [1.0, -2.0])\nassert len(r) == 2 and abs(r[0] - 101.0) < 0.0011 and abs(r[1] - 98.98) < 0.0011, r\n",
+    "THREE_DP": "r = update_index(100.0, [0.37, -1.13, 2.071, 0.5])\nassert all(abs(x * 1000 - round(x * 1000)) < 1e-6 for x in r), r\n",
+    "TRUNCATED": "import math\nch = [0.37, -1.13, 2.071, 0.5, -0.333] * 20\nv, exp = 100.0, []\nfor c in ch:\n    v = math.floor(v * (1 + c / 100) * 1000) / 1000\n    exp.append(v)\nr = update_index(100.0, ch)\nassert all(abs(a - b) < 1e-9 for a, b in zip(r, exp)) and len(r) == len(exp), (r[-1], exp[-1])\n",
+    "NO_DRIFT": "ch = [0.05, -0.05] * 1500\nexact = 100.0\nfor c in ch:\n    exact *= 1 + c / 100\nr = update_index(100.0, ch)\nassert abs(r[-1] - exact) < 0.05, (r[-1], exact)\n"
+  },
+  "alternative_solutions": [
+    {
+      "variant": "counter-stated-full",
+      "answer": "```python\nfrom decimal import Decimal, ROUND_HALF_EVEN\n\n\ndef update_index(start, changes):\n    v, out = Decimal(str(start)), []\n    for c in changes:\n        v = v * (1 + Decimal(str(c)) / 100)\n        out.append(float(v.quantize(Decimal(\"0.001\"), rounding=ROUND_HALF_EVEN)))\n    return out\n```",
+      "why": "Decimal arithmetic with rounding only for output is also valid."
+    }
+  ]
+}

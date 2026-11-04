@@ -1,0 +1,776 @@
+{
+  "id": "C01_calver_compare",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "code",
+  "domain": "software versioning",
+  "provenance": {
+    "source_type": "software_practice",
+    "case": "Semantic Versioning 2.0.0 precedence rules",
+    "references": [
+      {
+        "citation": "Preston-Werner, T. Semantic Versioning 2.0.0.",
+        "url": "https://semver.org/spec/v2.0.0.html"
+      },
+      {
+        "citation": "Calendar Versioning.",
+        "url": "https://calver.org/"
+      }
+    ],
+    "provenance_group_id": "PG-semver",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our field-survey app is versioned by date as YEAR.MONTH.PATCH, for example 2026.11.3. A hotfix is published as the base version plus -hotfixN, for example 2026.11.3-hotfix2. Our CI may append +ci.N to any version, for example 2026.11.3+ci.41. Write a Python function is_newer(a, b) that returns True if version a is newer than version b.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Use only the standard library; the only allowed import is re.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "regex_absent",
+              "(^|\\n)\\s*(import|from)\\s+(?!re\\b)\\w+"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "A -hotfixN version is newer than its base version, and a higher N is newer.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "HOTFIX"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Equal versions are not newer than each other.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "py_test",
+              "EQUAL"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "is_newer must accept every version form described above, return True or False and never raise an error for them.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "py_test",
+              "ACCEPTS"
+            ]
+          },
+          {
+            "id": "R4b",
+            "spec": [
+              "py_test",
+              "BASIC"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "source_example": {
+    "text": "Semantic Versioning 2.0.0, published at semver.org, defines how version numbers like 1.4.2 are compared. A version has MAJOR, MINOR and PATCH numbers, and they are compared numerically from left to right, so 1.10.0 is newer than 1.9.0. A version may carry a pre-release tag after a hyphen, such as 1.4.2-rc.1. A pre-release version has lower precedence than the normal version, so 1.4.2-rc.1 comes before 1.4.2. Pre-release tags are compared part by part, numbers as numbers and words in ASCII order. Build metadata after a plus sign, such as 1.4.2+build.7, must be ignored when determining precedence. So 1.4.2+build.7 and 1.4.2+build.8 have the same precedence. Many teams also strip a leading v, as in v1.4.2, before parsing. The functions below are the comparator our release tooling used for a library we published on PyPI. They raise ValueError for anything that does not look like a semantic version.\n\n```python\nimport functools\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)  # a release outranks any pre-release\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef compare_semver(a, b):\n    ka, kb = _key(a), _key(b)\n    return (ka > kb) - (ka < kb)\n\n\ndef sort_versions(versions):\n    return sorted(versions, key=functools.cmp_to_key(compare_semver))\n```",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Published on PyPI",
+        "leak_terms": [
+          "PyPI"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Leading v is stripped",
+        "leak_regex": "\\^v\\?"
+      },
+      {
+        "id": "I3",
+        "text": "semver naming",
+        "leak_terms": [
+          "semver"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "The error message",
+        "leak_terms": [
+          "semantic version"
+        ],
+        "control": {
+          "from": "not a semantic version",
+          "to": "bad semantic version string",
+          "leak_terms": [
+            "semantic version"
+          ]
+        }
+      },
+      {
+        "id": "I5",
+        "text": "Sorting helper with cmp_to_key",
+        "leak_terms": [
+          "cmp_to_key",
+          "sort_versions"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "dotted three-part numbers",
+        "source_quote": "MAJOR, MINOR and PATCH numbers",
+        "target_quote": "YEAR.MONTH.PATCH"
+      },
+      {
+        "feature": "a suffix after a hyphen",
+        "source_quote": "a pre-release tag after a hyphen",
+        "target_quote": "the base version plus -hotfixN"
+      },
+      {
+        "feature": "build data after a plus sign",
+        "source_quote": "Build metadata after a plus sign",
+        "target_quote": "append +ci.N"
+      },
+      {
+        "feature": "a newer-than comparison",
+        "source_quote": "compared numerically from left to right",
+        "target_quote": "returns True if version a is newer than version b"
+      }
+    ]
+  },
+  "relation": "Split the version into parts and compare the parts as numbers, left to right.",
+  "marker": {
+    "what": "build metadata ignored",
+    "spec": [
+      "py_test",
+      "BUILD_IGNORED"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our old library used the comparator below. Borrow the idea for the app, not its details; our version rules are the ones above.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NUMERIC"
+          ],
+          "what": "Parts compared as numbers (2026.10 is newer than 2026.9)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "compared numerically from left to right"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our old library used the comparator below:\n\n{EX}\n\nThe app needs one too.",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NUMERIC"
+          ],
+          "what": "Parts compared as numbers",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "compared numerically from left to right"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Keep exactly one rule from the comparator below: build metadata after a plus sign is ignored, so 2026.11.3+ci.41 and 2026.11.3+ci.42 are equally new. Everything else follows our rules above.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_IGNORED"
+          ],
+          "what": "+ci.N is ignored for ordering",
+          "basis": {
+            "type": "stated",
+            "quote": "build metadata after a plus sign is ignored"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our CI adds +ci.N as the build-metadata part of the spec below allows, and our update server already treats such builds the way the spec says.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_IGNORED"
+          ],
+          "what": "+ci.N is ignored for ordering",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "treats such builds the way the spec says"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our first updater used the comparator below and ignored the +ci.N part, so devices never installed rebuilt versions. Don't do it like this: a higher ci number must count as newer.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_ORDERED"
+          ],
+          "what": "A higher +ci.N is newer",
+          "basis": {
+            "type": "stated",
+            "quote": "a higher ci number must count as newer"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our first updater used the comparator below, and because of how it treated the +ci.N part, devices never installed rebuilt versions.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_ORDERED"
+          ],
+          "what": "A higher +ci.N is newer",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "devices never installed rebuilt versions"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "The target already fixes how suffixes order; no partial or wrong-fit version of the numeric-comparison relation was found that keeps the task natural."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "The target already fixes how suffixes order; no partial or wrong-fit version of the numeric-comparison relation was found that keeps the task natural."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "analogy-stated-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+    "analogy-implied-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+    "requirement-stated-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+    "requirement-implied-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+    "counter-stated-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+    "counter-implied-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```"
+  },
+  "copy_answers": {
+    "analogy-stated-full": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+    "analogy-implied-full": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+    "requirement-stated-full": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+    "requirement-implied-full": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+    "counter-stated-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v)\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)  # build metadata ignored, as in the spec\n```",
+    "counter-implied-full": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v)\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)  # build metadata ignored, as in the spec\n```"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The target says nothing about how +ci.N orders, so the requirement (ignore it) and the counter-example (order by it) are both target-neutral. The analogy transfer (numeric comparison) overlaps with what any correct date-version comparator does; annotators should decide whether this seed belongs in the primary analogical subset (dataset-construction step 3). Identifier leaks such as 'semver' are ambiguous under implied cues.",
+  "func": "is_newer",
+  "tests": {
+    "BASIC": "assert is_newer('2026.11.3', '2026.11.2') is True\nassert is_newer('2026.11.2', '2026.11.3') is False\nassert is_newer('2027.1.0', '2026.12.9') is True\n",
+    "EQUAL": "assert is_newer('2026.11.3', '2026.11.3') is False\n",
+    "HOTFIX": "assert is_newer('2026.11.3-hotfix1', '2026.11.3') is True\nassert is_newer('2026.11.3', '2026.11.3-hotfix1') is False\nassert is_newer('2026.11.3-hotfix10', '2026.11.3-hotfix2') is True\nassert is_newer('2026.11.4', '2026.11.3-hotfix5') is True\n",
+    "ACCEPTS": "for a in ['2026.11.3', '2026.11.3-hotfix2', '2026.11.3+ci.41', '2026.11.3-hotfix2+ci.7']:\n    for b in ['2026.11.3', '2026.11.3-hotfix2', '2026.11.3+ci.41', '2026.11.3-hotfix2+ci.7']:\n        assert is_newer(a, b) in (True, False)\n",
+    "NUMERIC": "assert is_newer('2026.10.0', '2026.9.12') is True\nassert is_newer('2026.9.12', '2026.10.0') is False\n",
+    "BUILD_IGNORED": "assert is_newer('2026.11.3+ci.42', '2026.11.3+ci.41') is False\nassert is_newer('2026.11.3+ci.41', '2026.11.3+ci.42') is False\nassert is_newer('2026.11.3+ci.41', '2026.11.3') is False\nassert is_newer('2026.11.3', '2026.11.3+ci.41') is False\n",
+    "BUILD_ORDERED": "assert is_newer('2026.11.3+ci.42', '2026.11.3+ci.41') is True\nassert is_newer('2026.11.3+ci.41', '2026.11.3+ci.42') is False\n"
+  },
+  "alternative_solutions": [
+    {
+      "variant": "analogy-stated-full",
+      "answer": "```python\ndef is_newer(a, b):\n    def parts(v):\n        v = v.split(\"+\")[0]\n        base, _, hot = v.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0)]\n    return parts(a) > parts(b)\n```",
+      "why": "No regex, no imports: still valid."
+    }
+  ]
+}

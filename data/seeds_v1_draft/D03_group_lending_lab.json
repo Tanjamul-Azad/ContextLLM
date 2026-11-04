@@ -1,0 +1,1053 @@
+{
+  "id": "D03_group_lending_lab",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "decision",
+  "domain": "microfinance / shared-resource policy",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "Grameen Bank group lending and joint liability (1976 onward; Grameen II around 2002)",
+    "references": [
+      {
+        "citation": "Morduch, J. (1999). The Microfinance Promise. Journal of Economic Literature 37(4), 1569-1614.",
+        "doi": "10.1257/jel.37.4.1569"
+      },
+      {
+        "citation": "Yunus, M. (1999). Banker to the Poor. PublicAffairs."
+      },
+      {
+        "citation": "Grameen Bank, official site.",
+        "url": "https://grameenbank.org/"
+      }
+    ],
+    "provenance_group_id": "PG-grameen",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our university electronics lab lends 40 portable kits (oscilloscope, multimeter, Arduino board) to 120 second-year students for take-home practice. Last term, damaged or missing parts cost the lab 85,000 BDT, and nobody felt responsible. Design a borrowing scheme.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Borrowers may be organised in groups of 2 to 6 students, or a group size of 1 for no groups.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "json_all_int",
+              "group_size"
+            ]
+          },
+          {
+            "id": "R1b",
+            "spec": [
+              "json_all_ge",
+              "group_size",
+              1
+            ]
+          },
+          {
+            "id": "R1c",
+            "spec": [
+              "json_all_le",
+              "group_size",
+              6
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Who pays for damage must be one of: group, individual, lab.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "json_in",
+              "who_pays_for_damage",
+              [
+                "group",
+                "individual",
+                "lab"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Any deposit is from 0 to 500 BDT per student.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "json_all_ge",
+              "deposit_bdt_per_student",
+              0
+            ]
+          },
+          {
+            "id": "R3b",
+            "spec": [
+              "json_all_le",
+              "deposit_bdt_per_student",
+              500
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "Give 2 to 5 rules, open to every second-year student whatever their gender.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "json_len_between",
+              "rules",
+              2,
+              5
+            ]
+          },
+          {
+            "id": "R4b",
+            "spec": [
+              "text_absent",
+              [
+                "women"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with JSON only, in this shape: {\"group_size\": 1, \"who_pays_for_damage\": \"group, individual or lab\", \"deposit_bdt_per_student\": 0, \"rules\": [\"...\"]}"
+  },
+  "source_example": {
+    "text": "Grameen Bank grew out of an experiment that the economist Muhammad Yunus began in 1976 in Jobra, a village next to Chittagong University. His first loans, about 27 US dollars in total, went to 42 women, among them makers of bamboo stools. Ordinary banks would not lend to such borrowers because they had no collateral. Grameen's answer was the group: a borrower joined a group of five people who lived nearby and chose each other. Loans went first to two members, then to two more, and last to the group chair, each step depending on the earlier borrowers repaying. Group members were jointly responsible, so a member who did not repay hurt the chances of the others. Because of this, members chose partners they trusted, checked on each other and helped one another through bad weeks. Groups met weekly with a bank worker at a centre in the village and repaid in small weekly instalments. Most borrowers were women, and Grameen reported repayment rates above 95 percent. In 2006 Yunus and Grameen Bank shared the Nobel Peace Prize. Around 2002 Grameen replaced the strict joint-liability rules with a more flexible system often called Grameen II. Economists still debate how much of the high repayment came from joint liability itself and how much from weekly meetings and careful staff.",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "First loans of 27 dollars to 42 women",
+        "leak_regex": "\\$\\s*27|\\b27 (US )?dollars|\\b42 women"
+      },
+      {
+        "id": "I2",
+        "text": "Mostly women borrowers",
+        "leak_terms": [
+          "women"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "Weekly village-centre meetings and instalments",
+        "leak_terms": [
+          "instalments",
+          "village"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "Names: Grameen, Yunus, Jobra, Nobel",
+        "leak_terms": [
+          "Grameen",
+          "Yunus",
+          "Jobra",
+          "Nobel"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "Bamboo stool makers",
+        "leak_terms": [
+          "bamboo"
+        ],
+        "control": {
+          "from": "bamboo stools",
+          "to": "clay pots",
+          "leak_terms": [
+            "clay"
+          ]
+        }
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "small groups of borrowers",
+        "source_quote": "a group of five people",
+        "target_quote": "groups of 2 to 6 students"
+      },
+      {
+        "feature": "lending without collateral",
+        "source_quote": "they had no collateral",
+        "target_quote": "lends 40 portable kits"
+      },
+      {
+        "feature": "responsibility for losses",
+        "source_quote": "jointly responsible",
+        "target_quote": "nobody felt responsible"
+      },
+      {
+        "feature": "a university setting",
+        "source_quote": "Chittagong University",
+        "target_quote": "Our university electronics lab"
+      }
+    ]
+  },
+  "relation": "Peer groups that share responsibility make members choose and support each other.",
+  "marker": {
+    "what": "groups of exactly five",
+    "spec": [
+      "json_eq_num",
+      "group_size",
+      5
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our department head suggested we learn from the microfinance bank below. Borrow the idea, not the details; our scheme must fit our lab and our rules.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "who_pays_for_damage",
+            [
+              "group"
+            ]
+          ],
+          "what": "The group shares responsibility for damage",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Group members were jointly responsible"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_all_ge",
+            "group_size",
+            2
+          ],
+          "what": "Students borrow in groups (size at least 2)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "groups of 2 to 6 students"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our department head keeps telling us this story whenever we discuss the kit losses:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "who_pays_for_damage",
+            [
+              "group"
+            ]
+          ],
+          "what": "The group shares responsibility for damage",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Group members were jointly responsible"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_all_ge",
+            "group_size",
+            2
+          ],
+          "what": "Students borrow in groups (size at least 2)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "groups of 2 to 6 students"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The lab committee has decided to follow the bank's group size exactly: groups must have five students, as in the groups below. Take nothing else from the bank unless it fits our rules.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_eq_num",
+            "group_size",
+            5
+          ],
+          "what": "Groups of exactly five",
+          "basis": {
+            "type": "stated",
+            "quote": "groups must have five students"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "stated",
+            "quote": "Take nothing else from the bank"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "stated",
+            "quote": "Take nothing else from the bank"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "stated",
+            "quote": "Take nothing else from the bank"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The lab committee already printed sign-up sheets with five name slots per group, copied from the bank's groups described below.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_eq_num",
+            "group_size",
+            5
+          ],
+          "what": "Groups of exactly five",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "five name slots per group"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Last year the physics lab copied the bank's groups, described below. The groups never managed to meet, because five students rarely share a free lab slot. Do not use groups of five or more.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_all_lt",
+            "group_size",
+            5
+          ],
+          "what": "Groups smaller than five",
+          "basis": {
+            "type": "stated",
+            "quote": "Do not use groups of five or more"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Last year the physics lab copied the bank's groups, described below, and the groups never managed to meet because five students rarely share a free lab slot.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_all_lt",
+            "group_size",
+            5
+          ],
+          "what": "Groups smaller than five",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "five students rarely share a free lab slot"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-stated-partial",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "partial",
+      "text": "Our department head suggested we learn from the microfinance bank below. Borrow the idea, not the details, and keep only the part of it that still fits our insurance rule.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_all_ge",
+            "group_size",
+            2
+          ],
+          "what": "Students borrow in groups (size at least 2)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "groups of 2 to 6 students"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_in",
+            "who_pays_for_damage",
+            [
+              "individual"
+            ]
+          ],
+          "what": "Damage is paid by the individual, as insurance requires",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R5"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "stated",
+            "quote": "not the details"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R5",
+          "text": "University insurance requires the student who signs out a kit to pay for its damage personally.",
+          "checks": [
+            {
+              "id": "R5a",
+              "spec": [
+                "json_in",
+                "who_pays_for_damage",
+                [
+                  "individual"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "Joint liability is blocked by the insurance rule; peer groups for choosing and supporting each other still apply."
+    },
+    {
+      "id": "analogy-implied-partial",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "partial",
+      "text": "Our department head keeps telling us this story whenever we discuss the kit losses:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_all_ge",
+            "group_size",
+            2
+          ],
+          "what": "Students borrow in groups (size at least 2)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "ambiguous",
+            "quote": "groups of 2 to 6 students"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_in",
+            "who_pays_for_damage",
+            [
+              "individual"
+            ]
+          ],
+          "what": "Damage is paid by the individual, as insurance requires",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R5"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No 27-dollar / 42-women figures",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No women-only eligibility",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No weekly village meetings or instalments",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Grameen names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No bamboo stools",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R5",
+          "text": "University insurance requires the student who signs out a kit to pay for its damage personally.",
+          "checks": [
+            {
+              "id": "R5a",
+              "spec": [
+                "json_in",
+                "who_pays_for_damage",
+                [
+                  "individual"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "Joint liability is blocked by the insurance rule; whether groups still help is a judgement, so T1 is ambiguous."
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft; a wrong-fit target (for example, kits used only by one person at a time with no peers) is possible and should be added later."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "analogy-stated-full": "{\"group_size\": 4, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students form groups of 4 classmates who choose each other and borrow kits together.\", \"The whole group shares the cost of any damage to its kits.\", \"A group with unpaid damage cannot borrow again until it is settled.\"]}",
+    "analogy-implied-full": "{\"group_size\": 4, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students form groups of 4 classmates who choose each other and borrow kits together.\", \"The whole group shares the cost of any damage to its kits.\", \"A group with unpaid damage cannot borrow again until it is settled.\"]}",
+    "requirement-stated-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 200, \"rules\": [\"Students borrow in groups of five who choose each other.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "requirement-implied-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 200, \"rules\": [\"Students borrow in groups of five who choose each other.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "counter-stated-full": "{\"group_size\": 3, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students borrow in groups of three, small enough to meet in one lab slot.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "counter-implied-full": "{\"group_size\": 3, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students borrow in groups of three, small enough to meet in one lab slot.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "analogy-stated-partial": "{\"group_size\": 3, \"who_pays_for_damage\": \"individual\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students borrow in groups of three who check each other's kits before return.\", \"The student who signs out a kit pays for its damage, as our insurance requires.\", \"A group helps its members keep kits complete but is not charged.\"]}",
+    "analogy-implied-partial": "{\"group_size\": 3, \"who_pays_for_damage\": \"individual\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Students borrow in groups of three who check each other's kits before return.\", \"The student who signs out a kit pays for its damage, as our insurance requires.\", \"A group helps its members keep kits complete but is not charged.\"]}"
+  },
+  "copy_answers": {
+    "analogy-stated-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen; kits go first to two members, then two more, then the chair.\", \"Groups meet weekly at a village-style centre and repay damage in weekly instalments.\", \"Women students are served first, as at Grameen.\"]}",
+    "analogy-implied-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen; kits go first to two members, then two more, then the chair.\", \"Groups meet weekly at a village-style centre and repay damage in weekly instalments.\", \"Women students are served first, as at Grameen.\"]}",
+    "requirement-stated-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen; kits go first to two members, then two more, then the chair.\", \"Groups meet weekly at a village-style centre and repay damage in weekly instalments.\", \"Women students are served first, as at Grameen.\"]}",
+    "requirement-implied-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen; kits go first to two members, then two more, then the chair.\", \"Groups meet weekly at a village-style centre and repay damage in weekly instalments.\", \"Women students are served first, as at Grameen.\"]}",
+    "counter-stated-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 200, \"rules\": [\"Students borrow in groups of five who choose each other.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "counter-implied-full": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 200, \"rules\": [\"Students borrow in groups of five who choose each other.\", \"The group shares the cost of damage.\", \"Kits are checked at the counter on return.\"]}",
+    "analogy-stated-partial": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen.\", \"The group is jointly responsible for damage.\"]}",
+    "analogy-implied-partial": "{\"group_size\": 5, \"who_pays_for_damage\": \"group\", \"deposit_bdt_per_student\": 300, \"rules\": [\"Groups of five like Grameen.\", \"The group is jointly responsible for damage.\"]}"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The 27-dollar / 42-women story is widely reported from Yunus's own account; annotators should check it against the book. The weekly-meeting detail (I3) is not checked for the requirement variants because 'unless it fits our rules' allows adapting it. Name mentions (I4) are ambiguous under implied cues."
+}

@@ -1,0 +1,1003 @@
+{
+  "id": "C04_grader_assignment",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "code",
+  "domain": "distributed systems / workload assignment",
+  "provenance": {
+    "source_type": "software_practice",
+    "case": "Modulo key distribution in early memcached clients and the move to consistent hashing (ketama, 2007)",
+    "references": [
+      {
+        "citation": "Karger, D. et al. (1997). Consistent hashing and random trees. STOC 1997.",
+        "doi": "10.1145/258533.258660"
+      },
+      {
+        "citation": "DeCandia, G. et al. (2007). Dynamo: Amazon's highly available key-value store. SOSP 2007.",
+        "doi": "10.1145/1294261.1294281"
+      },
+      {
+        "citation": "Thaler, D., Ravishankar, C. (1998). Using name-based mappings to increase hit rates. IEEE/ACM Transactions on Networking 6(1).",
+        "doi": "10.1109/90.663936"
+      }
+    ],
+    "provenance_group_id": "PG-consistent-hashing",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our department marks about 1,200 final-exam scripts per term. Each script has an ID such as CSE2215-0457 (course code, hyphen, number). Graders join or leave during the marking week, and every time the assignment is recomputed. Write a Python function assign(script_ids, graders) that returns a dict mapping every script ID to one grader name.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Every script goes to exactly one of the given graders.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "py_test",
+              "BASIC"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "The same inputs must give the same result on every run and on every computer, so do not use Python's built-in hash() on strings.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "DETERMINISTIC"
+            ]
+          },
+          {
+            "id": "R2b",
+            "spec": [
+              "regex_absent",
+              "(?<![\\w.])hash\\s*\\("
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "With 4 graders and about 1,200 scripts, no grader may get more than 1.5 times their fair share.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "py_test",
+              "BALANCE"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "source_example": {
+    "text": "Memcached is an in-memory cache that many large websites placed in front of their databases in the 2000s. A site might run four cache servers, and each key, such as a user's profile, had to live on exactly one of them. Early client libraries chose the server with a simple rule: hash the key and take the remainder after dividing by the number of servers. The client in our example used CRC32 as the hash, as several early clients did. The rule has real strengths. It needs no shared table, because every web server computes the same answer on its own. It spreads keys almost evenly, because CRC32 values are close to uniform. It is fast and deterministic, so the same key always goes to the same server. The trouble starts when the number of servers changes. With four servers a key goes to server CRC32 mod 4, and with five it goes to CRC32 mod 5. For most keys these two remainders differ, so about four out of five keys move to a different server at once. Every moved key is a cache miss, and the misses all land on the database together. Engineers at Last.fm described exactly this pain when they released their ketama library in 2007. Ketama places each server at many points on a circle, 160 points per server in their code, and sends each key to the next server point clockwise. When a server is added, only the keys between its new points and the previous points move, roughly one fifth of keys when going from four to five servers. The idea, called consistent hashing, comes from a 1997 paper by Karger and colleagues at MIT. Amazon's Dynamo storage system, described in 2007, used the same idea with virtual nodes. Rendezvous hashing, which gives each key to the server with the highest hash of key and server together, has the same property. Today most cache clients offer a consistent-hashing option, but the modulo rule is still common in small systems. Its appeal is that it fits in three lines. The code below is the modulo version.\n\n```python\nimport zlib\n\nSERVERS = [\"cache-a.internal:11211\", \"cache-b.internal:11211\",\n           \"cache-c.internal:11211\", \"cache-d.internal:11211\"]\n\n\ndef server_for(key, servers=SERVERS):\n    \"\"\"Pick the memcached server for a key: CRC32 of the key, modulo the server count.\"\"\"\n    h = zlib.crc32(key.encode(\"utf-8\")) & 0xffffffff\n    return servers[h % len(servers)]\n```",
+    "length": "long",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Host names and the memcached port",
+        "leak_terms": [
+          "11211",
+          "internal"
+        ],
+        "control": {
+          "from": "11211",
+          "to": "11311",
+          "leak_terms": [
+            "11311",
+            "internal"
+          ]
+        }
+      },
+      {
+        "id": "I2",
+        "text": "Ketama and its 160 points",
+        "leak_terms": [
+          "ketama"
+        ],
+        "leak_regex": "\\b160\\b"
+      },
+      {
+        "id": "I3",
+        "text": "Memcached",
+        "leak_terms": [
+          "memcached"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "Last.fm and Dynamo",
+        "leak_terms": [
+          "Last.fm",
+          "Dynamo"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "Cache-server vocabulary",
+        "leak_terms": [
+          "SERVERS",
+          "server_for"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "each item goes to exactly one worker",
+        "source_quote": "had to live on exactly one of them",
+        "target_quote": "Every script goes to exactly one of the given graders"
+      },
+      {
+        "feature": "workers join or leave",
+        "source_quote": "when the number of servers changes",
+        "target_quote": "Graders join or leave"
+      },
+      {
+        "feature": "same answer everywhere",
+        "source_quote": "the same key always goes to the same server",
+        "target_quote": "same result on every run and on every computer"
+      },
+      {
+        "feature": "string IDs that get hashed",
+        "source_quote": "hash the key",
+        "target_quote": "do not use Python's built-in hash() on strings"
+      }
+    ]
+  },
+  "relation": "Give each item to a worker by a hash of the item alone, so every machine computes the same answer without a shared table.",
+  "marker": {
+    "what": "CRC32 modulo assignment",
+    "spec": [
+      "py_test",
+      "MODULO"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our web team assigns cache keys with the function below and says the approach is solid. Borrow the idea, not its details: our graders and rules are the ones above.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "ORDER_FREE"
+          ],
+          "what": "Each script's grader depends only on the script and graders, not on list order",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "every web server computes the same answer on its own"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our web team showed me the function below when I asked how they spread work across machines:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "ORDER_FREE"
+          ],
+          "what": "Each script's grader depends only on the script and graders",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "every web server computes the same answer on its own"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The exam office's dashboard recomputes assignments with exactly the rule below, so use the same rule: CRC32 of the script ID modulo the number of graders, with graders in the order given.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "MODULO"
+          ],
+          "what": "CRC32 modulo the number of graders",
+          "basis": {
+            "type": "stated",
+            "quote": "CRC32 of the script ID modulo the number of graders"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The exam office's dashboard, built by the web team from the function below, already shows each grader their scripts.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "MODULO"
+          ],
+          "what": "CRC32 modulo the number of graders",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "ambiguous",
+            "quote": "built by the web team from the function below"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Last term we used the function below. When a fifth grader joined halfway through, almost every script moved to someone new, and graders lost their half-marked piles. Don't do it like this: adding a grader must not move most of the scripts.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "FEW_MOVES"
+          ],
+          "what": "Going from 4 to 5 graders moves at most half of the scripts",
+          "basis": {
+            "type": "stated",
+            "quote": "adding a grader must not move most of the scripts"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Last term we used the function below. When a fifth grader joined halfway through, almost every script moved to someone new, and graders lost their half-marked piles.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "FEW_MOVES"
+          ],
+          "what": "Going from 4 to 5 graders moves at most half of the scripts",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "almost every script moved to someone new"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-stated-partial",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "partial",
+      "text": "Our web team assigns cache keys with the function below and says the approach is solid. Borrow the idea, not its details, and use it where our rule about Nadia leaves room.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "ORDER_FREE"
+          ],
+          "what": "Each script's grader depends only on the script and graders",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "every web server computes the same answer on its own"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "py_test",
+            "FIXED_NADIA"
+          ],
+          "what": "CSE4111 to Nadia, nothing else to Nadia",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "Every CSE4111 script goes to Nadia, who set that paper; spread the other scripts over the other graders.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "py_test",
+                "FIXED_NADIA"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "One course is fixed to one grader; hashing applies to the rest."
+    },
+    {
+      "id": "analogy-implied-partial",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "partial",
+      "text": "Our web team showed me the function below when I asked how they spread work across machines:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "ORDER_FREE"
+          ],
+          "what": "Each script's grader depends only on the script and graders",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "every web server computes the same answer on its own"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "py_test",
+            "FIXED_NADIA"
+          ],
+          "what": "CSE4111 to Nadia, nothing else to Nadia",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No hosts or port 11211",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No ketama / 160 points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No memcached",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Last.fm / Dynamo",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No cache-server names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "Every CSE4111 script goes to Nadia, who set that paper; spread the other scripts over the other graders.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "py_test",
+                "FIXED_NADIA"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "One course is fixed to one grader; hashing applies to the rest."
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft; a wrong-fit target (for example, graders must get scripts in submission order) is possible."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "analogy-stated-full": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    return {s: max(graders, key=lambda g: _score(s, g)) for s in script_ids}\n```",
+    "analogy-implied-full": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    return {s: max(graders, key=lambda g: _score(s, g)) for s in script_ids}\n```",
+    "requirement-stated-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "requirement-implied-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "counter-stated-full": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    return {s: max(graders, key=lambda g: _score(s, g)) for s in script_ids}\n```",
+    "counter-implied-full": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    return {s: max(graders, key=lambda g: _score(s, g)) for s in script_ids}\n```",
+    "analogy-stated-partial": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    others = [g for g in graders if g != \"Nadia\"]\n    out = {}\n    for s in script_ids:\n        if s.startswith(\"CSE4111\") and \"Nadia\" in graders:\n            out[s] = \"Nadia\"\n        else:\n            out[s] = max(others, key=lambda g: _score(s, g))\n    return out\n```",
+    "analogy-implied-partial": "```python\nimport hashlib\n\n\ndef _score(script_id, grader):\n    return hashlib.sha256(f\"{grader}|{script_id}\".encode(\"utf-8\")).digest()\n\n\ndef assign(script_ids, graders):\n    others = [g for g in graders if g != \"Nadia\"]\n    out = {}\n    for s in script_ids:\n        if s.startswith(\"CSE4111\") and \"Nadia\" in graders:\n            out[s] = \"Nadia\"\n        else:\n            out[s] = max(others, key=lambda g: _score(s, g))\n    return out\n```"
+  },
+  "copy_answers": {
+    "analogy-stated-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    \"\"\"Like server_for: memcached-style CRC32 modulo, as with cache-a.internal:11211.\"\"\"\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "analogy-implied-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    \"\"\"Like server_for: memcached-style CRC32 modulo, as with cache-a.internal:11211.\"\"\"\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "requirement-stated-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    \"\"\"Like server_for: memcached-style CRC32 modulo, as with cache-a.internal:11211.\"\"\"\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "requirement-implied-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    \"\"\"Like server_for: memcached-style CRC32 modulo, as with cache-a.internal:11211.\"\"\"\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "counter-stated-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "counter-implied-full": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "analogy-stated-partial": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+    "analogy-implied-partial": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "Extra check: a round-robin answer (not a hash idea) must fail ORDER_FREE; see the test file. The 50% bound in FEW_MOVES follows 'must not move most of the scripts'; modulo moves about 80%, rendezvous about 20%. The provenance case is an engineering practice documented by the cited papers and by Last.fm's 2007 ketama release; the ketama blog post URL still needs to be found and checked.",
+  "func": "assign",
+  "tests": {
+    "_GEN": "import zlib, random\nIDS = [f'CSE{c}-{n:04d}' for c in (2215, 3313, 4111) for n in range(400)]\nG4 = ['Rahim', 'Nadia', 'Tanvir', 'Mitu']\nG5 = G4 + ['Sabbir']\n",
+    "BASIC": "{_GEN}r = assign(IDS, G4)\nassert set(r) == set(IDS) and set(r.values()) <= set(G4), len(r)\n",
+    "DETERMINISTIC": "{_GEN}assert assign(IDS, G4) == assign(list(IDS), list(G4))\n",
+    "BALANCE": "{_GEN}r = assign(IDS, G4)\nfrom collections import Counter\nc = Counter(r.values())\nassert max(c.values()) <= 1.5 * len(IDS) / len(G4), c\n",
+    "ORDER_FREE": "{_GEN}full = assign(IDS, G4)\nrev = assign(list(reversed(IDS)), G4)\nassert rev == full\npart = assign(IDS[3::7], G4)\nassert part == {k: full[k] for k in IDS[3::7]}\n",
+    "MODULO": "{_GEN}r = assign(IDS, G4)\nassert all(r[s] == G4[(zlib.crc32(s.encode('utf-8')) & 0xffffffff) % 4] for s in IDS)\n",
+    "FEW_MOVES": "{_GEN}a, b = assign(IDS, G4), assign(IDS, G5)\nmoved = sum(a[s] != b[s] for s in IDS)\nassert moved <= 0.5 * len(IDS), moved\n",
+    "FIXED_NADIA": "{_GEN}for g in (G4, G5):\n    r = assign(IDS, g)\n    assert all((r[s] == 'Nadia') == s.startswith('CSE4111') for s in IDS)\n"
+  },
+  "alternative_solutions": [
+    {
+      "variant": "analogy-stated-full",
+      "answer": "```python\nimport zlib\n\n\ndef assign(script_ids, graders):\n    out = {}\n    for s in script_ids:\n        h = zlib.crc32(s.encode(\"utf-8\")) & 0xffffffff\n        out[s] = graders[h % len(graders)]\n    return out\n```",
+      "why": "Plain modulo hashing is a valid use of the idea when no rule asks for stability."
+    }
+  ]
+}

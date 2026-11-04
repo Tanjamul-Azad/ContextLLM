@@ -21,10 +21,10 @@ All numbers below come from files in [results/](results/). Every raw prompt and 
 | --- | --- | --- | --- | --- |
 | E1 | Do real chats contain the problem? | WildChat: about 2,160 real example-giving turns (hand-checked rate 0.29% of unique turns). OASST2: about 100 | 300+ | Pass, but almost all are "follow this format"; real counter-examples are rare |
 | E2 | Do two people agree on the gold answer? | Not run: needs two human annotators | 80%+ agreement | Pending: [data/E2_annotation_sheet.csv](data/E2_annotation_sheet.csv) |
-| E3 | Is reused data contaminated? | GSM8K on Qwen2.5-3B: 0% recited word for word; originals scored above their paraphrases in only 17% of pairs | Flag if >5% recited | Not flagged |
-| E4 | Do models fail? | Plain wording: 47% / 40% / 47% fail (Qwen-3B / Qwen-7B / Llama-8B). Explicit wording: 33% / 30% / 27% | 25%+ fail, and explicit halves it | Failure is real; explicit wording helps but does not halve it |
-| E5 | Does the role matter? | Copy-rate gap, requirement minus counter: 60 [30, 90], 30 [-10, 70], 50 [20, 80] points | 15+ points, interval above 0 | Pass for Qwen-3B and Llama-8B; not for Qwen-7B |
-| E6 | Is it more than multi-turn drift? | Single-turn failure 40–47%; multi-turn 40–43% | Failure appears in single-turn | Pass |
+| E3 | Is reused data contaminated? | Qwen2.5-3B, 50–60 items per source: GSM8K, Super-NaturalInstructions, HumanEval, Spider and AnaloBench all show 0% word-for-word recall. Super-NaturalInstructions sits exactly at the Min-K% threshold (originals above paraphrases in 70% of pairs) | Flag if >5% recited, or originals beat paraphrases in >70% | None flagged; rewrite Super-NaturalInstructions definitions before test use |
+| E4 | Do models fail? | Plain wording, open models: 47% / 40% / 43% (Qwen-3B / Qwen-7B / Llama-8B). Frontier: 23% / 17% / 30% (GPT-4.1-mini / GPT-5.4-mini / GPT-5.4). Explicit wording: open 27–33%, frontier 0–7% | 25%+ fail, and explicit halves it | Open models fail and prompting does not fix it. Frontier models fail less, and explicit wording almost fixes them |
+| E5 | Does the role matter? | Copy-rate gap, requirement minus counter (points): Qwen-3B 60 [30, 90], Qwen-7B 30 [-10, 70], Llama-8B 50 [20, 80], all three GPT models 80 [50, 100] | 15+ points, interval above 0 | Pass for 5 of 6 models; not for Qwen-7B |
+| E6 | Is it more than multi-turn drift? | Single-turn failure 17–47%; multi-turn 23–43% | Failure appears in single-turn | Pass for open models; frontier models at 17–30% |
 | E7 | Is there a layer signal? | The roles' logit-lens curves separate at layers 23–28 of 36 in all 5 probes; the final answer was role-correct in 2 of 5 | Clear split in 3 of 5 | Met as read-out only; not causal evidence |
 
 Intervals are 95% bootstrap over seeds.
@@ -35,7 +35,7 @@ Intervals are 95% bootstrap over seeds.
 | --- | --- |
 | Seeds | 10 tasks: 6 planning tasks (JSON answer) and 4 code tasks (Python function with tests). Each is built on a real case: hospital triage, Rolls-Royce "Power by the Hour", Toyota andon, Abraham Wald's bombers, airline boarding, tabloid headlines, Gmail address rules, a GitHub pager. See [src/seeds.py](src/seeds.py) |
 | Conditions per seed | 3 roles × 2 wordings (plain, explicit) × 2 turn structures (single, multi) + 1 no-example baseline = 13 prompts |
-| Models | Qwen2.5-3B-Instruct (bf16), Qwen2.5-7B-Instruct (4-bit), Llama-3.1-8B-Instruct (4-bit), all on one RTX 4060 (8GB) |
+| Models | Open, on one RTX 4060 (8GB): Qwen2.5-3B-Instruct (bf16), Qwen2.5-7B-Instruct (4-bit), Llama-3.1-8B-Instruct (4-bit). Frontier, through the OpenAI API with pinned snapshots: gpt-4.1-mini-2025-04-14 (temperature 0), gpt-5.4-mini-2026-03-17 and gpt-5.4-2026-03-05 (reasoning effort low) |
 | Decoding | Greedy, at most 512 new tokens, so reruns give the same answers |
 | Scoring | Fully automatic: JSON checks and Python tests. [tests/validate_checks.py](tests/validate_checks.py) shows that correct answers pass and copied answers get caught |
 | Total | 390 scored answers, 5 layer probes, 60 contamination items, 30,000 sampled chats |
@@ -64,7 +64,20 @@ This is the failure the project is about: the model takes the example's surface 
 | --- | --- | --- | --- | --- | --- |
 | Qwen2.5-3B | 50% | 50% | 40% | 70% | 10% |
 | Qwen2.5-7B (4-bit) | 40% | 60% | 20% | 50% | 20% |
-| Llama-3.1-8B (4-bit) | 40% | 70% | 30% | 50% | 0% |
+| Llama-3.1-8B (4-bit) | 30% | 70% | 30% | 50% | 0% |
+| GPT-4.1-mini | 20% | 40% | 10% | 80% | 0% |
+| GPT-5.4-mini | 10% | 30% | 10% | 80% | 0% |
+| GPT-5.4 | 40% | 40% | 10% | 80% | 0% |
+
+**What the frontier models get wrong** (read by hand, plain single-turn):
+
+- **Requirement ignored:** GPT-5.4 dropped the required plan name "Power by the Hour". GPT-4.1-mini pasted the email-cleaning code onto usernames, and it crashed.
+- **Incidental detail copied:** several models copied "within 60 seconds" from the Toyota example, named Wald when only the idea was asked for, or copied the tabloid "!!".
+- **Needs a person to decide:** whether "do something similar" means case-insensitive comparison (C3), and whether "any developer after confirming" breaks the counter-example (P3).
+
+Frontier models mostly fail where the role is only implied. Told explicitly, they fail 0–7% of the time. So for frontier models the paper's question is narrower: inferring the role from context, not following it.
+
+**Scorer v1.1 (5 November).** Two checker bugs were fixed and every saved answer was rescored. P6: the "far rows" check rejected correct answers such as "rows 25–30". P5: an 8-word analogy check was stricter than the prompt's 10 words. Only Llama-8B's plain-failure rate changed (47% to 43%) among the open models. The GPT numbers are all v1.1.
 
 Plain wording, single-turn. Each cell is 10 answers, one per seed.
 

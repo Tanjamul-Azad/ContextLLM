@@ -185,6 +185,13 @@ def run_check(spec, ans, seed):
         items = vals[0] if vals and isinstance(vals[0], list) else []
         found = any(isinstance(it, dict) and all(has_word(it.get(f, ""), ws) for f, ws in spec[2].items()) for it in items)
         return (found if kind == "json_exists_item" else (bool(items) and not found)), ""
+    if kind == "json_first_item_regex":
+        items = vals[0] if vals and isinstance(vals[0], list) else []
+        items = [it for it in items if isinstance(it, dict) and is_num(it.get(spec[2]))]
+        if not items:
+            return False, "no ordered items"
+        first = min(items, key=lambda it: it[spec[2]])
+        return re.search(spec[4], str(first.get(spec[3], "")), re.I) is not None, str(first.get(spec[3], ""))[:80]
     if kind == "json_first_item_word":
         items = vals[0] if vals and isinstance(vals[0], list) else []
         items = [it for it in items if isinstance(it, dict) and is_num(it.get(spec[2]))]

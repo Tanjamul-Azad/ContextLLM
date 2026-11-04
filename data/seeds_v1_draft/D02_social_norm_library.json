@@ -1,0 +1,994 @@
+{
+  "id": "D02_social_norm_library",
+  "schema": "seed-card-v1",
+  "status": "draft — needs two human annotators before use",
+  "author": "Tanjamul Azad",
+  "created": "2026-11-05",
+  "family": "decision",
+  "domain": "public policy / behavioural messaging",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "HMRC and Behavioural Insights Team social-norm tax letters (2011-2012 trials)",
+    "references": [
+      {
+        "citation": "Hallsworth, M., List, J. A., Metcalfe, R. D., Vlaev, I. (2017). The behavioralist as tax collector: Using natural field experiments to enhance tax compliance. Journal of Public Economics 148, 14-31.",
+        "doi": "10.1016/j.jpubeco.2017.02.003"
+      },
+      {
+        "citation": "NBER Working Paper 20007 (2014), same authors and title.",
+        "url": "https://www.nber.org/papers/w20007"
+      }
+    ],
+    "provenance_group_id": "PG-hmrc-social-norms",
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our university library in Chattogram lends about 3,000 books a month. 86% of loans are returned on time; the rest are late, and late books are the main reason students cannot get course texts before exams. Plan the reminder messages for borrowers whose books are overdue.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Send 2 or 3 messages.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "json_len_between",
+              "messages",
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Give each message a day number counted from the due date, in increasing order, none later than day 30.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "json_all_int",
+              "messages[].day"
+            ]
+          },
+          {
+            "id": "R2b",
+            "spec": [
+              "json_increasing",
+              "messages[].day"
+            ]
+          },
+          {
+            "id": "R2c",
+            "spec": [
+              "json_all_le",
+              "messages[].day",
+              30
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Each message text has at most 60 words.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "json_all_words_le",
+              "messages[].text",
+              60
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "Use only facts given in this brief; do not invent statistics.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "regex_absent",
+              "\\b(9|nine) out of (10|ten)\\b"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R5",
+        "text": "The late fine stays at 5 BDT per day.",
+        "checks": [
+          {
+            "id": "R5a",
+            "spec": [
+              "json_eq_num",
+              "fine_per_day_bdt",
+              5
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with JSON only, in this shape: {\"messages\": [{\"day\": 1, \"channel\": \"email or sms\", \"text\": \"...\"}], \"fine_per_day_bdt\": 5}"
+  },
+  "source_example": {
+    "text": "In 2011 and 2012 the UK tax authority, HM Revenue and Customs (HMRC), worked with the Behavioural Insights Team on letters to people who had not paid tax due under Self Assessment. The standard reminder letter stated the debt and the penalty for late payment. Trial versions added one sentence about what other people do, for example: \"Nine out of ten people in the UK pay their tax on time.\" One version went further and said: \"You are currently in the very small minority of people who have not paid us yet.\" The first trial covered roughly a hundred thousand people with Self Assessment debts. The researchers measured how many people paid within 23 days of the letter. Messages that described the social norm raised that share compared with the standard letter. In the first trial, the minority sentence produced the largest effect of the messages tested. Because only the wording changed, the extra tax was brought in at almost no cost, and the authors estimated it in millions of pounds. The study was published by Hallsworth, List, Metcalfe and Vlaev in the Journal of Public Economics in 2017. Its lesson is that people respond to what they believe others like them do. The same researchers stress that a norm message only helps when the norm is true and favourable.",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "The tax authority's name",
+        "leak_terms": [
+          "HMRC",
+          "Revenue and Customs"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Tax and Self Assessment",
+        "leak_terms": [
+          "Self Assessment",
+          "tax"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "The UK statistic 'nine out of ten'",
+        "leak_regex": "\\b(9|nine) out of (10|ten)\\b"
+      },
+      {
+        "id": "I4",
+        "text": "Amounts in pounds",
+        "leak_terms": [
+          "pounds"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "The 23-day measurement window",
+        "leak_regex": "\\b23 days\\b",
+        "control": {
+          "from": "23 days",
+          "to": "21 days",
+          "leak_regex": "\\b21 days\\b"
+        }
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "people who are late",
+        "source_quote": "people who had not paid tax due",
+        "target_quote": "borrowers whose books are overdue"
+      },
+      {
+        "feature": "reminder messages",
+        "source_quote": "The standard reminder letter",
+        "target_quote": "reminder messages"
+      },
+      {
+        "feature": "a penalty for lateness",
+        "source_quote": "the penalty for late payment",
+        "target_quote": "late fine"
+      },
+      {
+        "feature": "share of people who comply on time",
+        "source_quote": "pay their tax on time",
+        "target_quote": "returned on time"
+      }
+    ]
+  },
+  "relation": "Tell late people, truthfully, that most others comply.",
+  "marker": {
+    "what": "the minority sentence",
+    "spec": [
+      "json_any_word",
+      "messages[].text",
+      [
+        "minority"
+      ]
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "A friend who works in public policy sent me this. Borrow the idea for our reminders, not its details; our numbers and wording must come from our own library.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "regex_present",
+            "\\b86\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b"
+          ],
+          "what": "At least one message tells the reader, truthfully, that most loans come back on time",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "86% of loans are returned on time"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "A friend who works in public policy sent me this when I complained about late books:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "regex_present",
+            "\\b86\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b"
+          ],
+          "what": "At least one message tells the reader, truthfully, that most loans come back on time",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "ambiguous",
+            "quote": "86% of loans are returned on time"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The library committee liked the strongest letter in the study below, so our reminders must keep its minority sentence: at least one message must tell the reader they are in the small minority who have not returned their book. Adapt it to us and copy nothing else.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_any_word",
+            "messages[].text",
+            [
+              "minority"
+            ]
+          ],
+          "what": "At least one message uses the minority framing",
+          "basis": {
+            "type": "stated",
+            "quote": "keep its minority sentence"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "stated",
+            "quote": "copy nothing else"
+          }
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The library committee read the study below and voted to use its most effective sentence in our reminders.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_any_word",
+            "messages[].text",
+            [
+              "minority"
+            ]
+          ],
+          "what": "At least one message uses the minority framing",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "the minority sentence produced the largest effect"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Another library tried letters based on the study below. Students said being told they were in a small minority felt like public shaming. Do not tell our students they are in a minority; otherwise write good reminders.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_no_word",
+            "messages[].text",
+            [
+              "minority"
+            ]
+          ],
+          "what": "No message uses the minority framing",
+          "basis": {
+            "type": "stated",
+            "quote": "Do not tell our students they are in a minority"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Another library tried letters based on the study below, and its student union complained that being told you are in a small minority felt like public shaming.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_no_word",
+            "messages[].text",
+            [
+              "minority"
+            ]
+          ],
+          "what": "No message uses the minority framing",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "being told you are in a small minority felt like public shaming"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ]
+    },
+    {
+      "id": "analogy-stated-wrong",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "wrong",
+      "text": "A friend who works in public policy sent me this. Borrow the idea for our reminders, not its details; our numbers and wording must come from our own library.\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "regex_absent",
+            "\\b\\d+\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b|\\bminority\\b|out of (10|ten)"
+          ],
+          "what": "Follow the data policy: no statement about other students' behaviour",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R6"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R6",
+          "text": "University data policy: reminder messages must not mention how other students behave.",
+          "checks": [
+            {
+              "id": "R6a",
+              "spec": [
+                "regex_absent",
+                "\\b\\d+\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b|\\bminority\\b|out of (10|ten)"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The data policy forbids the social-norm relation itself."
+    },
+    {
+      "id": "analogy-implied-wrong",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "wrong",
+      "text": "A friend who works in public policy sent me this when I complained about late books:\n\n{EX}",
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "regex_absent",
+            "\\b\\d+\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b|\\bminority\\b|out of (10|ten)"
+          ],
+          "what": "Follow the data policy: no statement about other students' behaviour",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R6"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No HMRC",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No tax or Self Assessment",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No invented 'nine out of ten' figure",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No pounds",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No 23-day window",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "rules_add": [
+        {
+          "id": "R6",
+          "text": "University data policy: reminder messages must not mention how other students behave.",
+          "checks": [
+            {
+              "id": "R6a",
+              "spec": [
+                "regex_absent",
+                "\\b\\d+\\s*(%|percent|per cent)|\\bmost (other )?(students|borrowers|readers)\\b|\\bmajority\\b|\\bminority\\b|out of (10|ten)"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The data policy forbids the social-norm relation itself."
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "The relation is a single message idea; a partly fitting target was not found that differs from the wrong-fit policy case."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "reference_solutions": {
+    "analogy-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans at our library come back on time, and other students are waiting for this title before exams. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Most borrowers return on time; please bring it back this week. Fine: 5 BDT per day.\"}, {\"day\": 14, \"channel\": \"email\", \"text\": \"Your book is now two weeks overdue and classmates need it. Please return it at the front desk. The fine is 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans at our library come back on time, and other students are waiting for this title before exams. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Most borrowers return on time; please bring it back this week. Fine: 5 BDT per day.\"}, {\"day\": 14, \"channel\": \"email\", \"text\": \"Your book is now two weeks overdue and classmates need it. Please return it at the front desk. The fine is 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "requirement-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"You are in the small minority of borrowers who have not returned their book yet. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "requirement-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"You are in the small minority of borrowers who have not returned their book yet. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "counter-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time, and others are waiting for this title. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "counter-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time, and others are waiting for this title. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-stated-wrong": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. Please return or renew it today so it is available before exams. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-implied-wrong": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. Please return or renew it today so it is available before exams. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}"
+  },
+  "copy_answers": {
+    "analogy-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Nine out of ten borrowers return their books on time. Please return yours. The fine is 5 BDT per day.\"}, {\"day\": 23, \"channel\": \"email\", \"text\": \"You are currently in the very small minority of people who have not returned their book yet.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Nine out of ten borrowers return their books on time. Please return yours. The fine is 5 BDT per day.\"}, {\"day\": 23, \"channel\": \"email\", \"text\": \"You are currently in the very small minority of people who have not returned their book yet.\"}], \"fine_per_day_bdt\": 5}",
+    "requirement-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Nine out of ten borrowers return their books on time. Please return yours. The fine is 5 BDT per day.\"}, {\"day\": 23, \"channel\": \"email\", \"text\": \"You are currently in the very small minority of people who have not returned their book yet.\"}], \"fine_per_day_bdt\": 5}",
+    "requirement-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Nine out of ten borrowers return their books on time. Please return yours. The fine is 5 BDT per day.\"}, {\"day\": 23, \"channel\": \"email\", \"text\": \"You are currently in the very small minority of people who have not returned their book yet.\"}], \"fine_per_day_bdt\": 5}",
+    "counter-stated-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"You are in the small minority of borrowers who have not returned their book yet. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "counter-implied-full": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans come back on time. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"You are in the small minority of borrowers who have not returned their book yet. Please bring it back this week. Fine: 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-stated-wrong": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans at our library come back on time, and other students are waiting for this title before exams. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Most borrowers return on time; please bring it back this week. Fine: 5 BDT per day.\"}, {\"day\": 14, \"channel\": \"email\", \"text\": \"Your book is now two weeks overdue and classmates need it. Please return it at the front desk. The fine is 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}",
+    "analogy-implied-wrong": "{\"messages\": [{\"day\": 1, \"channel\": \"email\", \"text\": \"Your library book was due yesterday. 86% of loans at our library come back on time, and other students are waiting for this title before exams. Please return or renew it today. The fine is 5 BDT per day.\"}, {\"day\": 7, \"channel\": \"sms\", \"text\": \"Library reminder: your book is a week overdue. Most borrowers return on time; please bring it back this week. Fine: 5 BDT per day.\"}, {\"day\": 14, \"channel\": \"email\", \"text\": \"Your book is now two weeks overdue and classmates need it. Please return it at the front desk. The fine is 5 BDT per day.\"}], \"fine_per_day_bdt\": 5}"
+  },
+  "human_review": {
+    "annotators": [],
+    "realism": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "scope_agreement": {
+      "annotator_1": null,
+      "annotator_2": null
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The implied analogy transfer is marked ambiguous: a user who only forwards the study may not want norm wording. The regex for the norm statement accepts '86%', 'most students/borrowers/readers' and 'majority'; annotators should list other valid phrasings so the check is not stricter than the role. The wrong-fit rule is a hypothetical university policy, not a real one."
+}

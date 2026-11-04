@@ -28,6 +28,9 @@ This project tests whether models use an example according to its role, finds wh
 | [src/analyze.py](src/analyze.py) | Metrics, seed-level bootstrap intervals, figures |
 | [src/logit_lens.py](src/logit_lens.py) | E7: layer scan |
 | [src/contamination.py](src/contamination.py) | E3: guided completion and Min-K% Prob |
+| [src/run_api.py](src/run_api.py) | E4–E6 on OpenAI models (pinned snapshots; key read from local_only/.env) |
+| [src/seed_lint_v1.py](src/seed_lint_v1.py) | Checks new seed cards against the paper protocol |
+| [data/seeds_v1_draft/](data/seeds_v1_draft/) | 10 draft seed cards in the v1 format (need two annotators) |
 | [src/wildchat_mine.py](src/wildchat_mine.py) | E1: example-giving turns in real WildChat conversations |
 | [data/seeds.json](data/seeds.json) | The seeds in readable form |
 | [data/E2_annotation_sheet.csv](data/E2_annotation_sheet.csv) | Sheet for the two-annotator agreement check (E2) |

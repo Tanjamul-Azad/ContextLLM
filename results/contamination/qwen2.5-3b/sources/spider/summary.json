@@ -1,0 +1,26 @@
+{
+ "model": "Qwen/Qwen2.5-3B-Instruct",
+ "source": "spider",
+ "dataset": "xlangai/spider (validation), questions with >= 12 words (563 eligible of 1034), 50 sampled",
+ "n": 50,
+ "item_sampling_seed": 7,
+ "max_new_tokens": {
+  "completion": 36,
+  "paraphrase": 74
+ },
+ "guided_completion": {
+  "mean_rouge_l_guided": 0.133,
+  "mean_rouge_l_general": 0.096,
+  "share_near_verbatim_guided(>=0.75)": 0.0,
+  "share_near_verbatim_general(>=0.75)": 0.0
+ },
+ "min_k_prob(k=20%)": {
+  "mean_original": -10.13,
+  "mean_paraphrase": -9.747,
+  "share_original_scores_higher_than_its_paraphrase": 0.36,
+  "mean_our_fresh_seed_texts": -9.418
+ },
+ "rule": "Flag if guided near-verbatim share (ROUGE-L >= 0.75) > 0.05, or original > paraphrase in > 70% of pairs.",
+ "flag_reasons": [],
+ "flag_source": false
+}

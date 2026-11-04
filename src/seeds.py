@@ -18,6 +18,8 @@ HOUR_WORDS = ["hour", "hours", "hourly", "per-hour"]
 ANYONE = ["any", "anyone", "everyone", "all", "any member", "any developer", "any volunteer"]
 STOP_WORDS = ["stop", "pause", "halt", "freeze", "block", "roll back", "rollback", "suspend"]
 FAR_WORDS = ["back", "far", "farthest", "furthest", "last", "rear", "rows 2", "row 30", "rows 3"]
+# v1.1: the word list missed "rows 25-30"; match any back-half row range instead.
+FAR_REGEX = r"\b(back|far|farthest|furthest|last|rear)\b|\brows?\s*(1[6-9]|2\d|30)\b"
 CAPS_BANG = r"^\s*[A-Z]{3,}!"
 ZONE = r"^\s*zone\b"
 
@@ -236,7 +238,7 @@ SEEDS = [
                 "plain": "Make them as attention-grabbing as these, but in our own newsletter voice:\n{EX}",
                 "explicit": "Take only the punchy, short style. Do not copy the ALL-CAPS opener, the double exclamation marks or any of their words.",
                 "checks": [
-                    ("transfer", ("json_all_words_le", "headlines[]", 8)),
+                    # v1.1: removed an 8-word transfer check; the prompt allows 10 words (audit 2026-11-05).
                     ("leakage", ("json_none_match", "headlines[]", CAPS_BANG)),
                     ("leakage", ("text_absent", ["SHOCK", "EXCLUSIVE", "REVEALED", "Celebrity", "Take Over", "!!"])),
                 ],
@@ -281,7 +283,7 @@ SEEDS = [
                 "plain": "Something like how airlines board planes might help:\n{EX}",
                 "explicit": "Take only the idea of letting the people seated farthest from the door enter first. Do not reuse zone names or airline terms.",
                 "checks": [
-                    ("transfer", ("json_first_item_word", "groups", "order", "who", FAR_WORDS)),
+                    ("transfer", ("json_first_item_regex", "groups", "order", "who", FAR_REGEX)),
                     ("leakage", ("json_none_match", "groups[].name", ZONE)),
                     ("leakage", ("text_absent", ["business class", "passenger", "passengers", "gate", "boarding pass", "flight", "priority members", "window seats"])),
                 ],

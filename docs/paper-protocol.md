@@ -39,7 +39,7 @@ Multiple comparisons: Holm correction across H1–H5's primary tests.
 1. Decisions and plans with a JSON answer (schemes, policies, pricing, evaluations).
 2. Code and data tasks with unit tests.
 
-**Variation axes.** Every seed covers all meaningful cells.
+**Variation axes.** Every role × fit × cue cell is either built or marked not applicable with a written reason, and both annotators accept the reason.
 
 | Axis | Levels |
 | --- | --- |
@@ -53,15 +53,17 @@ Multiple comparisons: Holm correction across H1–H5's primary tests.
 
 - [ ] Built on a real, citable case or a real user request (source recorded in the seed).
 - [ ] The source example is at least 8 sentences long. A long variant of 20 or more sentences exists for 30% of seeds.
-- [ ] The example contains at least 3 incidental details that must not transfer.
-- [ ] A counter-example shares at least 3 surface features with the target task, so it looks applicable.
+- [ ] The example contains at least 3 incidental details that must not transfer under the analogy role; any per-role exceptions are listed in the gold.
+- [ ] A counter-example shares at least 3 surface features with the target task, each quoted in both texts, so it looks applicable.
 - [ ] The gold specification lists what must transfer, what must not, and the target rules, each with an automatic check.
 - [ ] Realism rated 4 or 5 out of 5 by both annotators.
-- [ ] Implied-cue variants make up half of all variants.
-- [ ] Every check matches something the prompt or the role actually implies; a stricter check than the instruction is a seed error (pilot P5).
-- [ ] Where a plain (implied) variant leaves a detail ambiguous, two annotators adjudicate it before it is scored (pilot P1).
+- [ ] In every seed, each stated-cue variant has an implied-cue twin with the same role and fit.
+- [ ] Each check names its basis (a stated quote, a target rule, or a role implication). Numbers and words in the check must appear in that basis. Test thresholds are approved by both annotators. A check stricter than its basis is a seed error (pilot P5).
+- [ ] The author marks every implied-cue check as clear or ambiguous, and either annotator may change clear to ambiguous. Ambiguous checks are scored only after both annotators record a decision (pilot P1).
 
-**Sources and quotas.** No source may supply more than 40% of seeds.
+Machine-checkable rules are enforced by [src/seed_lint_v1.py](../src/seed_lint_v1.py); the card format is in [seed-spec-v1.md](seed-spec-v1.md).
+
+**Sources and quotas.** No single case or provenance group supplies more than 2 seeds. Open question for the freeze: the draft cap of 40% per source category conflicts with documented real cases being the main source of analogy and counter-example seeds (60% in the first 10 drafts). Decide the category cap with sir.
 
 | Source | Used for |
 | --- | --- |
