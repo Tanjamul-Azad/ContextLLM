@@ -125,7 +125,7 @@ On 60 GSM8K test questions, Qwen2.5-3B did not recite any second half word for w
 
 - **Small set.** 10 seeds, so each role cell is 10 answers and the intervals are wide. The sprint target is 20–30 seeds.
 - **No second annotator yet.** The seeds and gold checks were written by one person; E2 has not run.
-- **Small models only.** The largest is 8B, and two of the models are 4-bit. No API model yet.
+- **Model coverage.** Open models up to 8B (two of them 4-bit) and three OpenAI models (gpt-4.1-mini, gpt-5.4-mini, gpt-5.4). No other frontier family yet.
 - **Leakage checks are word lists.** A model could leak an idea in other words and not be caught.
 - **One prompt per condition.** Wording changes may move the numbers.
 
