@@ -1,5 +1,7 @@
 # Role-Aware Example Use in LLMs: Research Proposal v2
 
+> **Superseded on 7 November 2026 by [proposal-detailed.md](proposal-detailed.md).**
+
 7 November 2026 · Tanjamul Azad
 
 **Working title:** "That Was Just an Example": Learning Role-Aware Selective Transfer in LLMs. **Area:** NLP, instruction following, analogical transfer, mechanistic interpretability. **Target:** ACL or EMNLP main track; submission timing follows validated results.
