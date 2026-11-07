@@ -41,6 +41,8 @@ Explicit instructions largely fix frontier models but not open ones, so the hard
 
 **Why not simply ask explicitly?** The explicit condition works as an oracle: the user states which parts to take and which to leave, which is the very judgement the model is meant to make. Real users rarely do this. In our samples of WildChat and OASST2, people give the example and leave the role implied, and under that realistic condition frontier models still fail 17–30% of the time. Open models, which are widely deployed for cost and privacy reasons, fail 27–33% of the time even when told explicitly. Agents that reuse retrieved documents or earlier code face the same problem with no one to state the scope. The pilot examples were also short and fairly direct; whether longer contexts and weaker cues raise frontier failure rates will be tested in the validation week.
 
+**Code and data.** The code, the 130 prompts, all 780 model answers and their scores are on [GitHub](https://github.com/Tanjamul-Azad/ContextLLM). A browsable copy with spreadsheets and Colab notebooks is in a [Google Drive folder](https://drive.google.com/drive/folders/1PDY9RPmH4ioq-y9gHqcQZVryrqk3Xnwm).
+
 ## 4. Proposed methodology
 
 ### 4.1 Dataset
