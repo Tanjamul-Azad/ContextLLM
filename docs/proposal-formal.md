@@ -90,8 +90,6 @@ I would be grateful for your feedback on the scope, and for guidance on the anno
 - Ali, A., Wolf, L. and Titov, I. (2026). [Mitigating Copy Bias in In-Context Learning through Neuron Pruning](https://aclanthology.org/2026.findings-eacl.13/). Findings of EACL.
 - Camassa, C. and Shiller, D. (2026). [Do as I Say, Not as I Do: Instruction-Induction Conflict in LLMs](https://arxiv.org/abs/2605.20382). Sci-FM Workshop, COLM.
 - Halawi, D., Denain, J.-S. and Steinhardt, J. (2024). [Overthinking the Truth: Understanding how Language Models Process False Demonstrations](https://arxiv.org/abs/2307.09476). ICLR.
-- Laban, P., Hayashi, H., Zhou, Y. and Neville, J. (2025). [LLMs Get Lost in Multi-Turn Conversation](https://arxiv.org/abs/2505.06120). arXiv.
-- Li, Z. et al. (2026). [ReTRE: Benchmarking LLM Transfer Robustness with Structure-Preserving Variants](https://aclanthology.org/2026.acl-long.2048/). ACL.
 - Sourati, Z., Ilievski, F., Sommerauer, P. and Jiang, Y. (2023). [ARN: Analogical Reasoning on Narratives](https://arxiv.org/abs/2310.00996). arXiv.
 - Wang, Y. et al. (2022). [Super-NaturalInstructions: Generalization via Declarative Instructions on 1600+ NLP Tasks](https://arxiv.org/abs/2204.07705). EMNLP.
 - Ye, X. et al. (2024). [AnaloBench: Benchmarking the Identification of Abstract and Long-context Analogies](https://aclanthology.org/2024.emnlp-main.725/). EMNLP.
