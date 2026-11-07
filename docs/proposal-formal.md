@@ -16,9 +16,13 @@ Related work studies parts of this problem. Ali et al. (2026) prune neurons to r
 
 ## 2. Research questions
 
-- **RQ1.** When only the role of an example changes, do LLMs change what they transfer accordingly, while keeping the user's own constraints?
-- **RQ2.** Which internal components carry the example's role and drive the transfer of source details?
-- **RQ3.** Does training that supervises transfer scope improve role-correct transfer on unseen tasks, beyond prompting and standard fine-tuning?
+**Main research question.** When a user gives an example, do large language models use it according to the role the user intends, and if not, why do they fail and can training correct it?
+
+The question breaks into three parts, one for each stage of the study:
+
+1. **Behaviour.** When only the role of an example changes, do models change what they transfer accordingly, while keeping the user's own constraints?
+2. **Mechanism.** Which internal components carry the example's role and drive the transfer of source details?
+3. **Correction.** Does training that supervises transfer scope improve role-correct transfer on unseen tasks, beyond prompting and standard fine-tuning?
 
 ## 3. Preliminary results
 
