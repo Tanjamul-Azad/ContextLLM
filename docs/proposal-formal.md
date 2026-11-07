@@ -39,6 +39,8 @@ The pilot used 10 seeds (6 planning tasks with JSON answers, 4 code tasks with u
 
 Explicit instructions largely fix frontier models but not open ones, so the hard case is inferring the role from context. A logit-lens reading of Qwen2.5-3B shows the roles' predictions diverging around layers 23–28 of 36; causal tests are still to come. These results are provisional: the seeds have not yet been validated by independent annotators.
 
+**Why not simply ask explicitly?** The explicit condition works as an oracle: the user states which parts to take and which to leave, which is the very judgement the model is meant to make. Real users rarely do this. In our samples of WildChat and OASST2, people give the example and leave the role implied, and under that realistic condition frontier models still fail 17–30% of the time. Open models, which are widely deployed for cost and privacy reasons, fail 27–33% of the time even when told explicitly. Agents that reuse retrieved documents or earlier code face the same problem with no one to state the scope. The pilot examples were also short and fairly direct; whether longer contexts and weaker cues raise frontier failure rates will be tested in the validation week.
+
 ## 4. Proposed methodology
 
 ### 4.1 Dataset
