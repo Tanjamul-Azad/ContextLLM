@@ -20,7 +20,7 @@ All numbers below come from files in [results/](results/). Every raw prompt and 
 | # | Question | Result | Pass mark | Verdict |
 | --- | --- | --- | --- | --- |
 | E1 | Do real chats contain the problem? | WildChat: about 2,160 real example-giving turns (hand-checked rate 0.29% of unique turns). OASST2: about 100 | 300+ | Pass, but almost all are "follow this format"; real counter-examples are rare |
-| E2 | Do two people agree on the gold answer? | Not run: needs two human annotators | 80%+ agreement | Pending: [data/E2_annotation_sheet.csv](data/E2_annotation_sheet.csv) |
+| E2 | Do two people agree on the gold answer? | Not run: needs two human annotators | 80%+ agreement | Pending: [v1.1 review pack](data/human_review/v1_1_draft/) |
 | E3 | Is reused data contaminated? | Qwen2.5-3B, 50–60 items per source: GSM8K, Super-NaturalInstructions, HumanEval, Spider and AnaloBench all show 0% word-for-word recall. Super-NaturalInstructions sits exactly at the Min-K% threshold (originals above paraphrases in 70% of pairs) | Flag if >5% recited, or originals beat paraphrases in >70% | None flagged; rewrite Super-NaturalInstructions definitions before test use |
 | E4 | Do models fail? | Plain wording, open models: 47% / 40% / 43% (Qwen-3B / Qwen-7B / Llama-8B). Frontier: 23% / 17% / 30% (GPT-4.1-mini / GPT-5.4-mini / GPT-5.4). Explicit wording: open 27–33%, frontier 0–7% | 25%+ fail, and explicit halves it | Open models fail and prompting does not fix it. Frontier models fail less, and explicit wording almost fixes them |
 | E5 | Does the role matter? | Copy-rate gap, requirement minus counter (points): Qwen-3B 60 [30, 90], Qwen-7B 30 [-10, 70], Llama-8B 50 [20, 80], all three GPT models 80 [50, 100] | 15+ points, interval above 0 | Pass for 5 of 6 models; not for Qwen-7B |
@@ -38,7 +38,7 @@ Intervals are 95% bootstrap over seeds.
 | Models | Open, on one RTX 4060 (8GB): Qwen2.5-3B-Instruct (bf16), Qwen2.5-7B-Instruct (4-bit), Llama-3.1-8B-Instruct (4-bit). Frontier, through the OpenAI API with pinned snapshots: gpt-4.1-mini-2025-04-14 (temperature 0), gpt-5.4-mini-2026-03-17 and gpt-5.4-2026-03-05 (reasoning effort low) |
 | Decoding | Greedy, at most 512 new tokens, so reruns give the same answers |
 | Scoring | Fully automatic: JSON checks and Python tests. [tests/validate_checks.py](tests/validate_checks.py) shows that correct answers pass and copied answers get caught |
-| Total | 390 scored answers, 5 layer probes, 60 contamination items, 30,000 sampled chats |
+| Total | 780 scored answers (6 models × 130 prompts), 5 layer probes, 260 contamination items (5 sources), 30,000 sampled chats and messages |
 
 ## One real example
 
@@ -131,7 +131,7 @@ On 60 GSM8K test questions, Qwen2.5-3B did not recite any second half word for w
 
 ## Next steps
 
-1. Run E2: two people fill [data/E2_annotation_sheet.csv](data/E2_annotation_sheet.csv) independently.
+1. Run the human review: two people fill the v1.1 review pack ([data/human_review/v1_1_draft/](data/human_review/v1_1_draft/)) independently.
 2. Grow to 20–30 seeds, mostly counter-example and analogy seeds from curated real cases.
-3. Add one API model and a 14B open model.
+3. Add a second frontier family (Gemini or Claude) and a 14B open model.
 4. Activation patching and head ablation on layers 23–36 of Qwen2.5-3B.

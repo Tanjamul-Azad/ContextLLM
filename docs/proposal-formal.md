@@ -2,7 +2,7 @@
 
 7 November 2026
 
-**Student:** Tanjamul Azad, United International University. **Target venue:** ACL or EMNLP main track.
+**Md. Tanzamul Azad (0112230863)**, United International University. **Target venue:** ACL or EMNLP main track.
 
 ## Abstract
 

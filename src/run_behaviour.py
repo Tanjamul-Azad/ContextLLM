@@ -32,13 +32,15 @@ def load(key):
     tok.padding_side = "left"
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
+    # Colab's T4 has no bf16; fall back to fp16 there. The saved results used bf16 (RTX 4060).
+    half = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     kw = {"device_map": "cuda"}
     if key in QUANTIZE_ON_LOAD:
         from transformers import BitsAndBytesConfig
         kw["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
-                                                       bnb_4bit_compute_dtype=torch.bfloat16)
+                                                       bnb_4bit_compute_dtype=half)
     elif "bnb-4bit" not in name:
-        kw["dtype"] = torch.bfloat16
+        kw["dtype"] = half
     model = AutoModelForCausalLM.from_pretrained(name, **kw)
     model.eval()
     return tok, model

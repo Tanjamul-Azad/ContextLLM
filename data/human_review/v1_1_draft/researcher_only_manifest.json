@@ -1,0 +1,342 @@
+{
+  "R008": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "c1a4c8b31a411aef7f9f571a13c8fca7fec260d40b4cf2979c46e354545b8061"
+  },
+  "R043": {
+    "seed": "D02_social_norm_library",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "bc9c622297edc7536f6e9e4fa4f84c8a39ff26e3a2725e5a94a5d2870be5b287"
+  },
+  "R035": {
+    "seed": "D01_stockholm_parking",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "bcb0e18e41dacdc6f7948adcdb0c79f36156153516119df82cc6bbb0301c164b"
+  },
+  "R007": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "8dc2f30bf125338effb0a6849876ac6206615d351a3a36c89d1b2e5b1c2e6b0f"
+  },
+  "R034": {
+    "seed": "D01_stockholm_parking",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "1584d820f2a6389ca6ec589313afa78f39dce60a1324e41dc48f86ce86ae7dd9"
+  },
+  "R018": {
+    "seed": "C04_grader_assignment",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "959b46138f81818e56e962ed62c1109a935299a258fec58164b7bce71ddeff82"
+  },
+  "R050": {
+    "seed": "D03_group_lending_lab",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "65a58e80f97b3a90d1479b21312a7756e837ab3e6b83993608a6e5d57f7b3421"
+  },
+  "R040": {
+    "seed": "D02_social_norm_library",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "9a067ac5da8571248f42fdd9b6c90daa01e83b516d18be8f7312bbb0d46a7dda"
+  },
+  "R023": {
+    "seed": "C04_grader_assignment",
+    "variant": "analogy-stated-partial",
+    "prompt_sha256": "c16cd2c1f95b8aa78589cf4cf76a873d94dedd6cf59a25dd75fe320d22a66133"
+  },
+  "R039": {
+    "seed": "D02_social_norm_library",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "d84cc0be631ce92cebebc2c4e270d7d0c4b43197528181b3049f0a6b329fcf63"
+  },
+  "R052": {
+    "seed": "D03_group_lending_lab",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "e0499491f4e8e8572fc8902a07d1fb96b7bab4a630d0a44a113429b1be87bb93"
+  },
+  "R015": {
+    "seed": "C03_index_truncation",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "56ae7f2d43dbed360240e686bb9e451cb3a4249e9807821da8506b7cf2a53f14"
+  },
+  "R044": {
+    "seed": "D02_social_norm_library",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "e1df077accea1e051fcf6630ca51b150d2f0c2981afdba08045127ce1f9348e3"
+  },
+  "R030": {
+    "seed": "C05_simpson_methods",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "720287876512356d5d5f05ca5ba1f318a96e677eabd78dff83ba79947d146470"
+  },
+  "R028": {
+    "seed": "C05_simpson_methods",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "208e01fb4611827381e2f32730dd742ba57f3b8f734b55123c4729b7c7a34059"
+  },
+  "R047": {
+    "seed": "D03_group_lending_lab",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "e534a67d864c4f0c920d6c35e982a34e423bd3e4c82e89b586f0eea5de977f04"
+  },
+  "R059": {
+    "seed": "D04_abc_makerspace",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "67a3737e4df2de0efdf56083028e49a2600da8d780434b6870bec6b0c8b12672"
+  },
+  "R051": {
+    "seed": "D03_group_lending_lab",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "0bf571c012d1857082e3f8035c72b185ff49309128648961ca22e86ec7f4a103"
+  },
+  "R061": {
+    "seed": "D04_abc_makerspace",
+    "variant": "analogy-stated-partial",
+    "prompt_sha256": "36d80927a8d1188dcadf67d55b40f9c8bcb993edafe21c2b1b19730198a83f40"
+  },
+  "R021": {
+    "seed": "C04_grader_assignment",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "9168921755d6722c405056edbe69faf243cb729762361009bb831c123f3a2821"
+  },
+  "R065": {
+    "seed": "D05_release_train_portal",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "554c2b9e3e6f41ec2d1e4fb4d6eb1e37c1eb01e150cfdf93efa77bfd3cf16c64"
+  },
+  "R024": {
+    "seed": "C04_grader_assignment",
+    "variant": "analogy-implied-partial",
+    "prompt_sha256": "e113deb826ca3a8497b7667ead5a6da59d4758455bdf2e4163ba702ea35948a5"
+  },
+  "R068": {
+    "seed": "D05_release_train_portal",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "78e002a4ff65ba9519ad74ffa98e1cf8bc17755934e52173c8c73f2f67e1f7f1"
+  },
+  "R054": {
+    "seed": "D03_group_lending_lab",
+    "variant": "analogy-implied-partial",
+    "prompt_sha256": "cfccfc2fc2790b0c76a9897c4e068282d2a57d642250902c78ca4e0e3e9e8c20"
+  },
+  "R027": {
+    "seed": "C05_simpson_methods",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "616a2fd5c78c09317eeff7e7719b585349ab6ad2782df879d70d142a211312e3"
+  },
+  "R017": {
+    "seed": "C04_grader_assignment",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "c4cf0dd4221ba8bde919c7bfd5fddce49a6e5bb4d927e6b29e835797db94ba41"
+  },
+  "R056": {
+    "seed": "D04_abc_makerspace",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "bd10628f4ae3798721b0a9f52c4bdaec4bbbdf514ab8cde6981e2d10f971a27f"
+  },
+  "R062": {
+    "seed": "D04_abc_makerspace",
+    "variant": "analogy-implied-partial",
+    "prompt_sha256": "76c9124a87ebe6f5d432fa88af8a20c938437073b446dd1aa0cd653f84308e9d"
+  },
+  "R033": {
+    "seed": "D01_stockholm_parking",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "120e796ff0c0cb5760d22a60bea7c198d8df7e0867e651592adf2e11f570ee15"
+  },
+  "R020": {
+    "seed": "C04_grader_assignment",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "b1b27153e8704b7df50063cc03d58443991e4964bfdaf84ec00fbb8922359e8d"
+  },
+  "R006": {
+    "seed": "C01_calver_compare",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "addedf02a770020eeda29750b909a4f22a98f633d127615224ee635222c6d884"
+  },
+  "R003": {
+    "seed": "C01_calver_compare",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "414f1accc3ca804c0586ef410b8fab8deb11ce154185f1f637bca144fea39c81"
+  },
+  "R009": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "e6a6bb3880105ffea2a834e6aad9b75747c3ad3162e86a1ba5a7cfd3ad1070b3"
+  },
+  "R016": {
+    "seed": "C03_index_truncation",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "2d58303602e30fc2aa2f7a8718ee7430ec2a9731bbe7fff90a5d11b3bf44535e"
+  },
+  "R038": {
+    "seed": "D01_stockholm_parking",
+    "variant": "analogy-implied-wrong",
+    "prompt_sha256": "ef559f9f88cf8512d030eac6292d6c904f339c3e1895365cae0f11ef33e32c38"
+  },
+  "R032": {
+    "seed": "D01_stockholm_parking",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "ede274e85f2bd018f69a8dddd031b186b91b78c5c4ec6c7f62efa40c892d3854"
+  },
+  "R066": {
+    "seed": "D05_release_train_portal",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "d2991d49dd5b9aef083f9ba048182f85e3b529aebd58dcacf758355c0a83c73f"
+  },
+  "R010": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "3e8448b1c742ddb2c9fbc08af6d698bcb521c8b7e6d0a02dc4cece3b5002c1e2"
+  },
+  "R004": {
+    "seed": "C01_calver_compare",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "76587fd1f6e5c288c7ea7d522368e55d6028b80793c11ee5c92e962ac45beacb"
+  },
+  "R048": {
+    "seed": "D03_group_lending_lab",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "d77eb8c49a6641325beb4d28a9690c6c2d73790fc5759c3b5ada689c26f8f9ee"
+  },
+  "R002": {
+    "seed": "C01_calver_compare",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "ea6a847cff57e616d2cfa9e30dcf8b5f71a96c70d63db143af5bd529f9f97341"
+  },
+  "R031": {
+    "seed": "D01_stockholm_parking",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "e7762a6cd45e26fde979d8ea7a766aa742c928f2d07261cee6a91b53196d6902"
+  },
+  "R025": {
+    "seed": "C05_simpson_methods",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "e81ce97492f63410813c1ad0977a80d628fd1bf9fd8a17ce5dc33eca09fedad1"
+  },
+  "R045": {
+    "seed": "D02_social_norm_library",
+    "variant": "analogy-stated-wrong",
+    "prompt_sha256": "6b231c714a251435a15555a3ea5452d7a96b6047a836ed115058a68c7a1e116d"
+  },
+  "R042": {
+    "seed": "D02_social_norm_library",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "e8482d27102cc73df6c75fda89d19410d2596d685dba9717a6e7c406641583ec"
+  },
+  "R053": {
+    "seed": "D03_group_lending_lab",
+    "variant": "analogy-stated-partial",
+    "prompt_sha256": "7140834d03e0401f809d330ac38a8aebfb2704e3b6d87b027074734d7c93b31a"
+  },
+  "R013": {
+    "seed": "C03_index_truncation",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "0d288fd68f63537b40a62f4e120168840cc320158f382849d7db4a989a1a7e99"
+  },
+  "R055": {
+    "seed": "D04_abc_makerspace",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "9f35a51fe90d4015adfc528c74db87a94a9d4fb9418fcd4394c383a002bcc47d"
+  },
+  "R019": {
+    "seed": "C04_grader_assignment",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "fe27194317217945d18bf1a2bdc21e122b9e8914d7763c3d7f18e2b2aaa268d3"
+  },
+  "R063": {
+    "seed": "D05_release_train_portal",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "6cdbe98d8d4a9a981211516bca59625361d12c5b16fd0633698b301cb8f58242"
+  },
+  "R036": {
+    "seed": "D01_stockholm_parking",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "eada45eb5150983bed8c47f945f88845f662a3564df3eb0ff64beead41d7e390"
+  },
+  "R046": {
+    "seed": "D02_social_norm_library",
+    "variant": "analogy-implied-wrong",
+    "prompt_sha256": "140466544d59d49e53047f1d035c7b3298c0cadc2bf4f4ff7589c2a6241c7748"
+  },
+  "R014": {
+    "seed": "C03_index_truncation",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "c85bb95f0e66328dcb2976262a8829a8ee89b8f262bce9c0a4305ed6eebbc05c"
+  },
+  "R026": {
+    "seed": "C05_simpson_methods",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "90a2cab3d8e6fa90d2edf2c5b7830d799b7cc4c01ed347612064561c45b2740c"
+  },
+  "R060": {
+    "seed": "D04_abc_makerspace",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "ed14a39ea954950d379dd16442b6096ced2213a81fe447d99871b69d92aac805"
+  },
+  "R057": {
+    "seed": "D04_abc_makerspace",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "4d6f6a8079e6c5109199ddb67f75f83014b750714530207e9c92e9cda47044e1"
+  },
+  "R037": {
+    "seed": "D01_stockholm_parking",
+    "variant": "analogy-stated-wrong",
+    "prompt_sha256": "a595ef0313d91e2cfa984f11f3bcc6f2dff134c5f40c10b6e4879fcab72f4d97"
+  },
+  "R067": {
+    "seed": "D05_release_train_portal",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "f35bf847b85590cdaeba7364d667616eb9552e9a71e5c3c248cc1cd3a7324cf4"
+  },
+  "R058": {
+    "seed": "D04_abc_makerspace",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "fee4082278ed2d49f865e11208985812251121708551da77f4dcd47e9a10bfdb"
+  },
+  "R001": {
+    "seed": "C01_calver_compare",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "9a80cbe7a46a772d840766aa176ba4a0bb5cb6ce548751b7c307eb4bf8545aeb"
+  },
+  "R064": {
+    "seed": "D05_release_train_portal",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "08a1c3e76f6009ca98559a77f9bc5e1a892ceae8cf57f69d73b12ea804c5e87c"
+  },
+  "R022": {
+    "seed": "C04_grader_assignment",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "4f3fa6489b4ef940d0f4b92a37e3e122be302b5fded4c80fa4728188984c0829"
+  },
+  "R012": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "e8a0bc623de406de17499ee02dc0f64a0439b75545d034170800c392b71fa5a1"
+  },
+  "R011": {
+    "seed": "C02_typed_tsv_parser",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "a385eaf05622079cc717cd35b3813732fb61e598f51a9eac9aaaa4c7ca1fc6f5"
+  },
+  "R049": {
+    "seed": "D03_group_lending_lab",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "f298c57cc3b22b00bea35465405e6db351b058a057ae2b6b5acbe2b1ebe78f85"
+  },
+  "R029": {
+    "seed": "C05_simpson_methods",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "3f5af60716715377cd1415ca293639ee2f3ffd8c27b180de37a8e5d658ec1c88"
+  },
+  "R041": {
+    "seed": "D02_social_norm_library",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "2e248209b2d39fb972073eec3008147b6faf9defa4f63720260cc32ae0fe84e2"
+  },
+  "R005": {
+    "seed": "C01_calver_compare",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "303ed3373135f051853331656026c1fa8ae191367d869c33f485a30346b6e49f"
+  }
+}
