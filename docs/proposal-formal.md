@@ -55,11 +55,23 @@ On development data we compare matched prompts that differ only in the example's
 
 ### 4.3 Training method
 
-We fine-tune with LoRA using an objective with three parts: producing a valid answer, predicting the transfer scope, and staying consistent across paired variants, so that the answer changes when the role changes but not when only incidental details do. If the mechanism study locates the role in specific layers, we also train only those layers. Baselines are a prompt that asks the model to work out the scope itself, standard supervised fine-tuning, and LoRA on all or random layers with the same budget.
+We fine-tune with LoRA using an objective with three parts: producing a valid answer, predicting the transfer scope, and staying consistent across paired variants, so that the answer changes when the role changes but not when only incidental details do. Gold scope is used only in training; at test time the model must infer it from the prompt. If the mechanism study locates the role in specific layers, we also train only those layers.
 
-### 4.4 Evaluation
+### 4.4 Baselines and evaluation
 
-The main measure is joint success: the answer uses what it must, avoids what it must not, and keeps the user's constraints. We also report each error type separately, use seed-level bootstrap intervals because variants of one seed are related, and evaluate generalisation on the held-out families.
+Every method is compared on the same test seeds, and every trained method gets the same data and the same tuning budget.
+
+| Comparison | Purpose |
+| --- | --- |
+| No example | Shows whether a failure comes from the example or from the task itself |
+| Plain prompt | The realistic condition: the role is stated or implied as a user would |
+| Scope-inference prompt | A strong prompting baseline: the model is asked to work out what to take before answering |
+| Explicit scope (oracle) | Upper bound: the gold scope is given; reported as a diagnostic, not as a competitor |
+| Supervised fine-tuning | Standard training on the same data without scope supervision |
+| LoRA on all or random layers | Tests whether choosing layers from the mechanism study matters |
+| Random ablation | Control for the mechanism study: removing as many random components |
+
+The main measure is joint success: the answer uses what it must, avoids what it must not, and keeps the user's constraints. We also report harmful transfer, missed transfer and broken constraints separately, and keep format errors apart from content errors. Results use seed-level bootstrap intervals and paired tests, because variants of one seed are related. Generalisation is measured on held-out task families, and general ability (for example GSM8K and MMLU) is checked after every intervention or training run. Trained methods are averaged over three random seeds.
 
 ## 5. Expected contributions
 
@@ -68,17 +80,6 @@ The main measure is joint success: the answer uses what it must, avoids what it 
 3. A training method that improves role-correct transfer on unseen task families.
 
 If the training method does not beat the baselines, the first two contributions still stand as a benchmark and analysis paper.
-
-## 6. Timeline and resources
-
-| Period | Work |
-| --- | --- |
-| 7–12 Nov 2026 | Validation: two annotators review the first seeds; rerun the pilot on validated prompts; decide whether to continue |
-| Nov 2026 – Jan 2027 | Build the benchmark and training data; full behaviour study |
-| Feb – Mar 2027 | Mechanism study and training method |
-| Apr – May 2027 | Held-out evaluation, ablations and writing |
-
-The work runs on two local GPUs (8 GB and 16 GB) for models up to 8B parameters. The final 7–8B training runs will need about 150–300 A100-hours, through lab hardware or cloud credits. API costs are small: the three OpenAI models in the pilot cost under one US dollar in total.
 
 I would be grateful for your feedback on the scope, and for guidance on the annotator arrangement and compute support.
 
