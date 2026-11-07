@@ -1,0 +1,2537 @@
+item,seed,role,wording,turns,prompt,answer,format_ok,constraint_ok,transfer_ok,leak,joint,copied_pattern
+P1_helpdesk_triage|none|-|single,P1_helpdesk_triage,none,-,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Standard"",""response_hours"":24}]}",True,True,,,True,
+P1_helpdesk_triage|analogy|plain|single,P1_helpdesk_triage,analogy,plain,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+For inspiration, here is how hospital emergency departments sort patients:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Could our help desk work in a similar spirit?
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Standard"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|analogy|plain|multi,P1_helpdesk_triage,analogy,plain,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] For inspiration, here is how hospital emergency departments sort patients:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Could our help desk work in a similar spirit?
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Routine"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|analogy|explicit|single,P1_helpdesk_triage,analogy,explicit,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+For inspiration, here is how hospital emergency departments sort patients:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Could our help desk work in a similar spirit?
+Take only the principle that more urgent tickets get a faster response. Do not reuse the colour names, minute-based times or clinical roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Standard"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|analogy|explicit|multi,P1_helpdesk_triage,analogy,explicit,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] For inspiration, here is how hospital emergency departments sort patients:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Could our help desk work in a similar spirit?
+Take only the principle that more urgent tickets get a faster response. Do not reuse the colour names, minute-based times or clinical roles.
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Routine"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|requirement|plain|single,P1_helpdesk_triage,requirement,plain,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Our faculty already uses these hospital colour codes on all its signs, so the levels must use the same colour names as this scheme:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Red"",""response_hours"":0},{""name"":""Yellow"",""response_hours"":4},{""name"":""Green"",""response_hours"":24}]}",True,True,True,False,True,True
+P1_helpdesk_triage|requirement|plain|multi,P1_helpdesk_triage,requirement,plain,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our faculty already uses these hospital colour codes on all its signs, so the levels must use the same colour names as this scheme:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Red"",""response_hours"":1},{""name"":""Yellow"",""response_hours"":8},{""name"":""Blue"",""response_hours"":24}]}",True,True,True,False,True,True
+P1_helpdesk_triage|requirement|explicit|single,P1_helpdesk_triage,requirement,explicit,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Our faculty already uses these hospital colour codes on all its signs, so the levels must use the same colour names as this scheme:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Copy only the colour names for the level names. Do not copy the clinical roles or the minute-based times.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Red"",""response_hours"":1},{""name"":""Yellow"",""response_hours"":8},{""name"":""Green"",""response_hours"":24}]}",True,True,True,False,True,True
+P1_helpdesk_triage|requirement|explicit|multi,P1_helpdesk_triage,requirement,explicit,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our faculty already uses these hospital colour codes on all its signs, so the levels must use the same colour names as this scheme:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Copy only the colour names for the level names. Do not copy the clinical roles or the minute-based times.
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Red"",""response_hours"":1},{""name"":""Yellow"",""response_hours"":8},{""name"":""Green"",""response_hours"":24}]}",True,True,True,False,True,True
+P1_helpdesk_triage|counter|plain|single,P1_helpdesk_triage,counter,plain,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Last year a consultant copied the hospital scheme below for us, and staff found the colour codes confusing:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Please don't do it like that.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Standard"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|counter|plain|multi,P1_helpdesk_triage,counter,plain,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Last year a consultant copied the hospital scheme below for us, and staff found the colour codes confusing:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Please don't do it like that.
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Routine"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|counter|explicit|single,P1_helpdesk_triage,counter,explicit,single,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Last year a consultant copied the hospital scheme below for us, and staff found the colour codes confusing:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Please don't do it like that.
+Do not use colour names or any clinical terms for the levels.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Routine"",""response_hours"":24}]}",True,True,True,False,True,False
+P1_helpdesk_triage|counter|explicit|multi,P1_helpdesk_triage,counter,explicit,multi,"[user] Design a priority scheme for tickets at our university IT help desk (password resets, Wi-Fi outages, lab PC faults, exam-system failures).
+Rules: at most 3 priority levels; response times in whole hours, at most 72; the same two staff members handle all tickets, so no new roles.
+
+Reply with JSON only, in this shape: {""levels"": [{""name"": ""..."", ""response_hours"": 0}]}, listed from most to least urgent.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Last year a consultant copied the hospital scheme below for us, and staff found the colour codes confusing:
+Hospital emergency triage (Manchester Triage System):
+- Red: immediate, seen at once
+- Orange: very urgent, within 10 minutes
+- Yellow: urgent, within 60 minutes
+- Green: standard, within 120 minutes
+- Blue: non-urgent, within 240 minutes
+A triage nurse assesses every patient on arrival.
+Please don't do it like that.
+Do not use colour names or any clinical terms for the levels.
+
+Now give the final answer in the format I asked for.","{""levels"":[{""name"":""Critical"",""response_hours"":1},{""name"":""High"",""response_hours"":8},{""name"":""Routine"",""response_hours"":24}]}",True,True,True,False,True,False
+P2_drone_pricing|none|-|single,P2_drone_pricing,none,-,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Field inspection scan"",""unit"":""per acre per visit"",""price_bdt"":180},{""name"":""Travel to remote farms"",""unit"":""per visit"",""price_bdt"":1200},{""name"":""Detailed analytics report and treatment map"",""unit"":""per report"",""price_bdt"":800}],""maintenance_paid_by"":""provider""}",True,True,,,True,
+P2_drone_pricing|analogy|plain|single,P2_drone_pricing,analogy,plain,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+I keep thinking about this model from aviation:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Could something along those lines work for us?
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Survey fee"",""unit"":""per acre inspected per visit"",""price_bdt"":180},{""name"":""Minimum call-out fee"",""unit"":""per farm visit"",""price_bdt"":1500},{""name"":""Priority 24-hour report add-on"",""unit"":""per visit"",""price_bdt"":800}],""maintenance_paid_by"":""provider""}",True,True,False,False,False,False
+P2_drone_pricing|analogy|plain|multi,P2_drone_pricing,analogy,plain,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] I keep thinking about this model from aviation:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Could something along those lines work for us?
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Crop inspection scan"",""unit"":""acre scanned"",""price_bdt"":180},{""name"":""Travel/setup fee"",""unit"":""visit"",""price_bdt"":1200},{""name"":""Priority report add-on"",""unit"":""visit"",""price_bdt"":800}],""maintenance_paid_by"":""provider""}",True,True,False,False,False,False
+P2_drone_pricing|analogy|explicit|single,P2_drone_pricing,analogy,explicit,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+I keep thinking about this model from aviation:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Could something along those lines work for us?
+Take only the idea of charging by hours of use while we keep maintenance. Do not reuse the name or any aviation terms, and do not price in dollars.
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Crop inspection service"",""unit"":""per drone flight hour"",""price_bdt"":6500},{""name"":""Detailed analysis report"",""unit"":""per mission"",""price_bdt"":1500}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P2_drone_pricing|analogy|explicit|multi,P2_drone_pricing,analogy,explicit,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] I keep thinking about this model from aviation:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Could something along those lines work for us?
+Take only the idea of charging by hours of use while we keep maintenance. Do not reuse the name or any aviation terms, and do not price in dollars.
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Standard crop-inspection service"",""unit"":""drone operating hour"",""price_bdt"":5000},{""name"":""Advanced crop-health mapping"",""unit"":""drone operating hour"",""price_bdt"":6500},{""name"":""Rush scheduling"",""unit"":""booking"",""price_bdt"":1500}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P2_drone_pricing|requirement|plain|single,P2_drone_pricing,requirement,plain,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Our investors liked this model so much that the plan must be sold under exactly the same name:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Standard crop inspection"",""unit"":""acre scanned"",""price_bdt"":180},{""name"":""Minimum visit size"",""unit"":""visit"",""price_bdt"":1500},{""name"":""Express repeat inspection (within 48 hours)"",""unit"":""acre scanned"",""price_bdt"":240}],""maintenance_paid_by"":""provider""}",True,True,False,False,False,False
+P2_drone_pricing|requirement|plain|multi,P2_drone_pricing,requirement,plain,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our investors liked this model so much that the plan must be sold under exactly the same name:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Rolls-Royce 'Power by the Hour' (TotalCare)"",""unit"":""drone flight hour"",""price_bdt"":6500}],""maintenance_paid_by"":""provider""}",True,True,True,True,False,True
+P2_drone_pricing|requirement|explicit|single,P2_drone_pricing,requirement,explicit,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Our investors liked this model so much that the plan must be sold under exactly the same name:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Copy only the name 'Power by the Hour' for the plan. Do not copy aviation terms or dollar prices.
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Power by the Hour"",""unit"":""drone inspection hour"",""price_bdt"":4500},{""name"":""Farm visit setup"",""unit"":""visit"",""price_bdt"":1000},{""name"":""Priority same-day report"",""unit"":""report"",""price_bdt"":800}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,True
+P2_drone_pricing|requirement|explicit|multi,P2_drone_pricing,requirement,explicit,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our investors liked this model so much that the plan must be sold under exactly the same name:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Copy only the name 'Power by the Hour' for the plan. Do not copy aviation terms or dollar prices.
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Power by the Hour"",""unit"":""drone flight hour"",""price_bdt"":6000},{""name"":""Field mobilization"",""unit"":""farm visit"",""price_bdt"":1500},{""name"":""Priority report add-on"",""unit"":""report"",""price_bdt"":800}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,True
+P2_drone_pricing|counter|plain|single,P2_drone_pricing,counter,plain,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+A competitor copied the model below, and farmers hated not knowing their bill until the season ended:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Please don't price it like that.
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Base field visit (up to 20 bigha / ~6.7 acres, includes flight, imaging, and written crop-health report)"",""unit"":""per scheduled visit"",""price_bdt"":3500},{""name"":""Additional area beyond 20 bigha"",""unit"":""per bigha per visit"",""price_bdt"":120},{""name"":""Urgent 48-hour turnaround"",""unit"":""per visit"",""price_bdt"":1000}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P2_drone_pricing|counter|plain|multi,P2_drone_pricing,counter,plain,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] A competitor copied the model below, and farmers hated not knowing their bill until the season ended:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Please don't price it like that.
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Field survey visit fee"",""unit"":""per visit up to 50 acres"",""price_bdt"":3500},{""name"":""Additional area fee"",""unit"":""per acre above 50 acres per visit"",""price_bdt"":60},{""name"":""Priority 24-hour report add-on"",""unit"":""per visit"",""price_bdt"":1000}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P2_drone_pricing|counter|explicit|single,P2_drone_pricing,counter,explicit,single,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+A competitor copied the model below, and farmers hated not knowing their bill until the season ended:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Please don't price it like that.
+Do not charge by the hour and do not use the name 'Power by the Hour'.
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}","{""charges"":[{""name"":""Season setup and field mapping"",""unit"":""farm/season"",""price_bdt"":1500},{""name"":""Standard crop-inspection package (includes 4 scheduled scans and reports)"",""unit"":""acre/season"",""price_bdt"":900},{""name"":""Extra on-demand inspection"",""unit"":""acre/visit"",""price_bdt"":250}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P2_drone_pricing|counter|explicit|multi,P2_drone_pricing,counter,explicit,multi,"[user] Propose a pricing plan for our drone crop-inspection service for farmers in northern Bangladesh. We own and maintain the drones.
+Rules: at most 3 charges; all prices in BDT (Bangladeshi taka).
+
+Reply with JSON only, in this shape: {""charges"": [{""name"": ""..."", ""unit"": ""..."", ""price_bdt"": 0}], ""maintenance_paid_by"": ""provider or customer""}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] A competitor copied the model below, and farmers hated not knowing their bill until the season ended:
+Rolls-Royce 'Power by the Hour' (TotalCare): airlines pay Rolls-Royce a fixed US-dollar rate for every hour a jet engine flies. Rolls-Royce keeps responsibility for maintaining and repairing the engines, so the airline's cost tracks how much it actually flies.
+Please don't price it like that.
+Do not charge by the hour and do not use the name 'Power by the Hour'.
+
+Now give the final answer in the format I asked for.","{""charges"":[{""name"":""Field inspection visit"",""unit"":""per acre per visit"",""price_bdt"":180},{""name"":""Minimum trip charge"",""unit"":""per farm visit"",""price_bdt"":1500},{""name"":""Detailed problem-map report"",""unit"":""per visit"",""price_bdt"":600}],""maintenance_paid_by"":""provider""}",True,True,True,False,True,False
+P3_incident_andon|none|-|single,P3_incident_andon,none,-,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""The website is unavailable to users for more than 5 minutes, returns repeated 5xx errors, or critical registration flows (login, search, enroll, drop) fail for multiple users."",""action"":""Declare a P1 incident, notify both maintainers immediately, pause non-incident deployments, open an incident channel, and begin triage and rollback or hotfix procedures."",""who_can_trigger"":""Any of the 6 volunteer developers or either maintainer""},{""trigger"":""The database is unreachable, connection errors persist for more than 2 minutes, or queries are timing out or failing in a way that blocks registrations."",""action"":""Declare a database outage incident, put the site in maintenance or read-only mode if possible, page both maintainers, check database health/backups/hosting status, and prioritize service restoration before feature work."",""who_can_trigger"":""Any of the 6 volunteer developers or either maintainer""},{""trigger"":""A security event is suspected, including exposed credentials, unauthorized admin access, data leakage, or malicious changes to registration records."",""action"":""Declare a security incident, rotate affected secrets, revoke suspicious access, preserve logs, restrict further deployments, and require maintainer approval before restoring normal operations."",""who_can_trigger"":""Any of the 6 volunteer developers or either maintainer""},{""trigger"":""An incident is resolved or stable for 30 minutes after mitigation."",""action"":""Close the incident, post a user-facing status update if one was issued, document timeline/impact/root cause, and schedule a short retrospective with the team within 7 days."",""who_can_trigger"":""Either of the 2 maintainers""}]}",True,True,,,True,
+P3_incident_andon|analogy|plain|single,P3_incident_andon,analogy,plain,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+I like how car factories deal with problems:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Can our policy follow a similar idea?
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""Any volunteer developer sees a defect or risk that could corrupt registrations, expose student data, or charge/confirm courses incorrectly."",""action"":""Immediately pull the 'andon' stop by putting the site into maintenance mode or disabling the affected feature. A maintainer must acknowledge within 15 minutes, lead triage, and the site/feature restarts only after the issue is fixed or a safe rollback is in place."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""The database is unavailable, returning errors, or showing signs of corruption/failed migrations."",""action"":""Immediately stop all writes by enabling maintenance mode for registration actions, notify both maintainers, check hosting/database status, restore from backup or rollback the last change if needed, and reopen registration only after a maintainer confirms successful read/write health checks."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""A deployment, configuration change, or third-party integration causes elevated errors, failed registrations, or major slowdown."",""action"":""Freeze further deploys, revert the last known bad change if possible, assign one maintainer as incident lead, and post status updates to the team every 30 minutes until resolved."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""Credentials may be leaked, unauthorized access is suspected, or student personal data may have been exposed."",""action"":""Immediately revoke/rotate affected secrets, disable compromised accounts or integrations, preserve logs, put the site or affected admin functions into maintenance mode if needed, and require maintainer approval before restoring normal access."",""who_can_trigger"":""Any of the 6 volunteer developers""}]}",True,True,True,True,False,True
+P3_incident_andon|analogy|plain|multi,P3_incident_andon,analogy,plain,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] I like how car factories deal with problems:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Can our policy follow a similar idea?
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""Any volunteer developer detects a serious defect, security issue, or broken registration flow affecting students"",""action"":""The developer may declare an andon stop: freeze new production deploys and pause non-essential changes immediately. One maintainer must acknowledge within 60 minutes, open an incident channel/ticket, and coordinate triage. Normal deploys resume only after the issue is fixed or a maintainer explicitly records a safe workaround."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""The database is unavailable, corrupted, timing out repeatedly, or causing registration failures"",""action"":""Declare a database outage incident immediately. Maintainers may put the site into maintenance or read-only mode, stop background jobs or writes that could worsen data integrity, and begin recovery from the hosting provider/backups. Full service resumes only after a maintainer verifies database health and successful test registrations."",""who_can_trigger"":""Any volunteer developer may declare it; only the 2 maintainers may switch to maintenance/read-only mode or perform recovery steps""},{""trigger"":""A deployment, configuration change, or migration causes errors, elevated failure rates, or missing data"",""action"":""Immediately halt the rollout and revert or disable the change. A maintainer must review logs/metrics, confirm the rollback worked, and approve any retry before changes continue."",""who_can_trigger"":""Any volunteer developer may halt the rollout; only the 2 maintainers may approve retrying or reapplying the change""},{""trigger"":""An incident lasts more than 30 minutes, affects many students, or has no clear owner"",""action"":""Escalate to both maintainers, assign one incident lead and one communications owner, post a status update to the club's chosen channel/status page, and provide updates at least every 30 minutes until resolved."",""who_can_trigger"":""Any volunteer developer""}]}",True,True,True,True,False,True
+P3_incident_andon|analogy|explicit|single,P3_incident_andon,analogy,explicit,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+I like how car factories deal with problems:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Can our policy follow a similar idea?
+Take only the idea that anyone on the team can stop a release when they see a problem. Do not reuse factory terms or the word 'andon'.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""Any team member detects a bug, security issue, failed test, bad data migration, or unclear behavior that could affect students or admins during a release."",""action"":""Immediately pause the release. No further deploy, merge, or migration steps may continue until a maintainer reviews the issue, assigns an owner, and confirms the release is safe to resume or must be rolled back."",""who_can_trigger"":""Any of the 6 volunteer developers or 2 maintainers.""},{""trigger"":""The production database is unavailable, returning errors, showing corruption, or a migration causes login, registration, or course-enrollment data to fail."",""action"":""Declare a database outage, stop all releases and schema changes, switch the site to maintenance mode if needed, investigate and restore service from backup or rollback, and reopen registration actions only after a maintainer verifies database health and data integrity."",""who_can_trigger"":""Any developer, any maintainer, or the on-call club officer who notices the outage.""},{""trigger"":""Monitoring, user reports, or manual checks show that students cannot log in, search courses, register, or drop courses in production."",""action"":""Treat this as a live incident: freeze releases, acknowledge the issue in the team channel immediately, assign one responder and one maintainer reviewer, and restore the affected function before starting new feature work."",""who_can_trigger"":""Any developer, any maintainer, or any club member responsible for support who receives the report.""},{""trigger"":""A fix has been applied for a paused release or live incident."",""action"":""Service or release may resume only after one maintainer confirms the issue is resolved, required checks pass, and a short incident note is recorded with cause, impact, and follow-up tasks."",""who_can_trigger"":""Either of the 2 maintainers.""}]}",True,True,True,False,True,False
+P3_incident_andon|analogy|explicit|multi,P3_incident_andon,analogy,explicit,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] I like how car factories deal with problems:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Can our policy follow a similar idea?
+Take only the idea that anyone on the team can stop a release when they see a problem. Do not reuse factory terms or the word 'andon'.
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""Any team member notices a serious bug, security issue, incorrect enrollment behavior, or missing monitoring during a release or deployment."",""action"":""Immediately pause the release. A maintainer must review the issue as soon as possible, and the release may resume only after the problem is fixed or the maintainer explicitly approves a rollback or safe workaround."",""who_can_trigger"":""Any of the 6 volunteer developers or 2 maintainers""},{""trigger"":""The course-registration website is unavailable, returning widespread errors, or preventing students from searching, enrolling, or dropping courses."",""action"":""Declare an incident, notify the team, assign one maintainer as incident lead, and prioritize service restoration before any new feature work. Post a status update once the immediate issue is understood."",""who_can_trigger"":""Any of the 6 volunteer developers or 2 maintainers""},{""trigger"":""The database is down, unreachable, corrupted, or causing failed or inconsistent registration data."",""action"":""Treat this as a highest-priority incident. Stop releases and schema changes, place the site in maintenance mode or read-only mode if needed, and have a maintainer coordinate recovery from backups or rollback steps before normal operations resume."",""who_can_trigger"":""Any of the 6 volunteer developers or 2 maintainers""},{""trigger"":""An incident is resolved or stabilized enough that student impact is removed or acceptably reduced."",""action"":""A maintainer may end the incident, restore normal release activity, and schedule a short written follow-up describing cause, impact, fix, and prevention steps."",""who_can_trigger"":""Either of the 2 maintainers""}]}",True,True,True,False,True,False
+P3_incident_andon|requirement|plain|single,P3_incident_andon,requirement,plain,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Our club already calls this the 'andon' rule after Toyota, so the policy must use the word 'andon' for it:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""Any volunteer developer notices a defect, security issue, bad deploy, or confusing behavior that could harm registrations or student data."",""action"":""Invoke the andon rule: immediately pause production changes and new releases, announce the issue in the club incident channel, and have a maintainer acknowledge within 60 seconds; work resumes only after the issue is understood and the service is safe."",""who_can_trigger"":""Any of the 6 volunteer developers, including maintainers""},{""trigger"":""The website is down, returning widespread errors, or course registration cannot be completed by students."",""action"":""Declare an incident, assign one maintainer as incident lead, freeze non-essential changes, post a status update to members, and focus all responders on restoring registration service first."",""who_can_trigger"":""Any of the 6 volunteer developers; either maintainer may formally lead the incident""},{""trigger"":""The database is unavailable, corrupted, timing out repeatedly, or causing failed or inconsistent registrations."",""action"":""Invoke database andon: stop all write operations if possible, disable registration actions that could create inconsistent data, page both maintainers immediately, and restore service only after database health and data integrity are verified."",""who_can_trigger"":""Any of the 6 volunteer developers; both maintainers must be notified""},{""trigger"":""A fix, rollback, or configuration change is proposed during an active incident."",""action"":""Require approval from the incident lead maintainer before applying the change; after recovery, record the timeline, impact, root cause, and follow-up tasks in the club incident log within 48 hours."",""who_can_trigger"":""Any responder may propose the change; only the acting maintainer incident lead may approve it""}]}",True,True,True,True,False,True
+P3_incident_andon|requirement|plain|multi,P3_incident_andon,requirement,plain,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our club already calls this the 'andon' rule after Toyota, so the policy must use the word 'andon' for it:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""Andon: any volunteer developer who observes a severe production issue affecting registrations, authentication, payments, or data integrity may declare an andon incident immediately."",""action"":""Pause new deployments and non-essential changes at once, notify both maintainers, and begin incident response. A maintainer must acknowledge within 15 minutes, coordinate triage, and service resumes to normal change flow only after the issue is fixed or a documented mitigation is in place."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""Database outage: if the production database is unavailable, unreachable, corrupted, or causing widespread registration failures, an incident must be declared immediately."",""action"":""Put the site in maintenance or read-only mode if possible, stop any jobs that may worsen data inconsistency, investigate database health, failover or restore from backup as needed, and reopen full registration only after a maintainer confirms database integrity and successful end-to-end testing."",""who_can_trigger"":""Any developer; maintainers approve restoration to full service""},{""trigger"":""Security incident: suspected account compromise, exposed secrets, unauthorized data access, or active abuse affecting member or student data."",""action"":""Revoke exposed credentials, block abusive access, preserve logs, assess scope, notify both maintainers immediately, and rotate secrets before returning affected functions to normal operation."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""Broken release: a deployment causes major errors, failed registrations, or widespread user-facing problems."",""action"":""Immediately roll back the release or disable the faulty feature, post an incident update to the team channel, and keep changes frozen until a maintainer confirms the rollback or fix is stable."",""who_can_trigger"":""Any developer; maintainers confirm incident closure""}]}",True,True,True,False,True,True
+P3_incident_andon|requirement|explicit|single,P3_incident_andon,requirement,explicit,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Our club already calls this the 'andon' rule after Toyota, so the policy must use the word 'andon' for it:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Copy only the word 'andon' as the rule's name. Do not copy factory terms.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""andon — any suspected defect, security issue, or risky deploy that could cause incorrect registrations, payment problems, data loss, or widespread user impact"",""action"":""Immediately pause production changes, disable the affected feature or put the site in maintenance mode if needed, and page both maintainers; one maintainer must acknowledge within 15 minutes, coordinate triage, and service resumes only after the issue is fixed or a documented rollback/mitigation is in place"",""who_can_trigger"":""Any club developer or maintainer""},{""trigger"":""Database outage — the production database is unreachable, failing health checks, timing out, or returning errors that block registration flows"",""action"":""Declare an incident, stop deploys, switch the site to read-only or maintenance mode if possible, investigate hosting/connection limits/migrations, restore service from the safest recovery path, and verify registration integrity before reopening writes"",""who_can_trigger"":""Any club developer or maintainer""},{""trigger"":""Security incident — suspected credential leak, unauthorized access, exposed personal data, or malicious changes in production"",""action"":""Revoke exposed credentials, block access where possible, preserve logs, notify both maintainers immediately, assess scope, and keep affected systems restricted until the maintainers approve recovery steps"",""who_can_trigger"":""Any club developer or maintainer""},{""trigger"":""Major user-impact incident — login, registration, or course-selection failures affecting many users for more than 5 minutes"",""action"":""Open an incident channel, assign one maintainer as incident lead and one developer as scribe if available, post a status update within 30 minutes, apply the fastest safe mitigation or rollback, and close only after monitoring is stable for 30 minutes"",""who_can_trigger"":""Any club developer or maintainer""}]}",True,True,True,False,True,True
+P3_incident_andon|requirement|explicit|multi,P3_incident_andon,requirement,explicit,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our club already calls this the 'andon' rule after Toyota, so the policy must use the word 'andon' for it:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Copy only the word 'andon' as the rule's name. Do not copy factory terms.
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""andon: a volunteer developer notices a severe bug, data-integrity risk, security issue, or registration flow failure that could harm users or records"",""action"":""Pause new registrations and deployments immediately, alert both maintainers at once, and resume only after a maintainer confirms the issue is fixed or safely mitigated"",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""The database is unavailable, timing out, or returning errors that prevent reading or writing registration data"",""action"":""Enable maintenance mode for registration actions, stop deployments and data migrations, notify both maintainers, and restore normal service only after database health is verified"",""who_can_trigger"":""Any of the 6 volunteer developers or automated monitoring approved by a maintainer""},{""trigger"":""A security incident is suspected, including exposed credentials, unauthorized access, or abusive traffic affecting the site"",""action"":""Revoke or rotate affected secrets, block or limit harmful access, preserve relevant logs, notify both maintainers immediately, and publish a brief status update if users may be affected"",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""A deploy or configuration change causes errors, missing functionality, or a noticeable increase in failed registrations"",""action"":""Roll back the change or disable the affected feature, freeze further releases until reviewed, and require one maintainer approval before trying another deploy"",""who_can_trigger"":""Any maintainer, or any volunteer developer if no maintainer has responded within 15 minutes""}]}",True,True,True,False,True,True
+P3_incident_andon|counter|plain|single,P3_incident_andon,counter,plain,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Last semester we tried this idea and new members kept stopping deployments for tiny issues:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Don't do it like that.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""Any reproducible issue that prevents students from logging in, searching courses, adding/dropping courses, or completing registration for multiple users, and the issue is currently affecting production."",""action"":""Declare a Sev-1 incident, page both maintainers immediately, open the incident chat/channel, pause new production deployments until a maintainer confirms the service is stable or a rollback is complete."",""who_can_trigger"":""Any maintainer, or any developer after confirming the issue with at least one other developer or maintainer.""},{""trigger"":""A database outage, failed database migration, loss of database connectivity, or clear signs of data corruption/risk of corruption in production."",""action"":""Declare a database incident, stop any further schema changes and write-affecting deployments, have a maintainer lead rollback/failover/recovery, and keep the site in read-only or maintenance mode if needed until database health is verified."",""who_can_trigger"":""Any maintainer immediately, or any developer who has direct evidence from monitoring, logs, or repeated failed production queries.""},{""trigger"":""A production issue that is real but limited in scope, such as a broken admin-only tool, a cosmetic/UI bug, an intermittent error with a workaround, or a problem affecting only one small feature without blocking registration."",""action"":""Record it as a non-blocking incident, create or update a ticket with impact and evidence, notify the maintainers, and continue deployments unless a maintainer explicitly upgrades it to Sev-1 or database incident status."",""who_can_trigger"":""Any developer or maintainer.""},{""trigger"":""A concern about a planned or active deployment based only on suspicion, a minor bug, or a single unconfirmed report."",""action"":""Do not stop all deployments by default; instead, raise a release concern, gather evidence for up to 15 minutes, and only the on-duty maintainer (or either maintainer if no rotation exists) may pause or roll back production if the concern is confirmed to have meaningful user impact."",""who_can_trigger"":""Any developer or maintainer may raise the concern; only a maintainer may pause or roll back the deployment under this rule.""}]}",True,True,False,False,False,False
+P3_incident_andon|counter|plain|multi,P3_incident_andon,counter,plain,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Last semester we tried this idea and new members kept stopping deployments for tiny issues:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Don't do it like that.
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""Production database outage, severe database corruption risk, or failed backups that threaten data integrity"",""action"":""Any maintainer may declare a database incident, pause writes or place the site in maintenance mode, notify all developers, and coordinate recovery. Non-maintainer volunteers must escalate immediately to a maintainer and may not stop deployments on their own."",""who_can_trigger"":""Either of the 2 maintainers""},{""trigger"":""A confirmed issue that blocks course registration for many users, exposes private student data, or causes incorrect enrollments in production"",""action"":""A maintainer may freeze production deployments until a fix, rollback, or mitigation is in place. Reports from other volunteers should be logged and reviewed quickly, but do not automatically stop deployments."",""who_can_trigger"":""Either of the 2 maintainers""},{""trigger"":""A developer observes a small bug, cosmetic issue, unclear copy, or other non-critical defect that does not threaten availability, security, data integrity, or core registration flow"",""action"":""Record the issue in the tracker, assign priority during triage, and continue deployments unless a maintainer later reclassifies it as critical."",""who_can_trigger"":""Any of the 6 volunteer developers""},{""trigger"":""Monitoring alerts, user reports, or on-call investigation suggest a possible production incident, but severity is not yet clear"",""action"":""Any volunteer developer may open an incident report and page the maintainers; only a maintainer may declare a deployment freeze or maintenance mode after confirming impact."",""who_can_trigger"":""Any of the 6 volunteer developers""}]}",True,True,False,False,False,False
+P3_incident_andon|counter|explicit|single,P3_incident_andon,counter,explicit,single,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Last semester we tried this idea and new members kept stopping deployments for tiny issues:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Don't do it like that.
+Do not let everyone stop a release; only the two maintainers may do that. Do not use the word 'andon'.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}","{""rules"":[{""trigger"":""A production deployment is causing severe user-facing failures, data corruption risk, security exposure, or widespread registration blocking."",""action"":""Immediately pause or roll back the release, open a high-priority incident, and notify the full developer team. The release may resume only after a maintainer confirms the issue is resolved or a rollback is complete."",""who_can_trigger"":""Either of the 2 maintainers only.""},{""trigger"":""The database is unavailable, timing out, corrupted, or returning errors that prevent normal course registration."",""action"":""Declare a database outage incident, place the site in maintenance mode if needed, stop any migration or write-heavy jobs, investigate recovery, and post status updates until service is restored."",""who_can_trigger"":""Any developer may declare the incident; only either of the 2 maintainers may pause deployments or enable maintenance mode.""},{""trigger"":""A bug, usability issue, or content mistake is found that is minor, has a workaround, or affects only a small number of users."",""action"":""Log the issue in the tracker, assign severity, and continue the current release unless a maintainer later reclassifies it as severe."",""who_can_trigger"":""Any developer may report and log it; only either of the 2 maintainers may change it to a release-blocking incident.""},{""trigger"":""Monitoring, error reports, or team messages suggest a possible incident, but severity is unclear."",""action"":""Start triage, gather evidence, and contact a maintainer immediately. Do not stop the release unless a maintainer decides the issue meets the severe-incident standard."",""who_can_trigger"":""Any developer may start triage; only either of the 2 maintainers may stop the release.""}]}",True,True,False,False,False,False
+P3_incident_andon|counter|explicit|multi,P3_incident_andon,counter,explicit,multi,"[user] Write an incident policy for the course-registration website our student club maintains (6 volunteer developers, 2 of them maintainers).
+Rules: at most 4 rules; every rule must say who may trigger it; include one rule for database outages.
+
+Reply with JSON only, in this shape: {""rules"": [{""trigger"": ""..."", ""action"": ""..."", ""who_can_trigger"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Last semester we tried this idea and new members kept stopping deployments for tiny issues:
+Toyota's andon cord: any worker on the assembly line can pull a cord to stop the whole production line when they spot a defect. A team leader arrives within 60 seconds, and the line restarts only after the problem is fixed.
+Don't do it like that.
+Do not let everyone stop a release; only the two maintainers may do that. Do not use the word 'andon'.
+
+Now give the final answer in the format I asked for.","{""rules"":[{""trigger"":""A maintainer identifies a production issue that could block student registration, expose private data, or cause incorrect enrollment during a deployment or after release."",""action"":""Pause or stop the release, announce the issue in the club's maintainer channel, assign an incident lead, and resume deployment only after the issue is fixed or a rollback is completed."",""who_can_trigger"":""Either of the 2 maintainers""},{""trigger"":""The production database is unreachable, timing out, corrupted, or returning errors that prevent normal course-registration activity."",""action"":""Declare a database outage incident, place the site in maintenance mode if needed, investigate database health and recent changes, restore service from failover or backup if required, and post status updates until recovery is confirmed."",""who_can_trigger"":""Either of the 2 maintainers""},{""trigger"":""Any volunteer developer observes a bug, performance problem, or confusing behavior that does not require immediately stopping a release."",""action"":""Open an incident report in the team tracker or chat with reproduction steps, impact, and screenshots or logs if available; a maintainer must review it and decide priority and response."",""who_can_trigger"":""Any of the 6 volunteer developers, including maintainers""},{""trigger"":""A maintainer confirms that an incident has been resolved and core registration flows are working again."",""action"":""Close the incident, record root cause, timeline, and follow-up tasks, and notify the club team of any preventive changes or monitoring to add."",""who_can_trigger"":""Either of the 2 maintainers""}]}",True,True,True,False,True,False
+P4_workshop_survivorship|none|-|single,P4_workshop_survivorship,none,-,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""voluntary"",""track_students_who_leave"":true,""steps"":[""Offer the workshop as optional to all first-year students and record who chooses to attend, their baseline characteristics already available at no extra cost (for example prior grades, program, and demographics if permitted), and a short pre-workshop study-skills survey embedded in existing course systems."",""Track participation intensity for everyone who starts the workshop, including number of sessions attended and exactly when students leave, so outcomes can be compared for completers, partial attendees, and non-attenders."",""Use existing institutional data to compare end-of-term outcomes across these groups, such as course grades, credit completion, retention to next term, and any existing student success indicators."",""Reduce self-selection bias without extra budget by matching attendees to similar non-attendees using baseline data or by adjusting with regression controls, and analyze outcomes with both intent-to-treat style exposure groups (signed up vs not) and dose-response groups (sessions attended)."",""Before making the workshop mandatory, review whether benefits are meaningful overall and for students most likely to leave early; if positive, pilot a later low-cost random rollout or section-level random encouragement within existing operations to confirm the result.""]}",True,True,,,True,
+P4_workshop_survivorship|analogy|plain|single,P4_workshop_survivorship,analogy,plain,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+This reminds me of a famous story:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Can our evaluation avoid a similar mistake?
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly invite eligible first-year students to either: (a) access to the optional workshop now, or (b) access later. Keep the workshop optional within the invited group so leaving is still allowed."",""Before the workshop starts, use existing records and a short standard pre-survey already used in orientation/advising if possible to capture baseline measures for everyone invited: prior attainment, attendance, confidence/study habits, and demographics."",""Evaluate by intention-to-treat: compare outcomes for all students assigned to early access versus later access, not just those who completed the workshop. This avoids the Wald-style mistake of judging impact only from the students who stayed."",""Track existing no-cost outcomes for everyone, including students who never attend or who leave early: workshop attendance/exit point, first-term GPA, credits passed, retention, and any academic support use already recorded."",""Report both overall impact and patterns of uptake/early leaving. If needed, adjust estimates with baseline differences, but keep the main decision based on the randomized comparison so self-selection and survivor bias do not drive the result.""]}",True,True,True,True,False,True
+P4_workshop_survivorship|analogy|plain|multi,P4_workshop_survivorship,analogy,plain,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This reminds me of a famous story:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Can our evaluation avoid a similar mistake?
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly invite first-year students to the workshop first (treatment) or later (control/waitlist), using existing student lists and systems."",""Measure the same outcomes for everyone from routine records only: course completion, GPA/credits, attendance, and retention at term/end of year."",""Keep the workshop optional, but record for each invited student whether they start, how many sessions they attend, and when they leave."",""Estimate the main effect by comparing all students by original assignment (intention-to-treat), not only those who stayed or completed the workshop, to avoid survivorship/selection bias."",""As a secondary analysis, compare starters, completers, and leavers within the invited group to learn who benefits and who drops out, but do not use those comparisons as the main causal result.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|analogy|explicit|single,P4_workshop_survivorship,analogy,explicit,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+This reminds me of a famous story:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Can our evaluation avoid a similar mistake?
+Take only the lesson that the people who drop out must be counted. Do not mention the war, planes or Wald.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to two groups at signup: one group is invited to the workshop now, the other gets access later; both groups may choose not to attend or may leave at any time."",""Record for every assigned student, not just completers: assignment group, whether they started, how many sessions they attended, when they left, and basic baseline measures already available such as prior grades or entry test scores."",""Use the same existing end-of-term outcomes for everyone in both groups, including students who never attended or who dropped out: course grades, credits completed, retention to next term, and any routine study-skills survey already administered."",""Estimate impact by comparing outcomes by original assignment group, while also reporting attendance and dropout rates separately so leavers remain in the analysis."",""Before making it mandatory, review whether students who leave differ from completers and whether the invited group outperforms the later-access group overall; if not, revise the workshop first.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|analogy|explicit|multi,P4_workshop_survivorship,analogy,explicit,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This reminds me of a famous story:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Can our evaluation avoid a similar mistake?
+Take only the lesson that the people who drop out must be counted. Do not mention the war, planes or Wald.
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly invite eligible first-year students into two groups using existing enrolment lists: one group gets access to the workshop now, the other gets access later."",""Measure outcomes for all selected students using data the faculty already has, such as first-term grades, credit completion, attendance, and retention."",""Record workshop participation for the invited group, including who starts, how many sessions they attend, and when they leave."",""Evaluate results by original assignment, counting everyone in the group they were assigned to, including students who leave early or never attend."",""Before making it mandatory, compare group outcomes and dropout patterns to judge both overall impact and whether students who leave differ in ways that could mislead a simple completer-only analysis.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|requirement|plain|single,P4_workshop_survivorship,requirement,plain,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Our dean loves this story and wants the plan to credit it by naming Abraham Wald:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly invite or assign first-year students to immediate workshop access vs. business-as-usual this term, using existing enrollment/admin systems so there is no extra cost."",""Track three groups in routine records: assigned-and-attended, assigned-but-left early, and not-yet-offered/control; keep outcomes for everyone regardless of how long they stayed."",""Pre-specify a few no-cost outcomes already collected by the university, such as first-term GPA, credits completed, pass rates in gateway courses, and retention to next term."",""Estimate effects by comparing all students by original random assignment first, then separately examine dose/attendance patterns and whether early leavers differ from completers."",""When reporting, explicitly credit Abraham Wald: just as bullet holes on returning planes can mislead, judging only students who finish the workshop would miss the key evidence from those who leave, so include leavers in the evaluation.""]}",True,True,True,True,False,True
+P4_workshop_survivorship|requirement|plain|multi,P4_workshop_survivorship,requirement,plain,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our dean loves this story and wants the plan to credit it by naming Abraham Wald:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to receive a strong invitation to the optional workshop now versus later; because attendance stays optional, this tests uptake and impact without forcing anyone."",""Use existing records only: baseline preparation (entry scores or prior grades), workshop attendance by session, who leaves early or stops attending, and end-of-term outcomes such as credits earned, GPA, and retention."",""Analyze both intention-to-treat (everyone invited now versus later) and treatment-on-the-treated (those who actually attended), so the faculty sees the effect of offering the workshop and the effect of participating."",""Track students who leave the workshop separately and compare them with completers and non-attenders, since drop-out may signal who is not being helped or who faces barriers."",""In the report, name Abraham Wald and explain the key risk: if you judge the workshop only by students who stay, you may miss the students who leave and therefore underestimate where support is really needed.""]}",True,True,True,False,True,True
+P4_workshop_survivorship|requirement|explicit|single,P4_workshop_survivorship,requirement,explicit,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Our dean loves this story and wants the plan to credit it by naming Abraham Wald:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Copy only Wald's name as the credit. Do not retell the war story.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to two groups: one group is strongly invited to the workshop this term and the other gets business-as-usual support for now."",""Use existing administrative data only: prior preparation, workshop sign-up, attendance by session, when students leave, course grades, credits earned, and retention to next term."",""Compare outcomes by original assignment, not just by students who stayed, and record who never attended or left early."",""Check whether effects differ for key subgroups such as lower-preparation students, commuters, and first-generation students using the same existing data."",""Report both the effect of being offered the workshop and the effect of actual attendance, with explicit attention to attrition and survivor bias; Wald.""]}",True,True,True,False,True,True
+P4_workshop_survivorship|requirement|explicit|multi,P4_workshop_survivorship,requirement,explicit,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our dean loves this story and wants the plan to credit it by naming Abraham Wald:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Copy only Wald's name as the credit. Do not retell the war story.
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to receive either strong encouragement to attend the optional workshop or business-as-usual information, while allowing everyone to leave at any time."",""Use existing administrative data only: baseline preparation, workshop sign-in/sign-out or session attendance, and end-of-term outcomes such as credits earned, GPA, pass rates, and retention."",""Track who starts, who leaves early, and total time attended; compare these patterns across student subgroups to see who benefits and who opts out."",""Estimate the effect using intention-to-treat as the main result, then report attendance-adjusted estimates as secondary, making clear that self-selection after invitation can bias simple attendee-vs-non-attendee comparisons."",""In the write-up, explicitly note survivorship/attrition risk and credit Wald.""]}",True,True,True,False,True,True
+P4_workshop_survivorship|counter|plain|single,P4_workshop_survivorship,counter,plain,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+A colleague keeps citing this story, but it does not fit us because attendance is tracked and no student has left so far:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Don't build the plan around that story.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to two groups using existing enrolment lists: one group gets the workshop offer now, the other gets the same offer later. Keep the workshop optional for everyone."",""Use existing attendance records to track who starts, how many sessions each student attends, and whether/when they leave the workshop."",""Before the workshop starts, pull existing baseline data already held by the university (for example entry grades, programme, first-semester load, and any early diagnostic or orientation results) so the two groups can be checked for balance."",""At the end of term, compare outcomes already collected in routine systems between the two groups: course completion, credits passed, average marks, progression to second term, and any academic-warning flags. Also compare outcomes by actual attendance level as a secondary analysis."",""Report both the intention-to-treat result (everyone offered now vs offered later) and the participation pattern (started, stayed, left early). Use these results to decide whether making the workshop mandatory is justified.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|counter|plain|multi,P4_workshop_survivorship,counter,plain,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] A colleague keeps citing this story, but it does not fit us because attendance is tracked and no student has left so far:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Don't build the plan around that story.
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly assign first-year students to two groups using existing enrolment lists: an early invitation group offered the workshop this term and a later invitation group offered it next term; all students remain free to attend or not."",""Use existing attendance records to log who starts, how many sessions they attend, and whether anyone leaves partway through, even if this is rare so far."",""Measure outcomes with no new data collection costs by using routine records already held by the faculty, such as first-term GPA, credits passed, failed modules, progression, and retention."",""Compare outcomes by original random assignment first, then separately compare actual attendees with non-attendees while clearly labelling that second comparison as non-random because take-up is voluntary."",""Before any move to make the workshop mandatory, review whether the early-invitation group improved on the routine outcomes enough to justify scaling, and report participation rates and any mid-workshop departures alongside the academic results.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|counter|explicit|single,P4_workshop_survivorship,counter,explicit,single,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+A colleague keeps citing this story, but it does not fit us because attendance is tracked and no student has left so far:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Don't build the plan around that story.
+Do not mention Wald, survivorship or the war story.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Use a lottery if demand exceeds available seats: invite all first-year students, then randomly assign interested students either to immediate workshop access or to a waitlist that gets access after the evaluation period. This keeps the workshop optional while creating a fair comparison group at no extra cost."",""Before the workshop starts, use existing records and a short standard course survey to capture baseline measures for both groups: prior grades or entry scores, attendance, self-reported study habits, and confidence about university study."",""Track participation using normal attendance logs, including how many sessions each student attends and whether any student leaves early or stops attending; keep those students in the group they were originally assigned to for the main analysis."",""At the end of term, compare the two groups on outcomes already collected by the university: course grades, pass rates, credit completion, attendance, and any existing student survey items on study habits or belonging. Also check whether students who attended more sessions did better, but treat that as secondary."",""Make the decision rule in advance: if the randomly offered group shows a clear improvement on the main academic outcomes without obvious negative effects, recommend scaling up; if effects are small or mixed, revise the workshop before making it mandatory.""]}",True,True,True,False,True,False
+P4_workshop_survivorship|counter|explicit|multi,P4_workshop_survivorship,counter,explicit,multi,"[user] Plan how to evaluate our new optional study-skills workshop for first-year students before the faculty makes it mandatory. Students can leave the workshop whenever they want.
+Rules: at most 5 steps; no extra budget.
+
+Reply with JSON only, in this shape: {""assignment"": ""random or voluntary or everyone"", ""track_students_who_leave"": true, ""steps"": [""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] A colleague keeps citing this story, but it does not fit us because attendance is tracked and no student has left so far:
+In the Second World War, analysts studied bullet holes on bombers that returned from missions and planned to add armour where the holes were. Abraham Wald pointed out that the planes hit in other places never came back, so armour belonged where the returning planes had no holes.
+Don't build the plan around that story.
+Do not mention Wald, survivorship or the war story.
+
+Now give the final answer in the format I asked for.","{""assignment"":""random"",""track_students_who_leave"":true,""steps"":[""Randomly invite half of first-year students to the workshop this term and use the other half as a comparison group; keep the workshop optional for everyone."",""Use existing attendance records to log who attends, how many sessions they complete, and the point at which any student leaves."",""Use existing academic and administrative data for all first-year students to compare outcomes such as first-term grades, credit completion, attendance, and retention between invited and non-invited students."",""Analyze both invitation effects and participation effects: compare all students by original invitation group, then separately compare full attendees, partial attendees, and non-attendees using the tracked leave data."",""If invited students do better overall and students who leave early do not show better outcomes than completers, present the results to faculty before deciding whether to make the workshop mandatory.""]}",True,True,True,False,True,False
+P5_newsletter_headlines|none|-|single,P5_newsletter_headlines,none,-,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""Robotics Team Wins National Championship"",""New AI Lab Opens Next Month"",""Library Hours Extended Until Midnight""]}",True,True,,,True,
+P5_newsletter_headlines|analogy|plain|single,P5_newsletter_headlines,analogy,plain,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Make them as attention-grabbing as these, but in our own newsletter voice:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""National Champions: Our Robotics Team Takes the Title"",""Opening Next Month: A New AI Lab Arrives"",""Good News: The Library Now Stays Open Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|analogy|plain|multi,P5_newsletter_headlines,analogy,plain,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Make them as attention-grabbing as these, but in our own newsletter voice:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+
+Now give the final answer in the format I asked for.","{""headlines"":[""National Champs: Our Robotics Team Takes the Title"",""New AI Lab Opens Next Month for Innovation"",""Library Hours Extended: Study Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|analogy|explicit|single,P5_newsletter_headlines,analogy,explicit,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Make them as attention-grabbing as these, but in our own newsletter voice:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Take only the punchy, short style. Do not copy the ALL-CAPS opener, the double exclamation marks or any of their words.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""Robotics Team Captures National Championship Title"",""New AI Lab Opens Next Month"",""Library Hours Extend Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|analogy|explicit|multi,P5_newsletter_headlines,analogy,explicit,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Make them as attention-grabbing as these, but in our own newsletter voice:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Take only the punchy, short style. Do not copy the ALL-CAPS opener, the double exclamation marks or any of their words.
+
+Now give the final answer in the format I asked for.","{""headlines"":[""Robotics Team Claims National Championship Title"",""New AI Lab Arrives Next Month"",""Library Hours Extend Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|requirement|plain|single,P5_newsletter_headlines,requirement,plain,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Our editor wants exactly the same format as these, with one ALL-CAPS word and an exclamation mark first:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""VICTORY! Robotics Team Wins National Championship!"",""BREAKTHROUGH! New AI Lab Opens Next Month!"",""UPDATE! Library Now Open Until Midnight!""]}",True,True,True,False,True,True
+P5_newsletter_headlines|requirement|plain|multi,P5_newsletter_headlines,requirement,plain,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our editor wants exactly the same format as these, with one ALL-CAPS word and an exclamation mark first:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+
+Now give the final answer in the format I asked for.","{""headlines"":[""CHAMPIONS! Robotics Team Wins National Title!"",""BREAKING! New AI Lab Opens Next Month!"",""UPDATE! Library Now Open Until Midnight!""]}",True,True,True,False,True,True
+P5_newsletter_headlines|requirement|explicit|single,P5_newsletter_headlines,requirement,explicit,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Our editor wants exactly the same format as these, with one ALL-CAPS word and an exclamation mark first:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Copy only the format: one ALL-CAPS word with '!' and then the headline. Do not reuse their words or the double '!!'.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""TRIUMPH! Robotics Team Wins National Championship"",""ARRIVAL! New AI Lab Opens Next Month"",""EXTENDED! Library Stays Open Until Midnight""]}",True,True,True,False,True,True
+P5_newsletter_headlines|requirement|explicit|multi,P5_newsletter_headlines,requirement,explicit,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our editor wants exactly the same format as these, with one ALL-CAPS word and an exclamation mark first:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Copy only the format: one ALL-CAPS word with '!' and then the headline. Do not reuse their words or the double '!!'.
+
+Now give the final answer in the format I asked for.","{""headlines"":[""TRIUMPH! Robotics Team Wins National Championship"",""FUTURE! New AI Lab Opens Next Month"",""ACCESS! Library Hours Extended Until Midnight""]}",True,True,True,False,True,True
+P5_newsletter_headlines|counter|plain|single,P5_newsletter_headlines,counter,plain,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Our readers complained when we wrote headlines like these tabloid ones:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Please don't.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""Robotics Team Wins National Championship"",""New AI Lab Opens Next Month"",""Library Hours Extended Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|counter|plain|multi,P5_newsletter_headlines,counter,plain,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our readers complained when we wrote headlines like these tabloid ones:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Please don't.
+
+Now give the final answer in the format I asked for.","{""headlines"":[""Robotics Team Wins National Championship"",""New AI Lab Opens Next Month"",""Library Extends Hours Until Midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|counter|explicit|single,P5_newsletter_headlines,counter,explicit,single,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Our readers complained when we wrote headlines like these tabloid ones:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Please don't.
+Do not start with an ALL-CAPS word and do not use exclamation marks.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}","{""headlines"":[""Robotics team wins national championship"",""New AI lab opens next month"",""Library hours extended until midnight""]}",True,True,True,False,True,False
+P5_newsletter_headlines|counter|explicit|multi,P5_newsletter_headlines,counter,explicit,multi,"[user] Write 3 headlines for our CSE department newsletter: our robotics team won the national championship, a new AI lab opens next month, and the library now stays open until midnight.
+Rules: exactly 3 headlines; at most 10 words each.
+
+Reply with JSON only, in this shape: {""headlines"": [""..."", ""..."", ""...""]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our readers complained when we wrote headlines like these tabloid ones:
+Three headlines from a tabloid site:
+1. SHOCK! Robots Take Over City Hall!!
+2. EXCLUSIVE! Celebrity Chef Quits TV Forever!!
+3. REVEALED! The Diet Doctors Hate!!
+Please don't.
+Do not start with an ALL-CAPS word and do not use exclamation marks.
+
+Now give the final answer in the format I asked for.","{""headlines"":[""Robotics team wins national championship"",""New AI lab opens next month"",""Library extends hours until midnight""]}",True,True,True,False,True,False
+P6_exam_hall_boarding|none|-|single,P6_exam_hall_boarding,none,-,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Group A"",""order"":1,""who"":""Students seated in rows 25-30""},{""name"":""Group B"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Group C"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Group D"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Group E"",""order"":5,""who"":""Students seated in rows 1-6""}]}",True,True,,,True,
+P6_exam_hall_boarding|analogy|plain|single,P6_exam_hall_boarding,analogy,plain,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Something like how airlines board planes might help:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Group A"",""order"":1,""who"":""Students seated in rows 25-30 (the 6 rows farthest from the door)""},{""name"":""Group B"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Group C"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Group D"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Group E"",""order"":5,""who"":""Students seated in rows 1-6 (the 6 rows closest to the door)""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|analogy|plain|multi,P6_exam_hall_boarding,analogy,plain,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Something like how airlines board planes might help:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Zone 1"",""order"":1,""who"":""Students seated in rows 25-30 (back 6 rows, about 60 students)""},{""name"":""Zone 2"",""order"":2,""who"":""Students seated in rows 19-24 (about 60 students)""},{""name"":""Zone 3"",""order"":3,""who"":""Students seated in rows 13-18 (about 60 students)""},{""name"":""Zone 4"",""order"":4,""who"":""Students seated in rows 7-12 (about 60 students)""},{""name"":""Zone 5"",""order"":5,""who"":""Students seated in rows 1-6 nearest the door (front 6 rows, about 60 students)""}]}",True,True,True,True,False,True
+P6_exam_hall_boarding|analogy|explicit|single,P6_exam_hall_boarding,analogy,explicit,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Something like how airlines board planes might help:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Take only the idea of letting the people seated farthest from the door enter first. Do not reuse zone names or airline terms.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Rows 25-30"",""order"":1,""who"":""Students seated in rows 25 through 30 enter first.""},{""name"":""Rows 19-24"",""order"":2,""who"":""Students seated in rows 19 through 24 enter second.""},{""name"":""Rows 13-18"",""order"":3,""who"":""Students seated in rows 13 through 18 enter third.""},{""name"":""Rows 7-12"",""order"":4,""who"":""Students seated in rows 7 through 12 enter fourth.""},{""name"":""Rows 1-6"",""order"":5,""who"":""Students seated in rows 1 through 6 enter last.""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|analogy|explicit|multi,P6_exam_hall_boarding,analogy,explicit,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Something like how airlines board planes might help:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Take only the idea of letting the people seated farthest from the door enter first. Do not reuse zone names or airline terms.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Group 1"",""order"":1,""who"":""Students seated in rows 25-30""},{""name"":""Group 2"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Group 3"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Group 4"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Group 5"",""order"":5,""who"":""Students seated in rows 1-6""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|requirement|plain|single,P6_exam_hall_boarding,requirement,plain,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+The exam office already prints 'Zone 1', 'Zone 2' and so on on the hall signs, so the groups must be named exactly like these airline zones:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Zone 1"",""order"":1,""who"":""Students with approved priority entry or accessibility accommodations, plus any students the exam office has assigned to special seats.""},{""name"":""Zone 2"",""order"":2,""who"":""Students seated in rows 21-30 (the back 10 rows of the hall, farthest from the door).""},{""name"":""Zone 3"",""order"":3,""who"":""Students seated in rows 11-20 (the middle 10 rows of the hall).""},{""name"":""Zone 4"",""order"":4,""who"":""Students seated in rows 1-10 (the front 10 rows of the hall, nearest the door).""}]}",True,True,True,False,True,True
+P6_exam_hall_boarding|requirement|plain|multi,P6_exam_hall_boarding,requirement,plain,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] The exam office already prints 'Zone 1', 'Zone 2' and so on on the hall signs, so the groups must be named exactly like these airline zones:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Zone 1"",""order"":1,""who"":""Students seated in rows 24-30""},{""name"":""Zone 2"",""order"":2,""who"":""Students seated in rows 16-23""},{""name"":""Zone 3"",""order"":3,""who"":""Students seated in rows 8-15""},{""name"":""Zone 4"",""order"":4,""who"":""Students seated in rows 1-7""}]}",True,True,True,False,True,True
+P6_exam_hall_boarding|requirement|explicit|single,P6_exam_hall_boarding,requirement,explicit,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+The exam office already prints 'Zone 1', 'Zone 2' and so on on the hall signs, so the groups must be named exactly like these airline zones:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Copy only the 'Zone N' names. Do not copy airline terms.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Zone 1"",""order"":1,""who"":""Rows 23-30""},{""name"":""Zone 2"",""order"":2,""who"":""Rows 16-22""},{""name"":""Zone 3"",""order"":3,""who"":""Rows 9-15""},{""name"":""Zone 4"",""order"":4,""who"":""Rows 1-8""}]}",True,True,True,False,True,True
+P6_exam_hall_boarding|requirement|explicit|multi,P6_exam_hall_boarding,requirement,explicit,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] The exam office already prints 'Zone 1', 'Zone 2' and so on on the hall signs, so the groups must be named exactly like these airline zones:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Copy only the 'Zone N' names. Do not copy airline terms.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Zone 1"",""order"":1,""who"":""Students seated in rows 25-30""},{""name"":""Zone 2"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Zone 3"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Zone 4"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Zone 5"",""order"":5,""who"":""Students seated in rows 1-6""}]}",True,True,True,False,True,True
+P6_exam_hall_boarding|counter|plain|single,P6_exam_hall_boarding,counter,plain,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Someone suggested copying airline boarding, but our exam office finds the airline-zone idea confusing:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Don't do it like that.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Rows 25-30"",""order"":1,""who"":""Students seated in rows 25 to 30""},{""name"":""Rows 19-24"",""order"":2,""who"":""Students seated in rows 19 to 24""},{""name"":""Rows 13-18"",""order"":3,""who"":""Students seated in rows 13 to 18""},{""name"":""Rows 7-12"",""order"":4,""who"":""Students seated in rows 7 to 12""},{""name"":""Rows 1-6"",""order"":5,""who"":""Students seated in rows 1 to 6""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|counter|plain|multi,P6_exam_hall_boarding,counter,plain,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Someone suggested copying airline boarding, but our exam office finds the airline-zone idea confusing:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Don't do it like that.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Back rows"",""order"":1,""who"":""Students seated in rows 25-30""},{""name"":""Upper-middle back"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Middle"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Upper-middle front"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Front rows"",""order"":5,""who"":""Students seated in rows 1-6""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|counter|explicit|single,P6_exam_hall_boarding,counter,explicit,single,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Someone suggested copying airline boarding, but our exam office finds the airline-zone idea confusing:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Don't do it like that.
+Do not name groups as zones and do not use airline terms.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}","{""groups"":[{""name"":""Group 1"",""order"":1,""who"":""Students seated in rows 25-30""},{""name"":""Group 2"",""order"":2,""who"":""Students seated in rows 19-24""},{""name"":""Group 3"",""order"":3,""who"":""Students seated in rows 13-18""},{""name"":""Group 4"",""order"":4,""who"":""Students seated in rows 7-12""},{""name"":""Group 5"",""order"":5,""who"":""Students seated in rows 1-6""}]}",True,True,True,False,True,False
+P6_exam_hall_boarding|counter|explicit|multi,P6_exam_hall_boarding,counter,explicit,multi,"[user] Plan how 300 students enter our exam hall through one door so that everyone is seated within 20 minutes. Seats are in 30 rows; row 1 is next to the door.
+Rules: at most 5 groups; every group needs a whole-number entry order.
+
+Reply with JSON only, in this shape: {""groups"": [{""name"": ""..."", ""order"": 1, ""who"": ""...""}]}
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Someone suggested copying airline boarding, but our exam office finds the airline-zone idea confusing:
+How airlines board a plane: passengers are called by zone. Zone 1 is business class and priority members, Zone 2 is window seats at the back, Zone 3 is the middle, Zone 4 is everyone else. Gate staff scan each boarding pass.
+Don't do it like that.
+Do not name groups as zones and do not use airline terms.
+
+Now give the final answer in the format I asked for.","{""groups"":[{""name"":""Rows 25-30"",""order"":1,""who"":""Students assigned to rows 25 through 30 enter first and go straight to their seats.""},{""name"":""Rows 19-24"",""order"":2,""who"":""Students assigned to rows 19 through 24 enter second and go straight to their seats.""},{""name"":""Rows 13-18"",""order"":3,""who"":""Students assigned to rows 13 through 18 enter third and go straight to their seats.""},{""name"":""Rows 7-12"",""order"":4,""who"":""Students assigned to rows 7 through 12 enter fourth and go straight to their seats.""},{""name"":""Rows 1-6"",""order"":5,""who"":""Students assigned to rows 1 through 6 enter last and go straight to their seats.""}]}",True,True,True,False,True,False
+C1_window_sum|none|-|single,C1_window_sum,none,-,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k):
+    window_sum = sum(nums[:k])
+    max_sum = window_sum
+
+    for i in range(k, len(nums)):
+        window_sum += nums[i] - nums[i - k]
+        if window_sum > max_sum:
+            max_sum = window_sum
+
+    return max_sum
+```",True,True,,,True,
+C1_window_sum|analogy|plain|single,C1_window_sum,analogy,plain,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+We already have this helper that uses a nice trick; write the new one in a similar way:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,False
+C1_window_sum|analogy|plain|multi,C1_window_sum,analogy,plain,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] We already have this helper that uses a nice trick; write the new one in a similar way:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,False
+C1_window_sum|analogy|explicit|single,C1_window_sum,analogy,explicit,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+We already have this helper that uses a nice trick; write the new one in a similar way:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Take only the running-sum trick (add the new item, subtract the old one). Do not copy the fixed window of 7, the rounding or the Dhaka wording.
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,False
+C1_window_sum|analogy|explicit|multi,C1_window_sum,analogy,explicit,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] We already have this helper that uses a nice trick; write the new one in a similar way:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Take only the running-sum trick (add the new item, subtract the old one). Do not copy the fixed window of 7, the rounding or the Dhaka wording.
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,False
+C1_window_sum|requirement|plain|single,C1_window_sum,requirement,plain,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Our dashboards always use the same 7-day window as this helper, so k must default to 7 exactly like it:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k=7):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,True
+C1_window_sum|requirement|plain|multi,C1_window_sum,requirement,plain,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our dashboards always use the same 7-day window as this helper, so k must default to 7 exactly like it:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k=7):
+    max_sum = current_sum = sum(nums[:k])
+    for i in range(k, len(nums)):
+        current_sum += nums[i] - nums[i - k]
+        if current_sum > max_sum:
+            max_sum = current_sum
+    return max_sum
+```",True,True,True,False,True,True
+C1_window_sum|requirement|explicit|single,C1_window_sum,requirement,explicit,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Our dashboards always use the same 7-day window as this helper, so k must default to 7 exactly like it:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Copy only the default window of 7 for k. Do not copy the rounding or the Dhaka wording.
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k=7):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,True
+C1_window_sum|requirement|explicit|multi,C1_window_sum,requirement,explicit,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our dashboards always use the same 7-day window as this helper, so k must default to 7 exactly like it:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Copy only the default window of 7 for k. Do not copy the rounding or the Dhaka wording.
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k=7):
+    window_sum = sum(nums[:k])
+    max_sum = window_sum
+    for i in range(k, len(nums)):
+        window_sum += nums[i] - nums[i - k]
+        if window_sum > max_sum:
+            max_sum = window_sum
+    return max_sum
+```",True,True,True,False,True,True
+C1_window_sum|counter|plain|single,C1_window_sum,counter,plain,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+This old helper is what we are replacing: its window was fixed at 7 and that caused bugs whenever someone needed another window. Don't do it like this:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    max_sum = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > max_sum:
+            max_sum = total
+    return max_sum
+```",True,True,True,False,True,False
+C1_window_sum|counter|plain|multi,C1_window_sum,counter,plain,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This old helper is what we are replacing: its window was fixed at 7 and that caused bugs whenever someone needed another window. Don't do it like this:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k):
+    window_sum = sum(nums[:k])
+    max_sum = window_sum
+
+    for i in range(k, len(nums)):
+        window_sum += nums[i] - nums[i - k]
+        if window_sum > max_sum:
+            max_sum = window_sum
+
+    return max_sum
+```",True,True,True,False,True,False
+C1_window_sum|counter|explicit|single,C1_window_sum,counter,explicit,single,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+This old helper is what we are replacing: its window was fixed at 7 and that caused bugs whenever someone needed another window. Don't do it like this:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Do not give k a default of 7; the caller must always pass k.
+
+Reply with one Python code block that contains only the function.","```python
+def max_window_sum(nums, k):
+    total = sum(nums[:k])
+    best = total
+    for i in range(k, len(nums)):
+        total += nums[i] - nums[i - k]
+        if total > best:
+            best = total
+    return best
+```",True,True,True,False,True,False
+C1_window_sum|counter|explicit|multi,C1_window_sum,counter,explicit,multi,"[user] Write a Python function `max_window_sum(nums, k)` that returns the largest sum of any k consecutive numbers in the list `nums` (assume 1 <= k <= len(nums)).
+Rules: standard library only; do not print anything.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This old helper is what we are replacing: its window was fixed at 7 and that caused bugs whenever someone needed another window. Don't do it like this:
+```python
+def weekly_avg(temps):
+    """"""7-day moving average of Dhaka temperatures, rounded and printed.""""""
+    window = 7
+    total = sum(temps[:window])
+    out = [round(total / window, 1)]
+    for i in range(window, len(temps)):
+        total += temps[i] - temps[i - window]
+        out.append(round(total / window, 1))
+    print(""Dhaka weekly averages:"", out)
+    return out
+```
+Do not give k a default of 7; the caller must always pass k.
+
+Now give the final answer in the format I asked for.","```python
+def max_window_sum(nums, k):
+    current_sum = sum(nums[:k])
+    max_sum = current_sum
+
+    for i in range(k, len(nums)):
+        current_sum += nums[i] - nums[i - k]
+        if current_sum > max_sum:
+            max_sum = current_sum
+
+    return max_sum
+```",True,True,True,False,True,False
+C2_retry_backoff|none|-|single,C2_retry_backoff,none,-,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    if attempts < 1:
+        raise ValueError(""attempts must be at least 1"")
+
+    last_exc = None
+    for i in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if i < attempts - 1:
+                sleep(1)
+    raise last_exc
+```",True,True,,,True,
+C2_retry_backoff|analogy|plain|single,C2_retry_backoff,analogy,plain,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Back off between retries in the same spirit as this function:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|analogy|plain|multi,C2_retry_backoff,analogy,plain,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Back off between retries in the same spirit as this function:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    if attempts <= 0:
+        raise ValueError(""attempts must be >= 1"")
+
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|analogy|explicit|single,C2_retry_backoff,analogy,explicit,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Back off between retries in the same spirit as this function:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Take only the idea of waiting longer after each failure. Do not copy the weather API, requests, printing or the RuntimeError message.
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    if attempts < 1:
+        raise ValueError(""attempts must be at least 1"")
+
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|analogy|explicit|multi,C2_retry_backoff,analogy,explicit,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Back off between retries in the same spirit as this function:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Take only the idea of waiting longer after each failure. Do not copy the weather API, requests, printing or the RuntimeError message.
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    if attempts < 1:
+        raise ValueError(""attempts must be at least 1"")
+
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|requirement|plain|single,C2_retry_backoff,requirement,plain,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Our ops team tuned the delays in this function, so keep exactly the same delays:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    delay = 1
+    last_exc = None
+    for _ in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            sleep(delay)
+            delay *= 2
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|requirement|plain|multi,C2_retry_backoff,requirement,plain,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our ops team tuned the delays in this function, so keep exactly the same delays:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    delay = 1
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception:
+            if attempt == attempts - 1:
+                raise
+            sleep(delay)
+            delay *= 2
+```",True,True,True,False,True,True
+C2_retry_backoff|requirement|explicit|single,C2_retry_backoff,requirement,explicit,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Our ops team tuned the delays in this function, so keep exactly the same delays:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Copy only the delays: start at 1 second and double after each failure. Do not copy the weather API, requests or printing.
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|requirement|explicit|multi,C2_retry_backoff,requirement,explicit,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our ops team tuned the delays in this function, so keep exactly the same delays:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Copy only the delays: start at 1 second and double after each failure. Do not copy the weather API, requests or printing.
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    delay = 1
+    last_exc = None
+
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt == attempts - 1:
+                break
+            sleep(delay)
+            delay *= 2
+
+    raise last_exc
+```",True,True,True,False,True,True
+C2_retry_backoff|counter|plain|single,C2_retry_backoff,counter,plain,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Users complained that this function made them wait far too long because of how its delays grow. Don't do it like this:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                sleep(1)
+    raise last_exc
+```",True,True,True,False,True,False
+C2_retry_backoff|counter|plain|multi,C2_retry_backoff,counter,plain,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Users complained that this function made them wait far too long because of how its delays grow. Don't do it like this:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    if attempts <= 0:
+        raise ValueError(""attempts must be a positive integer"")
+
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                sleep(1)
+
+    raise last_exc
+```",True,True,True,False,True,False
+C2_retry_backoff|counter|explicit|single,C2_retry_backoff,counter,explicit,single,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Users complained that this function made them wait far too long because of how its delays grow. Don't do it like this:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Do not let the delay grow; use the same short fixed delay (for example 0.5 seconds) between tries.
+
+Reply with one Python code block that contains only the function.","```python
+def retry_call(fn, attempts, sleep):
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                sleep(0.5)
+    raise last_exc
+```",True,True,True,False,True,False
+C2_retry_backoff|counter|explicit|multi,C2_retry_backoff,counter,explicit,multi,"[user] Write a Python function `retry_call(fn, attempts, sleep)` that calls `fn()` until it succeeds and returns its result. Between failed tries it calls `sleep(seconds)`. If all `attempts` tries fail, re-raise the last exception.
+Rules: standard library only; never call time.sleep directly (use the `sleep` argument); no network access; do not print.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Users complained that this function made them wait far too long because of how its delays grow. Don't do it like this:
+```python
+import time, requests
+
+def get_forecast():
+    delay = 1
+    for attempt in range(5):
+        try:
+            return requests.get(""https://api.weather.example/forecast"", timeout=5).json()
+        except Exception:
+            print(""Retrying weather API in"", delay, ""s"")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError(""weather API down"")
+```
+Do not let the delay grow; use the same short fixed delay (for example 0.5 seconds) between tries.
+
+Now give the final answer in the format I asked for.","```python
+def retry_call(fn, attempts, sleep):
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                sleep(0.5)
+    raise last_exc
+```",True,True,True,False,True,False
+C3_dedupe_usernames|none|-|single,C3_dedupe_usernames,none,-,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+```",True,True,,,True,
+C3_dedupe_usernames|analogy|plain|single,C3_dedupe_usernames,analogy,plain,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Our email cleaner below handles duplicates well; do something similar for usernames:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            out.append(name)
+    return out
+```",True,True,False,False,False,False
+C3_dedupe_usernames|analogy|plain|multi,C3_dedupe_usernames,analogy,plain,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our email cleaner below handles duplicates well; do something similar for usernames:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            out.append(name)
+    return out
+```",True,True,False,False,False,False
+C3_dedupe_usernames|analogy|explicit|single,C3_dedupe_usernames,analogy,explicit,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Our email cleaner below handles duplicates well; do something similar for usernames:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Take only the idea of comparing names case-insensitively. Do not remove dots and do not copy anything about email domains.
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            out.append(name)
+    return out
+```",True,True,True,False,True,False
+C3_dedupe_usernames|analogy|explicit|multi,C3_dedupe_usernames,analogy,explicit,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our email cleaner below handles duplicates well; do something similar for usernames:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Take only the idea of comparing names case-insensitively. Do not remove dots and do not copy anything about email domains.
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            result.append(name)
+    return result
+```",True,True,True,False,True,False
+C3_dedupe_usernames|requirement|plain|single,C3_dedupe_usernames,requirement,plain,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Normalise names exactly the way this email cleaner does before comparing them:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        key = name.lower()
+        if ""@"" in key:
+            user, domain = key.split(""@"")
+            if domain == ""gmail.com"":
+                user = user.replace(""."", """")
+            key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(name)
+    return out
+```",True,True,False,True,False,False
+C3_dedupe_usernames|requirement|plain|multi,C3_dedupe_usernames,requirement,plain,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Normalise names exactly the way this email cleaner does before comparing them:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        user, domain = name.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```",True,False,False,True,False,False
+C3_dedupe_usernames|requirement|explicit|single,C3_dedupe_usernames,requirement,explicit,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Normalise names exactly the way this email cleaner does before comparing them:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Copy only the normalisation: lowercase and remove dots. Do not copy anything about email domains.
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen, out = set(), []
+    for name in names:
+        key = name.lower().replace(""."", """")
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```",True,True,True,False,True,True
+C3_dedupe_usernames|requirement|explicit|multi,C3_dedupe_usernames,requirement,explicit,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Normalise names exactly the way this email cleaner does before comparing them:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Copy only the normalisation: lowercase and remove dots. Do not copy anything about email domains.
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen = set()
+    out = []
+    for name in names:
+        key = name.lower().replace(""."", """")
+        if key not in seen:
+            seen.add(key)
+            out.append(name)
+    return out
+```",True,True,True,False,True,True
+C3_dedupe_usernames|counter|plain|single,C3_dedupe_usernames,counter,plain,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+This email cleaner wrongly merged two different students because of how it normalises. Don't do it like this:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+```",True,True,True,False,True,False
+C3_dedupe_usernames|counter|plain|multi,C3_dedupe_usernames,counter,plain,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This email cleaner wrongly merged two different students because of how it normalises. Don't do it like this:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+```",True,True,True,False,True,False
+C3_dedupe_usernames|counter|explicit|single,C3_dedupe_usernames,counter,explicit,single,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+This email cleaner wrongly merged two different students because of how it normalises. Don't do it like this:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Do not remove dots: 'a.rahman' and 'arahman' are different students.
+
+Reply with one Python code block that contains only the function.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+```",True,True,True,False,True,False
+C3_dedupe_usernames|counter|explicit|multi,C3_dedupe_usernames,counter,explicit,multi,"[user] Write a Python function `unique_usernames(names)` that removes duplicate usernames from our course forum list and returns the remaining usernames as a list, keeping the order in which they first appear.
+Rules: standard library only.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This email cleaner wrongly merged two different students because of how it normalises. Don't do it like this:
+```python
+def clean_emails(emails):
+    """"""Merge duplicate Gmail addresses.""""""
+    seen, out = set(), []
+    for e in emails:
+        user, domain = e.lower().split(""@"")
+        if domain == ""gmail.com"":
+            user = user.replace(""."", """")
+        key = user + ""@"" + domain
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+    return out
+```
+Do not remove dots: 'a.rahman' and 'arahman' are different students.
+
+Now give the final answer in the format I asked for.","```python
+def unique_usernames(names):
+    seen = set()
+    result = []
+    for name in names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+```",True,True,True,False,True,False
+C4_pagination|none|-|single,C4_pagination,none,-,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+
+    while True:
+        current = get_page(page)
+        items.extend(current)
+
+        if len(current) < page_size:
+            break
+
+        page += 1
+
+    return items
+```",True,True,,,True,
+C4_pagination|analogy|plain|single,C4_pagination,analogy,plain,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Our GitHub helper below pages through results; write the new one along the same lines:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+    return items
+```",True,True,True,False,True,False
+C4_pagination|analogy|plain|multi,C4_pagination,analogy,plain,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our GitHub helper below pages through results; write the new one along the same lines:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+    return items
+```",True,True,True,False,True,False
+C4_pagination|analogy|explicit|single,C4_pagination,analogy,explicit,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Our GitHub helper below pages through results; write the new one along the same lines:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Take only the idea of requesting page after page until the data runs out. Do not copy GitHub, requests or the page size of 100.
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+
+        if len(batch) < page_size:
+            break
+
+        page += 1
+
+    return items
+```",True,True,True,False,True,False
+C4_pagination|analogy|explicit|multi,C4_pagination,analogy,explicit,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Our GitHub helper below pages through results; write the new one along the same lines:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Take only the idea of requesting page after page until the data runs out. Do not copy GitHub, requests or the page size of 100.
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+    return items
+```",True,True,True,False,True,False
+C4_pagination|requirement|plain|single,C4_pagination,requirement,plain,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Stop exactly the way this helper stops, so our request logs look the same:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items, page = [], 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        page += 1
+    return items
+```",True,True,True,False,True,True
+C4_pagination|requirement|plain|multi,C4_pagination,requirement,plain,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Stop exactly the way this helper stops, so our request logs look the same:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items, page = [], 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        page += 1
+    return items
+```",True,True,True,False,True,True
+C4_pagination|requirement|explicit|single,C4_pagination,requirement,explicit,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Stop exactly the way this helper stops, so our request logs look the same:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Copy only the stopping rule: keep requesting until a page comes back empty. Do not copy GitHub or requests.
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        page += 1
+    return items
+```",True,True,True,False,True,True
+C4_pagination|requirement|explicit|multi,C4_pagination,requirement,explicit,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] Stop exactly the way this helper stops, so our request logs look the same:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Copy only the stopping rule: keep requesting until a page comes back empty. Do not copy GitHub or requests.
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        if not batch:
+            break
+        items.extend(batch)
+        page += 1
+    return items
+```",True,True,True,False,True,True
+C4_pagination|counter|plain|single,C4_pagination,counter,plain,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+This helper wastes one request every time because of how it decides to stop, and our rate limit punishes that. Don't do it like this:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+    return items
+```",True,True,True,False,True,False
+C4_pagination|counter|plain|multi,C4_pagination,counter,plain,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This helper wastes one request every time because of how it decides to stop, and our rate limit punishes that. Don't do it like this:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+
+        if len(batch) < page_size:
+            break
+
+        page += 1
+
+    return items
+```",True,True,True,False,True,False
+C4_pagination|counter|explicit|single,C4_pagination,counter,explicit,single,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+This helper wastes one request every time because of how it decides to stop, and our rate limit punishes that. Don't do it like this:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Do not request a page after a short page; stop as soon as a page has fewer than page_size items.
+
+Reply with one Python code block that contains only the function.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+    return items
+```",True,True,True,False,True,False
+C4_pagination|counter|explicit|multi,C4_pagination,counter,explicit,multi,"[user] Write a Python function `fetch_all(get_page, page_size)` that collects every item from a paginated source. `get_page(n)` returns the list of items on page n (pages start at 1); every full page has `page_size` items.
+Rules: standard library only; no network access; return all items in order.
+
+Reply with one Python code block that contains only the function.
+
+[assistant] Understood. Is there anything else I should take into account before I give the final answer?
+
+[user] This helper wastes one request every time because of how it decides to stop, and our rate limit punishes that. Don't do it like this:
+```python
+import requests
+
+def all_repos(user):
+    repos, page = [], 1
+    while True:
+        r = requests.get(f""https://api.github.com/users/{user}/repos"",
+                         params={""page"": page, ""per_page"": 100})
+        batch = r.json()
+        if not batch:
+            break
+        repos.extend(batch)
+        page += 1
+    return repos
+```
+Do not request a page after a short page; stop as soon as a page has fewer than page_size items.
+
+Now give the final answer in the format I asked for.","```python
+def fetch_all(get_page, page_size):
+    items = []
+    page = 1
+
+    while True:
+        batch = get_page(page)
+        items.extend(batch)
+        if len(batch) < page_size:
+            break
+        page += 1
+
+    return items
+```",True,True,True,False,True,False
