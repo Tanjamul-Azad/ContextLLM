@@ -16,7 +16,11 @@ This project tests whether models use an example according to its role, finds wh
 
 | Path | What it holds |
 | --- | --- |
-| [docs/proposal.md](docs/proposal.md) | Research proposal (updated with sir's feedback) |
+| [docs/proposal-formal.md](docs/proposal-formal.md) | 3-page formal proposal for the supervisor (latest) |
+| [docs/proposal-detailed.md](docs/proposal-detailed.md) | Detailed proposal for the team: framework, benchmark and dataset construction, training, evaluation, full literature review |
+| [docs/best-paper-gap-analysis-2026-11-08.md](docs/best-paper-gap-analysis-2026-11-08.md) | What we still lack compared with the AACL 2026 best paper |
+| [notebooks/results/](notebooks/results/) | Executed results notebooks: every pilot answer, score and figure, no GPU needed |
+| [docs/proposal.md](docs/proposal.md) | Earlier proposal (superseded by the two above) |
 | [docs/feasibility-sprint.md](docs/feasibility-sprint.md) | One-week go / no-go plan (5–11 Nov 2026) and pass marks |
 | [docs/related-work-deep-read.md](docs/related-work-deep-read.md) | Full reading of the 10 closest papers |
 | [docs/paper-protocol.md](docs/paper-protocol.md) | Paper protocol: claims, hypotheses, pass marks, benchmark rules (draft until frozen) |
