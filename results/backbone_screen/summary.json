@@ -1,0 +1,1363 @@
+{
+ "status": "exploratory: development-stage results on unreviewed draft items",
+ "threshold": 0.8,
+ "bootstrap": {
+  "resamples": 10000,
+  "seed": 0,
+  "unit": "task (no-example) / card (oracle)"
+ },
+ "models": {
+  "qwen3-4b-2507-4bit": {
+   "hf_repo": "unsloth/Qwen3-4B-Instruct-2507-bnb-4bit",
+   "revision": "f12db89cd5156e090618dded9b4367f23f8f3b33",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.7,
+     "lo": 0.5,
+     "hi": 0.9,
+     "k": 14,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.818,
+     "lo": 0.545,
+     "hi": 1.0,
+     "k": 9,
+     "n": 11
+    },
+    "code": {
+     "p": 0.556,
+     "lo": 0.222,
+     "hi": 0.889,
+     "k": 5,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.4,
+     "lo": 0.1,
+     "hi": 0.7,
+     "k": 4,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "k": 10,
+     "n": 10
+    },
+    "truncated_likely": 1,
+    "format_failure_rate": 0.05
+   },
+   "no_example_without_flagged": {
+    "p": 0.765,
+    "lo": 0.529,
+    "hi": 0.941,
+    "k": 13,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.559,
+     "lo": 0.371,
+     "hi": 0.757,
+     "k": 38,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.571,
+      "lo": 0.346,
+      "hi": 0.808,
+      "k": 16,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.55,
+      "lo": 0.25,
+      "hi": 0.85,
+      "k": 11,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.55,
+      "lo": 0.3,
+      "hi": 0.8,
+      "k": 11,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.015,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: <module> r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpc",
+      "R2a: <module> r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpu",
+      "R3a: <module> r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp_",
+      "R4a: <module> r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmph"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: mp\\tmp55l74mda\\t.py\", line 25, in <module> assert len(r) == 2 and abs("
+     ]
+    },
+    {
+     "task": "C04_grader_assignment",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": false,
+     "truncated_likely": true,
+     "failed_checks": [
+      "R1a: no code",
+      "R2a: no code",
+      "R3a: no code"
+     ]
+    },
+    {
+     "task": "C05_simpson_methods",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: \\Users\\User\\AppData\\Local\\Temp\\tmph19gcdgy\\t.py\", line 69, in <module>"
+     ]
+    },
+    {
+     "task": "D01_stockholm_parking",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2c: [200, 50, 30, 10]"
+     ]
+    },
+    {
+     "task": "D05_release_train_portal",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['ship_without_it or delay_release']"
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 769.6
+  },
+  "phi4-mini-4bit": {
+   "hf_repo": "unsloth/Phi-4-mini-instruct-bnb-4bit",
+   "revision": "cece1fd36f04ff79f55ec861f206ca4e16acea6e",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.75,
+     "lo": 0.55,
+     "hi": 0.9,
+     "k": 15,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.818,
+     "lo": 0.545,
+     "hi": 1.0,
+     "k": 9,
+     "n": 11
+    },
+    "code": {
+     "p": 0.667,
+     "lo": 0.333,
+     "hi": 1.0,
+     "k": 6,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.5,
+     "lo": 0.2,
+     "hi": 0.8,
+     "k": 5,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "k": 10,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.882,
+    "lo": 0.706,
+    "hi": 1.0,
+    "k": 15,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.235,
+     "lo": 0.074,
+     "hi": 0.426,
+     "k": 16,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.321,
+      "lo": 0.077,
+      "hi": 0.577,
+      "k": 9,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.2,
+      "lo": 0.05,
+      "hi": 0.4,
+      "k": 4,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.15,
+      "lo": 0.0,
+      "hi": 0.35,
+      "k": 3,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.074,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a:  parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp95ib900b\\t",
+      "R3a:  parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpvh01v9zl\\t",
+      "R4a:  parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpsp8nxczj\\t",
+      "R4b:  parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp8xbv22sf\\t"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpdqhvkh2g\\t",
+      "R2a: r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp33951ygb\\t",
+      "R3a: r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp8owi5znt\\t",
+      "R4a: r = parse_rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp_jhau5ag\\t"
+     ]
+    },
+    {
+     "task": "C04_grader_assignment",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: timeout",
+      "R2a: timeout",
+      "R3a: timeout"
+     ]
+    },
+    {
+     "task": "D03_group_lending_lab",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['group, individual or lab']"
+     ]
+    },
+    {
+     "task": "D05_release_train_portal",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['ship_without_it or delay_release']"
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 309.1
+  },
+  "gemma3-4b-4bit": {
+   "hf_repo": "unsloth/gemma-3-4b-it-bnb-4bit",
+   "revision": "eb03c885bc2cc913fe792994bc766006f14ad72d",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.75,
+     "lo": 0.55,
+     "hi": 0.95,
+     "k": 15,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.818,
+     "lo": 0.545,
+     "hi": 1.0,
+     "k": 9,
+     "n": 11
+    },
+    "code": {
+     "p": 0.667,
+     "lo": 0.333,
+     "hi": 1.0,
+     "k": 6,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.5,
+     "lo": 0.2,
+     "hi": 0.8,
+     "k": 5,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 1.0,
+     "lo": 1.0,
+     "hi": 1.0,
+     "k": 10,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.824,
+    "lo": 0.647,
+    "hi": 1.0,
+    "k": 14,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.221,
+     "lo": 0.062,
+     "hi": 0.409,
+     "k": 15,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.286,
+      "lo": 0.0,
+      "hi": 0.538,
+      "k": 8,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.15,
+      "lo": 0.0,
+      "hi": 0.35,
+      "k": 3,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.2,
+      "lo": 0.0,
+      "hi": 0.5,
+      "k": 4,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.0,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a:  and not items)) ^^^^^^^^^^^^^^^^^^^^^^^^^ File \"F:\\Python\\Lib\\re\\_par",
+      "R4a:  and not items)) ^^^^^^^^^^^^^^^^^^^^^^^^^ File \"F:\\Python\\Lib\\re\\_par",
+      "R4b:  and not items)) ^^^^^^^^^^^^^^^^^^^^^^^^^ File \"F:\\Python\\Lib\\re\\_par"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: sers\\User\\AppData\\Local\\Temp\\tmp_tz40i9d\\t.py\", line 42, in <module> r",
+      "R2a: sers\\User\\AppData\\Local\\Temp\\tmpwgld0tat\\t.py\", line 42, in <module> r",
+      "R3a: sers\\User\\AppData\\Local\\Temp\\tmpoj4z10ff\\t.py\", line 42, in <module> r",
+      "R4a: sers\\User\\AppData\\Local\\Temp\\tmp1v8tf8q8\\t.py\", line 42, in <module> r"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: mp\\tmpdl64srth\\t.py\", line 21, in <module> assert len(r) == 2 and abs("
+     ]
+    },
+    {
+     "task": "D02_social_norm_library",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: 5"
+     ]
+    },
+    {
+     "task": "D03_group_lending_lab",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['group, individual']"
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 463.2
+  },
+  "llama3.2-3b-4bit": {
+   "hf_repo": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+   "revision": "bb1d317a108579fb40e646af8924a5e7ec5604b1",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.5,
+     "lo": 0.3,
+     "hi": 0.7,
+     "k": 10,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.636,
+     "lo": 0.364,
+     "hi": 0.909,
+     "k": 7,
+     "n": 11
+    },
+    "code": {
+     "p": 0.333,
+     "lo": 0.0,
+     "hi": 0.667,
+     "k": 3,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.2,
+     "lo": 0.0,
+     "hi": 0.5,
+     "k": 2,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 0.8,
+     "lo": 0.5,
+     "hi": 1.0,
+     "k": 8,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.05
+   },
+   "no_example_without_flagged": {
+    "p": 0.588,
+    "lo": 0.353,
+    "hi": 0.824,
+    "k": 10,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.103,
+     "lo": 0.017,
+     "hi": 0.189,
+     "k": 7,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.107,
+      "lo": 0.0,
+      "hi": 0.188,
+      "k": 3,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "k": 0,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.2,
+      "lo": 0.0,
+      "hi": 0.45,
+      "k": 4,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.074,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: is True ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"C:\\Users\\User",
+      "R3a: 11.3') is False ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"C:\\Users\\User",
+      "R4a: ert is_newer(a, b) in (True, False) ~~~~~~~~^^^^^^ File \"C:\\Users\\User",
+      "R4b: .11.2') is True ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"C:\\Users\\User"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: ocal\\Temp\\tmp828wdq4o\\t.py\", line 22, in parse_rows parsed_row['harves",
+      "R2a: ocal\\Temp\\tmp9r17fm2y\\t.py\", line 22, in parse_rows parsed_row['harves",
+      "R3a: ocal\\Temp\\tmpcr91_q9p\\t.py\", line 22, in parse_rows parsed_row['harves",
+      "R4a: ocal\\Temp\\tmpehn31xsj\\t.py\", line 22, in parse_rows parsed_row['harves"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: \\Users\\User\\AppData\\Local\\Temp\\tmp7th1_5yc\\t.py\", line 26, in <module>"
+     ]
+    },
+    {
+     "task": "C04_grader_assignment",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: \\Users\\User\\AppData\\Local\\Temp\\tmpgpgwt0d2\\t.py\", line 45, in <module>",
+      "R2a: \\Users\\User\\AppData\\Local\\Temp\\tmpiwxt6gu6\\t.py\", line 44, in <module>"
+     ]
+    },
+    {
+     "task": "C05_simpson_methods",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R4a: \\Users\\User\\AppData\\Local\\Temp\\tmpwszec_fx\\t.py\", line 65, in <module>"
+     ]
+    },
+    {
+     "task": "D02_social_norm_library",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: missing",
+      "R2a: []",
+      "R2b: []",
+      "R2c: []",
+      "R3a: []",
+      "R5a: []"
+     ]
+    },
+    {
+     "task": "D03_group_lending_lab",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": false,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: no json",
+      "R1b: no json",
+      "R1c: no json",
+      "R2a: no json",
+      "R3a: no json",
+      "R3b: no json",
+      "R4a: no json"
+     ]
+    },
+    {
+     "task": "D05_release_train_portal",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['ship_without_it or delay_release']"
+     ]
+    },
+    {
+     "task": "P1_helpdesk_triage",
+     "source": "pilot_seeds",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "json_len_between#0: missing",
+      "json_all_int#1: []",
+      "json_all_le#2: []"
+     ]
+    },
+    {
+     "task": "C2_retry_backoff",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0: .append) == 42 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError",
+      "regex_absent#1: time.sleep("
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 347.3
+  },
+  "qwen3-8b-4bit": {
+   "hf_repo": "unsloth/Qwen3-8B-bnb-4bit",
+   "revision": "1deaf68f694c40dbce295da300851729d759b21a",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.75,
+     "lo": 0.55,
+     "hi": 0.9,
+     "k": 15,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.909,
+     "lo": 0.727,
+     "hi": 1.0,
+     "k": 10,
+     "n": 11
+    },
+    "code": {
+     "p": 0.556,
+     "lo": 0.222,
+     "hi": 0.889,
+     "k": 5,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.6,
+     "lo": 0.3,
+     "hi": 0.9,
+     "k": 6,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 0.9,
+     "lo": 0.7,
+     "hi": 1.0,
+     "k": 9,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.706,
+    "lo": 0.471,
+    "hi": 0.882,
+    "k": 12,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.426,
+     "lo": 0.212,
+     "hi": 0.625,
+     "k": 29,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.536,
+      "lo": 0.292,
+      "hi": 0.75,
+      "k": 15,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.15,
+      "lo": 0.0,
+      "hi": 0.35,
+      "k": 3,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.55,
+      "lo": 0.25,
+      "hi": 0.85,
+      "k": 11,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.015,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: = parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpvgjn97a0\\",
+      "R3a: = parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpw3hjut_s\\",
+      "R4a: = parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpgxa8bymf\\",
+      "R4b: = parse_version(a) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpmz69b8av\\"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: cal\\Temp\\tmpa7obgy9a\\t.py\", line 24, in <module> assert len(r) == 2 an"
+     ]
+    },
+    {
+     "task": "C04_grader_assignment",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a:  = assign(IDS, G4) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp974mn5eg\\",
+      "R2a: )) ~~~~~~^^^^^^^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp4lhgn0gd\\",
+      "R3a:  = assign(IDS, G4) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp4k7jhuep\\"
+     ]
+    },
+    {
+     "task": "D01_stockholm_parking",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2c: [500, 200, 100]"
+     ]
+    },
+    {
+     "task": "C2_retry_backoff",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0: builtin_function_or_method' object cannot be interpreted as an integer",
+      "regex_absent#1: time.sleep("
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 1000.9
+  },
+  "qwen2.5-3b": {
+   "hf_repo": "Qwen/Qwen2.5-3B-Instruct",
+   "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.55,
+     "lo": 0.35,
+     "hi": 0.75,
+     "k": 11,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.636,
+     "lo": 0.364,
+     "hi": 0.909,
+     "k": 7,
+     "n": 11
+    },
+    "code": {
+     "p": 0.444,
+     "lo": 0.111,
+     "hi": 0.778,
+     "k": 4,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.3,
+     "lo": 0.1,
+     "hi": 0.6,
+     "k": 3,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 0.8,
+     "lo": 0.5,
+     "hi": 1.0,
+     "k": 8,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.647,
+    "lo": 0.412,
+    "hi": 0.882,
+    "k": 11,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.206,
+     "lo": 0.094,
+     "hi": 0.311,
+     "k": 14,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.214,
+      "lo": 0.033,
+      "hi": 0.406,
+      "k": 6,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.2,
+      "lo": 0.0,
+      "hi": 0.5,
+      "k": 4,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.2,
+      "lo": 0.0,
+      "hi": 0.5,
+      "k": 4,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.0,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: \\Users\\User\\AppData\\Local\\Temp\\tmpzqymcgwj\\t.py\", line 49, in <module>",
+      "R4b: \\Users\\User\\AppData\\Local\\Temp\\tmpt9ntuhp4\\t.py\", line 51, in <module>"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp34srmi9x\\t.py\", line 18, in parse",
+      "R2a: \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp5w8qbd02\\t.py\", line 18, in parse",
+      "R3a: \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpcixr5jud\\t.py\", line 18, in parse",
+      "R4a: \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpgx8pco6q\\t.py\", line 18, in parse"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: mp\\tmp6bbikcro\\t.py\", line 23, in <module> assert len(r) == 2 and abs("
+     ]
+    },
+    {
+     "task": "D02_social_norm_library",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: 1",
+      "R2b: [1]"
+     ]
+    },
+    {
+     "task": "D03_group_lending_lab",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['group, individual or lab']"
+     ]
+    },
+    {
+     "task": "D04_abc_makerspace",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1b: r wire,sandpaper,glue sticks,zip ties,fire blanket,eye-wash cartridges"
+     ]
+    },
+    {
+     "task": "D05_release_train_portal",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['ship_without_it or delay_release']"
+     ]
+    },
+    {
+     "task": "C2_retry_backoff",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0: builtin_function_or_method' object cannot be interpreted as an integer",
+      "regex_absent#1: print("
+     ]
+    },
+    {
+     "task": "C4_pagination",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0:  list(range(1, 8)) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError"
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 258.1
+  },
+  "qwen2.5-7b-4bit": {
+   "hf_repo": "unsloth/Qwen2.5-7B-Instruct-bnb-4bit",
+   "revision": "bdd404162d94997f390efbfa660eb3f21cbbc81d",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.7,
+     "lo": 0.5,
+     "hi": 0.9,
+     "k": 14,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.909,
+     "lo": 0.727,
+     "hi": 1.0,
+     "k": 10,
+     "n": 11
+    },
+    "code": {
+     "p": 0.444,
+     "lo": 0.111,
+     "hi": 0.778,
+     "k": 4,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.5,
+     "lo": 0.2,
+     "hi": 0.8,
+     "k": 5,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 0.9,
+     "lo": 0.7,
+     "hi": 1.0,
+     "k": 9,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.765,
+    "lo": 0.529,
+    "hi": 0.941,
+    "k": 13,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.397,
+     "lo": 0.219,
+     "hi": 0.547,
+     "k": 27,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.464,
+      "lo": 0.273,
+      "hi": 0.615,
+      "k": 13,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.2,
+      "lo": 0.05,
+      "hi": 0.4,
+      "k": 4,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.5,
+      "lo": 0.2,
+      "hi": 0.8,
+      "k": 10,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.0,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ersion(a) ~~~~~~~~~~~~~^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp1",
+      "R3a: ersion(a) ~~~~~~~~~~~~~^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp4",
+      "R4a: ersion(a) ~~~~~~~~~~~~~^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp1",
+      "R4b: ersion(a) ~~~~~~~~~~~~~^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp7"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: _rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp6mz7c9cm\\t.py\", lin",
+      "R2a: _rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpnpun4ptn\\t.py\", lin",
+      "R3a: _rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpoo8d1fs7\\t.py\", lin",
+      "R4a: _rows(T) File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmprrj_w5y9\\t.py\", lin"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: mp\\tmp983xaf8m\\t.py\", line 10, in <module> assert len(r) == 2 and abs("
+     ]
+    },
+    {
+     "task": "C04_grader_assignment",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: ndex]) >= (min_scripts_per_grader + (grader_index < num_graders - 1)):",
+      "R2a: ndex]) >= (min_scripts_per_grader + (grader_index < num_graders - 1)):",
+      "R3a: ndex]) >= (min_scripts_per_grader + (grader_index < num_graders - 1)):"
+     ]
+    },
+    {
+     "task": "D03_group_lending_lab",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['group, individual or lab']"
+     ]
+    },
+    {
+     "task": "C2_retry_backoff",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0: builtin_function_or_method' object cannot be interpreted as an integer",
+      "regex_absent#1: time.sleep("
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 474.9
+  },
+  "llama3.1-8b-4bit": {
+   "hf_repo": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+   "revision": "f15c379fb32bb402fa06a7ae9aecb1febf4b79ec",
+   "load_error": null,
+   "no_example": {
+    "overall": {
+     "p": 0.6,
+     "lo": 0.4,
+     "hi": 0.8,
+     "k": 12,
+     "n": 20
+    },
+    "decision": {
+     "p": 0.727,
+     "lo": 0.455,
+     "hi": 1.0,
+     "k": 8,
+     "n": 11
+    },
+    "code": {
+     "p": 0.444,
+     "lo": 0.111,
+     "hi": 0.778,
+     "k": 4,
+     "n": 9
+    },
+    "v1_cards": {
+     "p": 0.4,
+     "lo": 0.1,
+     "hi": 0.7,
+     "k": 4,
+     "n": 10
+    },
+    "pilot_seeds": {
+     "p": 0.8,
+     "lo": 0.5,
+     "hi": 1.0,
+     "k": 8,
+     "n": 10
+    },
+    "truncated_likely": 0,
+    "format_failure_rate": 0.0
+   },
+   "no_example_without_flagged": {
+    "p": 0.647,
+    "lo": 0.412,
+    "hi": 0.882,
+    "k": 11,
+    "n": 17
+   },
+   "eligible_80": false,
+   "oracle": {
+    "overall": {
+     "p": 0.412,
+     "lo": 0.191,
+     "hi": 0.611,
+     "k": 28,
+     "n": 68
+    },
+    "by_role": {
+     "analogy": {
+      "p": 0.536,
+      "lo": 0.227,
+      "hi": 0.8,
+      "k": 15,
+      "n": 28
+     },
+     "requirement": {
+      "p": 0.3,
+      "lo": 0.05,
+      "hi": 0.55,
+      "k": 6,
+      "n": 20
+     },
+     "counter": {
+      "p": 0.35,
+      "lo": 0.1,
+      "hi": 0.6,
+      "k": 7,
+      "n": 20
+     }
+    },
+    "format_failure_rate": 0.015,
+    "n_items": 68
+   },
+   "failed_no_example_tasks": [
+    {
+     "task": "C01_calver_compare",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: \\Users\\User\\AppData\\Local\\Temp\\tmpd8l17yp_\\t.py\", line 49, in <module>"
+     ]
+    },
+    {
+     "task": "C02_typed_tsv_parser",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: ~~~~~~~~^^^^^^^^^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmp89pup96t",
+      "R2a: ~~~~~~~~^^^^^^^^^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpcw7xf2tp",
+      "R3a: ~~~~~~~~^^^^^^^^^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpa0wkr6iw",
+      "R4a: ~~~~~~~~^^^^^^^^^^^ File \"C:\\Users\\User\\AppData\\Local\\Temp\\tmpeekls99d"
+     ]
+    },
+    {
+     "task": "C03_index_truncation",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: mp\\tmpcbf4yla8\\t.py\", line 23, in <module> assert len(r) == 2 and abs("
+     ]
+    },
+    {
+     "task": "C05_simpson_methods",
+     "source": "v1_cards",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1a: fk2gnv\\t.py\", line 17, in <genexpr> pass_rate_a = sum(passed for _, pa",
+      "R2a: 6zxhbn\\t.py\", line 17, in <genexpr> pass_rate_a = sum(passed for _, pa",
+      "R3a: 2395k1\\t.py\", line 17, in <genexpr> pass_rate_a = sum(passed for _, pa",
+      "R4a: gbqufm\\t.py\", line 17, in <genexpr> pass_rate_a = sum(passed for _, pa"
+     ]
+    },
+    {
+     "task": "D01_stockholm_parking",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R1b: [(7, 10), (8, 14), (14, 19), (19, 22)]"
+     ]
+    },
+    {
+     "task": "D05_release_train_portal",
+     "source": "v1_cards",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "R2a: ['ship_without_it or delay_release']"
+     ]
+    },
+    {
+     "task": "P6_exam_hall_boarding",
+     "source": "pilot_seeds",
+     "family": "decision",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "json_len_between#0: 10"
+     ]
+    },
+    {
+     "task": "C2_retry_backoff",
+     "source": "pilot_seeds",
+     "family": "code",
+     "format_ok": true,
+     "truncated_likely": false,
+     "failed_checks": [
+      "py_test#0: nnot access local variable 'e' where it is not associated with a value"
+     ]
+    }
+   ],
+   "status": "complete",
+   "wall_time_s": 3082.0
+  }
+ },
+ "flagged_tasks": {
+  "C02_typed_tsv_parser": "checker: the test header does 'import datetime' after the model code, which rebinds the name and breaks correct solutions that use 'from datetime import datetime'",
+  "D03_group_lending_lab": "task: the format template shows the placeholder 'group, individual or lab' and weaker models echo it",
+  "D05_release_train_portal": "task: the format template shows the placeholder 'ship_without_it or delay_release' and models echo it"
+ },
+ "failed_by_every_model": [],
+ "failed_by_all_but_one_model": [
+  {
+   "source": "v1_cards",
+   "task": "C01_calver_compare",
+   "failed_by": 7,
+   "of": 8
+  },
+  {
+   "source": "v1_cards",
+   "task": "C02_typed_tsv_parser",
+   "failed_by": 7,
+   "of": 8
+  },
+  {
+   "source": "v1_cards",
+   "task": "C03_index_truncation",
+   "failed_by": 7,
+   "of": 8
+  }
+ ]
+}

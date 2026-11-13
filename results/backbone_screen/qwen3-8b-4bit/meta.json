@@ -1,0 +1,36 @@
+{
+ "model_key": "qwen3-8b-4bit",
+ "hf_repo": "unsloth/Qwen3-8B-bnb-4bit",
+ "date": "2026-11-13",
+ "decoding": {
+  "do_sample": false,
+  "max_new_tokens": 1024,
+  "batch_size": 4,
+  "chat_template_kwargs": {
+   "enable_thinking": false
+  }
+ },
+ "library_versions": {
+  "python": "3.13.7",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.5.0",
+  "bitsandbytes": "0.49.2"
+ },
+ "gpu": "NVIDIA GeForce RTX 4060",
+ "items_hash": "794ccea85abb1bbd",
+ "n_items": 88,
+ "revision": "1deaf68f694c40dbce295da300851729d759b21a",
+ "quantisation": {
+  "method": "bitsandbytes",
+  "bits": 4,
+  "type": "nf4",
+  "compute_dtype": "bfloat16",
+  "double_quant": true,
+  "prequantised": true
+ },
+ "dtype": "torch.bfloat16",
+ "n_parameters_loaded": 4717851648,
+ "vram_after_load_gb": 6.07,
+ "wall_time_s": 1000.9,
+ "peak_vram_gb": 7.15
+}

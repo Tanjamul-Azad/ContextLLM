@@ -1,0 +1,34 @@
+{
+ "model_key": "llama3.2-3b-4bit",
+ "hf_repo": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+ "date": "2026-11-13",
+ "decoding": {
+  "do_sample": false,
+  "max_new_tokens": 1024,
+  "batch_size": 8,
+  "chat_template_kwargs": {}
+ },
+ "library_versions": {
+  "python": "3.13.7",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.5.0",
+  "bitsandbytes": "0.49.2"
+ },
+ "gpu": "NVIDIA GeForce RTX 4060",
+ "items_hash": "794ccea85abb1bbd",
+ "n_items": 88,
+ "revision": "bb1d317a108579fb40e646af8924a5e7ec5604b1",
+ "quantisation": {
+  "method": "bitsandbytes",
+  "bits": 4,
+  "type": "nf4",
+  "compute_dtype": "bfloat16",
+  "double_quant": true,
+  "prequantised": true
+ },
+ "dtype": "torch.bfloat16",
+ "n_parameters_loaded": 1803463680,
+ "vram_after_load_gb": 2.24,
+ "wall_time_s": 347.3,
+ "peak_vram_gb": 3.8
+}

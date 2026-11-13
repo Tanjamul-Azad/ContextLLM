@@ -1,0 +1,27 @@
+{
+ "model_key": "qwen2.5-3b",
+ "hf_repo": "Qwen/Qwen2.5-3B-Instruct",
+ "date": "2026-11-13",
+ "decoding": {
+  "do_sample": false,
+  "max_new_tokens": 1024,
+  "batch_size": 8,
+  "chat_template_kwargs": {}
+ },
+ "library_versions": {
+  "python": "3.13.7",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.5.0",
+  "bitsandbytes": "0.49.2"
+ },
+ "gpu": "NVIDIA GeForce RTX 4060",
+ "items_hash": "794ccea85abb1bbd",
+ "n_items": 88,
+ "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+ "quantisation": "none",
+ "dtype": "torch.bfloat16",
+ "n_parameters_loaded": 3085938688,
+ "vram_after_load_gb": 6.17,
+ "wall_time_s": 258.1,
+ "peak_vram_gb": 7.06
+}

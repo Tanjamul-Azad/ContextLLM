@@ -22,7 +22,9 @@ from checks_v1 import score_v1  # noqa: E402
 from seed_lint_v1 import build_messages  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOCAL = {"qwen2.5-3b", "qwen2.5-7b-4bit", "llama3.1-8b-4bit"}
+LOCAL = {"qwen2.5-3b", "qwen2.5-7b-4bit", "llama3.1-8b-4bit",
+         "qwen3-4b-2507-4bit", "phi4-mini-4bit", "gemma3-4b-4bit", "llama3.2-3b-4bit", "qwen3-8b-4bit"}
+CONDITIONS = ("no_example", "plain", "scope_inference", "oracle")
 API = {"gpt-4.1-mini", "gpt-5.4-mini", "gpt-5.4"}
 
 SCOPE_INFERENCE = ("Before you answer, work out from my message which parts of the example I want you to use, "
@@ -129,6 +131,8 @@ def main():
     ap.add_argument("--dev", action="store_true", help="allow draft cards; outputs are DEV only")
     ap.add_argument("--cards", default="", help="comma-separated id prefixes")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--conditions", default=",".join(CONDITIONS),
+                    help="comma list of conditions to run (default all four), e.g. no_example,oracle")
     ap.add_argument("--summarize-only", action="store_true")
     a = ap.parse_args()
 
@@ -140,7 +144,11 @@ def main():
     cards = load_cards(a.dev, [c for c in a.cards.split(",") if c])
     if not cards:
         sys.exit("No validated cards yet. Finish the E2 review, or use --dev for a pipeline check.")
-    items = [(card, *rest) for card in cards for rest in conditions(card)]
+    wanted = [c for c in a.conditions.split(",") if c]
+    bad = set(wanted) - set(CONDITIONS)
+    if bad:
+        sys.exit(f"unknown condition(s) {sorted(bad)}; choose from {CONDITIONS}")
+    items = [(card, *rest) for card in cards for rest in conditions(card) if rest[1] in wanted]
     gen_path = os.path.join(out_dir, "generations.jsonl")
     done = set()
     if os.path.exists(gen_path):
@@ -153,7 +161,9 @@ def main():
     if a.model in LOCAL:
         from run_behaviour import generate, load
         tok, model = load(a.model)
-        run = lambda msgs: generate(tok, model, [msgs], max_new_tokens=1024)[0]  # noqa: E731
+        from run_behaviour import TEMPLATE_KW
+        run = lambda msgs: generate(tok, model, [msgs], max_new_tokens=1024,  # noqa: E731
+                                    template_kw=TEMPLATE_KW.get(a.model))[0]
     else:
         from run_api import api_key, call
         key = api_key()

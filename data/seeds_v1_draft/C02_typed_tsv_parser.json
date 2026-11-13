@@ -755,10 +755,10 @@
   "notes": "The target says weights may contain a comma but does not say what it means, so stripping (requirement) and not merging (counter) are both target-neutral. The copy answer is the source loader switched to tabs; it breaks R2 (MAR12 and SEP3 become dates), leaks names, and strips commas. Analogy transfer (float conversion) is close to plain good practice; annotators should judge whether the seed is in the primary analogical subset.",
   "func": "parse_rows",
   "tests": {
-    "_DATA": "import datetime\nT = 'accession\\tvariety\\tqty_g\\tharvested\\nMAR12\\tBRRI dhan28\\t250\\t2025-12-01\\nSEP3\\tBR11\\t12.5\\t2026-01-15\\n'\nr = parse_rows(T)\n",
+    "_DATA": "import datetime as _tdt\nT = 'accession\\tvariety\\tqty_g\\tharvested\\nMAR12\\tBRRI dhan28\\t250\\t2025-12-01\\nSEP3\\tBR11\\t12.5\\t2026-01-15\\n'\nr = parse_rows(T)\n",
     "SHAPE": "{_DATA}assert isinstance(r, list) and len(r) == 2, r\nassert set(r[0]) == {'accession', 'variety', 'qty_g', 'harvested'}, r[0]\n",
     "TEXT_KEPT": "{_DATA}assert r[0]['accession'] == 'MAR12' and r[1]['accession'] == 'SEP3', r\nassert r[0]['variety'] == 'BRRI dhan28' and r[1]['variety'] == 'BR11', r\n",
-    "DATES": "{_DATA}assert r[0]['harvested'] == datetime.date(2025, 12, 1) and r[1]['harvested'] == datetime.date(2026, 1, 15), r\n",
+    "DATES": "{_DATA}assert r[0]['harvested'] == _tdt.date(2025, 12, 1) and r[1]['harvested'] == _tdt.date(2026, 1, 15), r\n",
     "INT": "{_DATA}assert r[0]['qty_g'] == 250 and type(r[0]['qty_g']) is int, r\n",
     "FLOAT": "{_DATA}assert r[1]['qty_g'] == 12.5 and isinstance(r[1]['qty_g'], float), r\n",
     "COMMA_STRIPPED": "r = parse_rows('accession\\tvariety\\tqty_g\\tharvested\\nOCT7\\tBR28\\t1,250\\t2026-02-01\\n')\nassert r[0]['qty_g'] == 1250, r\n",

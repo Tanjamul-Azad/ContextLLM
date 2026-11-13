@@ -21,7 +21,16 @@ MODELS = {
     "qwen2.5-3b": "Qwen/Qwen2.5-3B-Instruct",
     "qwen2.5-7b-4bit": "unsloth/Qwen2.5-7B-Instruct-bnb-4bit",
     "llama3.1-8b-4bit": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+    # WP0.4 backbone-screen candidates (pre-quantised unsloth checkpoints, bitsandbytes nf4)
+    "qwen3-4b-2507-4bit": "unsloth/Qwen3-4B-Instruct-2507-bnb-4bit",
+    "phi4-mini-4bit": "unsloth/Phi-4-mini-instruct-bnb-4bit",
+    "gemma3-4b-4bit": "unsloth/gemma-3-4b-it-bnb-4bit",
+    "llama3.2-3b-4bit": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+    "qwen3-8b-4bit": "unsloth/Qwen3-8B-bnb-4bit",
 }
+# Chat-template keyword arguments per model. Qwen3-8B is a hybrid thinking model; the screen uses it
+# in non-thinking mode (enable_thinking=False) so that it is comparable with the other instruct models.
+TEMPLATE_KW = {"qwen3-8b-4bit": {"enable_thinking": False}}
 QUANTIZE_ON_LOAD = set()
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,14 +50,16 @@ def load(key):
                                                        bnb_4bit_compute_dtype=half)
     elif "bnb-4bit" not in name:
         kw["dtype"] = half
+    # Gemma-3 4B ships as Gemma3ForConditionalGeneration (vision tower included). AutoModelForCausalLM
+    # loads it for text-only use in transformers 5; no image input is ever passed.
     model = AutoModelForCausalLM.from_pretrained(name, **kw)
     model.eval()
     return tok, model
 
 
 @torch.no_grad()
-def generate(tok, model, batch, max_new_tokens=512):
-    texts = [tok.apply_chat_template(m, tokenize=False, add_generation_prompt=True) for m in batch]
+def generate(tok, model, batch, max_new_tokens=512, template_kw=None):
+    texts = [tok.apply_chat_template(m, tokenize=False, add_generation_prompt=True, **(template_kw or {})) for m in batch]
     enc = tok(texts, return_tensors="pt", padding=True).to(model.device)
     out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False, temperature=None, top_p=None, top_k=None,
                          pad_token_id=tok.pad_token_id or tok.eos_token_id)

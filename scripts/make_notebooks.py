@@ -101,6 +101,17 @@ NOTEBOOKS = {
         [SETUP, ["!python -I src/role_probe_patch.py collect\n", "!python -I src/role_probe_patch.py probe\n"],
          ["!python -I src/role_probe_patch.py patch --layers 16,20,24,26,28\n", "!python -I src/role_probe_patch.py report\n"],
          save_cell("results/probe_patch_dev", "probe_patch_dev")]),
+    "09_backbone_screen.ipynb": nb(
+        "09 WP0.4 Backbone competence screen (development items, exploratory)",
+        "Runs one candidate backbone on the 20 no-example items (10 v1 draft cards + 10 pilot seeds) and the 68 oracle variants, "
+        "scores them, and rebuilds the summary table with 95% bootstrap intervals. A model is eligible as a method backbone if it "
+        "solves at least 80% of the no-example tasks. Greedy decoding, max 1024 new tokens; resumable. "
+        "Code answers are executed by the checker, which is not sandboxed. Pre-quantised 4-bit checkpoints.\n",
+        [SETUP, ["# Candidates: qwen3-4b-2507-4bit, phi4-mini-4bit, gemma3-4b-4bit, llama3.2-3b-4bit, qwen3-8b-4bit,\n",
+                 "# plus references qwen2.5-3b, qwen2.5-7b-4bit, llama3.1-8b-4bit\n",
+                 "MODEL = 'qwen3-4b-2507-4bit'\n", "!python -I scripts/backbone_screen.py $MODEL\n"],
+         ["!python -I scripts/backbone_screen_summary.py\n"],
+         save_cell("results/backbone_screen", "backbone_screen")]),
 }
 
 OUT.mkdir(exist_ok=True)
