@@ -109,7 +109,8 @@
     "exploratory": true,
     "details": "results/backbone_screen/summary.json"
    },
-   "parameters_billion_nominal": 3.2
+   "parameters_billion_nominal": 3.2,
+   "local_cache_note": "weights removed from the local cache on 2026-11-13 (lowest screen scores); re-download from the repo id and revision above if needed"
   },
   "gemma3-4b-4bit": {
    "key": "gemma3-4b-4bit",

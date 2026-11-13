@@ -1,0 +1,149 @@
+{
+  "registry": "domains",
+  "version": "0.1",
+  "date": "2026-11-13",
+  "status": "draft: proposed in the WP0.2 migration; the owner (with Opus) decides the final lists (seed-spec-v2 Section 12)",
+  "note": "Closed list of target domains: the functional area of the target task, not of the source example. Used for held-out-domain splits (MASTER-PLAN Section 4.2; linter rule M6).",
+  "domains": [
+    {
+      "id": "transport",
+      "definition": "Roads, parking, public transport and travel.",
+      "example": "A university car park fee schedule (D01)."
+    },
+    {
+      "id": "software_engineering",
+      "definition": "Building, versioning and releasing software.",
+      "example": "Version comparison for a field-survey app (C01)."
+    },
+    {
+      "id": "library_services",
+      "definition": "Lending, reminders and access in libraries and archives.",
+      "example": "Overdue-book reminders (D02)."
+    },
+    {
+      "id": "laboratory_operations",
+      "definition": "Running teaching or research labs: equipment, kits, safety and access.",
+      "example": "Lending electronics kits to students (D03)."
+    },
+    {
+      "id": "inventory_and_procurement",
+      "definition": "Buying, stocking and checking supplies.",
+      "example": "Stock-check frequencies in a makerspace (D04)."
+    },
+    {
+      "id": "public_sector_services",
+      "definition": "Services run by city or national government for the public.",
+      "example": "A city open data portal (D05)."
+    },
+    {
+      "id": "data_processing",
+      "definition": "Reading, cleaning and converting data files.",
+      "example": "Parsing a seed-bank inventory (C02)."
+    },
+    {
+      "id": "energy_and_utilities",
+      "definition": "Electricity, water, gas and their tariffs and metering.",
+      "example": "A mini-grid tariff index (C03)."
+    },
+    {
+      "id": "exams_and_assessment",
+      "definition": "Setting, marking and grading exams and coursework.",
+      "example": "Assigning exam scripts to graders (C04)."
+    },
+    {
+      "id": "teaching_and_learning",
+      "definition": "Course design, teaching methods and their evaluation.",
+      "example": "Comparing two calculus teaching methods (C05)."
+    },
+    {
+      "id": "it_operations",
+      "definition": "IT support, service desks and infrastructure operations.",
+      "example": "Helpdesk ticket priorities (spec example X01)."
+    },
+    {
+      "id": "healthcare_services",
+      "definition": "Clinics, hospitals, appointments and patient services.",
+      "example": "Appointment reminder rules for a clinic."
+    },
+    {
+      "id": "banking_and_payments",
+      "definition": "Accounts, loans, payments and fees.",
+      "example": "Late-fee rules for a student loan scheme."
+    },
+    {
+      "id": "agriculture_and_food",
+      "definition": "Farming, food supply and food safety.",
+      "example": "Irrigation schedules for a farm cooperative."
+    },
+    {
+      "id": "retail_and_ecommerce",
+      "definition": "Shops, online stores, orders and returns.",
+      "example": "A returns policy for an online shop."
+    },
+    {
+      "id": "hospitality_and_events",
+      "definition": "Hotels, restaurants, venues and event planning.",
+      "example": "Seat allocation for a conference dinner."
+    },
+    {
+      "id": "human_resources",
+      "definition": "Hiring, shifts, leave and staff policies.",
+      "example": "A shift roster for part-time staff."
+    },
+    {
+      "id": "manufacturing",
+      "definition": "Production lines, quality control and maintenance.",
+      "example": "Inspection sampling on a production line."
+    },
+    {
+      "id": "logistics_and_delivery",
+      "definition": "Shipping, warehousing, routing and delivery.",
+      "example": "Delivery time slots for a courier."
+    },
+    {
+      "id": "telecommunications_and_networks",
+      "definition": "Phone, internet and network services.",
+      "example": "Bandwidth limits for a campus network."
+    },
+    {
+      "id": "environment_and_conservation",
+      "definition": "Waste, pollution, wildlife and natural resources.",
+      "example": "A recycling incentive for a residential area."
+    },
+    {
+      "id": "sports_and_recreation",
+      "definition": "Clubs, gyms, leagues and leisure facilities.",
+      "example": "Court booking rules for a sports centre."
+    },
+    {
+      "id": "media_and_publishing",
+      "definition": "News, publishing, broadcasting and content platforms.",
+      "example": "A release schedule for a newsletter."
+    },
+    {
+      "id": "legal_and_compliance",
+      "definition": "Contracts, regulation, audits and compliance.",
+      "example": "A document retention policy."
+    },
+    {
+      "id": "housing_and_facilities",
+      "definition": "Housing, dormitories, buildings and maintenance.",
+      "example": "Repair request priorities in a dormitory."
+    },
+    {
+      "id": "community_and_nonprofit",
+      "definition": "Charities, volunteer groups and community organisations.",
+      "example": "Volunteer duty rotation for a food bank."
+    },
+    {
+      "id": "web_and_mobile_apps",
+      "definition": "Consumer-facing websites and mobile applications.",
+      "example": "Notification limits in a mobile app."
+    },
+    {
+      "id": "security_and_access_control",
+      "definition": "Accounts, permissions, authentication and physical access.",
+      "example": "Lock-out rules after failed logins."
+    }
+  ]
+}

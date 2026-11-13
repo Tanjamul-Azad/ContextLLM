@@ -101,15 +101,23 @@ def test_spec_example_card_has_only_the_accepted_warning():
 
 def test_release_mode_blocks_drafts():
     got = levels(d01(), release=True, gold=False)
-    for rule in ("M3", "M6", "P2", "H1", "H4", "K7r"):
+    for rule in ("M3", "P2", "H1", "H4", "K7r"):
         assert rule in got, (rule, sorted(got))
+    assert "M6" not in got                       # D01 uses registered ids now that data/registry exists
     assert "C9" not in got and "K7" not in got   # draft-only rules do not run in release mode
+
+
+def test_unknown_registry_id_is_flagged():
+    card = d01()
+    card["relation_family"] = "not_a_registered_family"
+    assert "M6" in levels(card, release=False, gold=False)
 
 
 def test_draft_mode_reports_pending_not_errors():
     rep = L.lint_card(d01())
     pend = {it["rule"] for it in rep.items if it["level"] == "PENDING"}
-    assert {"C9", "H1", "K7", "M6", "P2"} <= pend, pend
+    assert {"C9", "H1", "K7", "P2"} <= pend, pend
+    assert "M6" not in pend
 
 
 # ================================================================= scorer

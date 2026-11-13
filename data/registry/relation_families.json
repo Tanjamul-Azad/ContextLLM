@@ -1,0 +1,169 @@
+{
+  "registry": "relation_families",
+  "version": "0.1",
+  "date": "2026-11-13",
+  "status": "draft: proposed in the WP0.2 migration; the owner (with Opus) decides the final lists (seed-spec-v2 Section 12)",
+  "note": "Closed list of relation families: the abstract idea that may transfer, not the surface domain. Paraphrases of one relation share a family. Used for held-out-relation splits (MASTER-PLAN Section 4.2; linter rules M6 and T5).",
+  "relation_families": [
+    {
+      "id": "demand_responsive_pricing",
+      "definition": "Charge more when demand is high and less (or nothing) when it is low, so that people shift their timing.",
+      "example": "Stockholm congestion charges by time of day (D01)."
+    },
+    {
+      "id": "componentwise_numeric_ordering",
+      "definition": "Order composite identifiers by splitting them into parts and comparing the parts as numbers from left to right.",
+      "example": "Version 1.10.0 is newer than 1.9.0 (C01)."
+    },
+    {
+      "id": "social_norm_messaging",
+      "definition": "Tell people, truthfully, what most others like them do, so that they move toward that norm.",
+      "example": "Tax letters saying that nine out of ten people pay on time (D02)."
+    },
+    {
+      "id": "peer_group_joint_liability",
+      "definition": "Small self-chosen groups share responsibility for a debt or a loss, so members choose, watch and help each other.",
+      "example": "Group microloans with joint liability (D03)."
+    },
+    {
+      "id": "value_concentration_prioritisation",
+      "definition": "Give the few items that carry most of the total value the most frequent attention.",
+      "example": "ABC inventory counts: high-spend items weekly, the rest less often (D04)."
+    },
+    {
+      "id": "fixed_cadence_release",
+      "definition": "Release on a fixed schedule; work that is not ready waits for the next release instead of moving the date.",
+      "example": "A browser release train every six weeks (D05)."
+    },
+    {
+      "id": "ordered_type_coercion",
+      "definition": "Convert each raw value by trying a fixed series of types and fall back to text when none fits.",
+      "example": "A loader that tries int, float and date before keeping a string (C02)."
+    },
+    {
+      "id": "iterated_truncation_drift",
+      "definition": "Cutting digits off a running value at every step biases it in one direction; keep full precision and round only what is shown.",
+      "example": "A stock index that lost half its value through truncation (C03)."
+    },
+    {
+      "id": "stateless_hash_assignment",
+      "definition": "Assign each item to one worker by a function of the item alone, so every machine computes the same assignment without a shared table.",
+      "example": "Cache keys spread over servers by a hash of the key (C04)."
+    },
+    {
+      "id": "stratified_comparison",
+      "definition": "Compare groups within each stratum before pooling, because pooling can reverse the comparison.",
+      "example": "Admission rates compared department by department (C05)."
+    },
+    {
+      "id": "urgency_ordered_service_levels",
+      "definition": "The more urgent a case, the shorter the time allowed before it is handled.",
+      "example": "Hospital triage colours with maximum waiting times (spec example X01)."
+    },
+    {
+      "id": "default_option_nudge",
+      "definition": "Make the preferred choice the default, so that doing nothing leads to it while people stay free to opt out.",
+      "example": "Automatic pension enrolment with an opt-out."
+    },
+    {
+      "id": "commitment_device",
+      "definition": "Let people bind a future choice in advance, so that later temptation cannot undo it.",
+      "example": "A savings account that stays locked until a goal date."
+    },
+    {
+      "id": "staged_rollout",
+      "definition": "Expose a change to a small group first and widen it only while health measures stay within limits.",
+      "example": "A canary release to 5 percent of users."
+    },
+    {
+      "id": "redundancy_for_reliability",
+      "definition": "Duplicate a critical component so that one failure does not stop the service.",
+      "example": "Two independent power feeds for a server room."
+    },
+    {
+      "id": "retry_with_backoff",
+      "definition": "Retry a failed operation after waits that grow each time, so that retries do not overload a struggling service.",
+      "example": "Exponential backoff in a network client."
+    },
+    {
+      "id": "idempotent_operation",
+      "definition": "Design an operation so that repeating it has the same effect as doing it once.",
+      "example": "Payment requests that carry an idempotency key."
+    },
+    {
+      "id": "canonical_key_normalisation",
+      "definition": "Bring values to one canonical form before comparing or deduplicating them.",
+      "example": "Lower-casing and trimming e-mail addresses before matching."
+    },
+    {
+      "id": "random_spot_audit",
+      "definition": "Check an unpredictable random sample instead of everything, so that everyone stays careful at low cost.",
+      "example": "Random ticket inspections on public transport."
+    },
+    {
+      "id": "deferred_acceptance_matching",
+      "definition": "Match two sides by their preferences with tentative offers, so that no pair would rather leave their matches for each other.",
+      "example": "Medical residency matching."
+    },
+    {
+      "id": "duty_rotation",
+      "definition": "Rotate a burden or a scarce benefit through the members in a fixed order, so that it is shared evenly over time.",
+      "example": "A weekly cleaning roster."
+    },
+    {
+      "id": "token_bucket_rate_limiting",
+      "definition": "Allow bursts up to a budget that refills at a fixed rate, and refuse requests when the budget is empty.",
+      "example": "An API that allows 100 calls a minute with short bursts."
+    },
+    {
+      "id": "capacity_buffer",
+      "definition": "Keep spare capacity or stock in reserve, so that normal variation does not cause queues or shortages.",
+      "example": "Safety stock that covers late deliveries."
+    },
+    {
+      "id": "checklist_standardisation",
+      "definition": "Use a short fixed checklist at critical moments, so that no essential step is skipped.",
+      "example": "A surgical safety checklist before the first incision."
+    },
+    {
+      "id": "sliding_window_aggregation",
+      "definition": "Summarise only a moving window of recent events instead of the whole history.",
+      "example": "A rolling seven-day average of cases."
+    },
+    {
+      "id": "graceful_degradation",
+      "definition": "When a component fails, fall back to a reduced service that still works instead of failing completely.",
+      "example": "Showing cached results while the database is down."
+    },
+    {
+      "id": "fail_fast_validation",
+      "definition": "Reject bad input at the boundary at once, with a clear error, instead of letting it spread.",
+      "example": "Schema validation of incoming requests."
+    },
+    {
+      "id": "result_memoisation",
+      "definition": "Store the results of an expensive computation and reuse them for repeated inputs.",
+      "example": "A cache of function results keyed by the arguments."
+    },
+    {
+      "id": "increasing_block_tariff",
+      "definition": "Charge a higher unit price for each further block of consumption, so that basic use stays cheap and heavy use pays more.",
+      "example": "Water tariffs with rising prices per block of cubic metres."
+    },
+    {
+      "id": "allocation_by_lottery",
+      "definition": "Allocate a scarce good by a fair random draw when demand exceeds supply and no merit ranking is fair.",
+      "example": "A lottery for oversubscribed school places."
+    },
+    {
+      "id": "personal_feedback_loop",
+      "definition": "Show people timely feedback about their own behaviour, so that they can adjust it.",
+      "example": "A smart meter display of the day's electricity use."
+    },
+    {
+      "id": "deterministic_tie_breaking",
+      "definition": "Break ties by a fixed secondary key, so that the order is the same on every run.",
+      "example": "Sorting by score and then by ID."
+    }
+  ]
+}

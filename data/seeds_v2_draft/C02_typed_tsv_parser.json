@@ -1,0 +1,1928 @@
+{
+  "schema": "seed-card-v2",
+  "id": "C02_typed_tsv_parser",
+  "status": "draft",
+  "status_note": "Draft. Spans and licences are the author's proposal (drafted by a model in the v2 migration and not yet checked by the author) and are pending two blind reviewers. Not for evaluation.",
+  "created": "2026-11-05",
+  "updated": "2026-11-13",
+  "author_id": "tanjamul",
+  "model_assistance": "drafted",
+  "model_assistance_log": {
+    "model": "claude-opus-5-5",
+    "date": "2026-11-13",
+    "scope": "v2 migration: source_spans, relation_units, all licences, check-to-unit links, and every answer whose origin is model_drafted.",
+    "prompt_ref": "WP0.2 migration task (MASTER-PLAN Section 4.1; docs/seed-spec-v2.md Section 13 item 7)",
+    "human_edits": null,
+    "v1_origin": "v1 card written by the author on 2026-11-05; model assistance in v1 was not recorded."
+  },
+  "family": "code",
+  "domain": "data_processing",
+  "domain_note": "data cleaning / scientific data",
+  "relation_family": "ordered_type_coercion",
+  "template_group_id": "TG-C02",
+  "provenance_group_id": "PG-gene-name-autoconvert",
+  "provenance": {
+    "source_type": "software_practice",
+    "case": "Spreadsheet auto-conversion of gene names (Ziemann et al. 2016; HGNC renaming 2020)",
+    "references": [
+      {
+        "citation": "Ziemann, M., Eren, Y., El-Osta, A. (2016). Gene name errors are widespread in the scientific literature. Genome Biology 17, 177.",
+        "doi": "10.1186/s13059-016-1044-7"
+      },
+      {
+        "citation": "Bruford, E. A. et al. (2020). Guidelines for human gene nomenclature. Nature Genetics 52, 754-758.",
+        "doi": "10.1038/s41588-020-0669-3"
+      }
+    ],
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our rice research station keeps its seed-bank inventory as tab-separated text. The first line holds the column names accession, variety, qty_g and harvested. Accession codes look like MAR12 or SEP3 (field codes, not dates); variety names look like BRRI dhan28; qty_g is a weight in grams, and some older rows write large weights with a comma, as in 1,250; harvested is a date written as YYYY-MM-DD. Write a Python function parse_rows(text) that returns the rows with values converted to suitable Python types.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Return a list with one dict per data row, keyed by the column names.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "py_test",
+              "SHAPE"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Accession codes and variety names stay text exactly as written.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "TEXT_KEPT"
+            ],
+            "units": [
+              "U03"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "harvested becomes a datetime.date.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "py_test",
+              "DATES"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "Whole-number weights such as 250 become int.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "py_test",
+              "INT"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "func": "parse_rows",
+  "tests": {
+    "_DATA": "import datetime as _tdt\nT = 'accession\\tvariety\\tqty_g\\tharvested\\nMAR12\\tBRRI dhan28\\t250\\t2025-12-01\\nSEP3\\tBR11\\t12.5\\t2026-01-15\\n'\nr = parse_rows(T)\n",
+    "SHAPE": "{_DATA}assert isinstance(r, list) and len(r) == 2, r\nassert set(r[0]) == {'accession', 'variety', 'qty_g', 'harvested'}, r[0]\n",
+    "TEXT_KEPT": "{_DATA}assert r[0]['accession'] == 'MAR12' and r[1]['accession'] == 'SEP3', r\nassert r[0]['variety'] == 'BRRI dhan28' and r[1]['variety'] == 'BR11', r\n",
+    "DATES": "{_DATA}assert r[0]['harvested'] == _tdt.date(2025, 12, 1) and r[1]['harvested'] == _tdt.date(2026, 1, 15), r\n",
+    "INT": "{_DATA}assert r[0]['qty_g'] == 250 and type(r[0]['qty_g']) is int, r\n",
+    "FLOAT": "{_DATA}assert r[1]['qty_g'] == 12.5 and isinstance(r[1]['qty_g'], float), r\n",
+    "COMMA_STRIPPED": "r = parse_rows('accession\\tvariety\\tqty_g\\tharvested\\nOCT7\\tBR28\\t1,250\\t2026-02-01\\n')\nassert r[0]['qty_g'] == 1250, r\n",
+    "COMMA_NOT_MERGED": "r = parse_rows('accession\\tvariety\\tqty_g\\tharvested\\nOCT7\\tBR28\\t1,5\\t2026-02-01\\n')\nassert r[0]['qty_g'] != 15, r\n"
+  },
+  "source_example": {
+    "text": "In 2016 Ziemann, Eren and El-Osta reported in Genome Biology that about one fifth of papers with Excel gene lists in their supplementary files contained gene-name errors. The cause was automatic type conversion: when a file is opened, spreadsheet software turns gene symbols such as SEPT2 or MARCH1 into dates. Other identifiers that looked like numbers in scientific notation were turned into floating-point numbers. The changes were silent, so researchers shared the damaged files without noticing. In 2020 the HUGO Gene Nomenclature Committee renamed several genes, for example SEPT1 to SEPTIN1 and MARCH1 to MARCHF1, partly to avoid this problem. The loader below is a small Python version of the same guessing behaviour, written for a lab's plate-reader exports. It strips thousands separators, turns whole numbers into int and decimals into float, and reads ISO dates. It also treats a month abbreviation followed by a day number as a date in the current year, which is how gene names were turned into dates. Every value that matches no rule stays a string. The loader reads comma-separated text and logs each date guess to the plate-reader audit log.\n\n```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef load_plate_export(text):\n    rows = list(csv.DictReader(io.StringIO(text)))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Audit logging",
+        "leak_terms": [
+          "logging",
+          "audit"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Plate-reader naming",
+        "leak_terms": [
+          "plate"
+        ],
+        "control": {
+          "from": "plate-reader",
+          "to": "spectrometer",
+          "leak_terms": [
+            "plate",
+            "spectrometer"
+          ]
+        }
+      },
+      {
+        "id": "I3",
+        "text": "Gene names",
+        "leak_terms": [
+          "SEPT2",
+          "MARCH1",
+          "gene"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "Month lookup table",
+        "leak_terms": [
+          "MONTHS",
+          "MONTH_DAY"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "Current-year assumption",
+        "leak_regex": "today\\(\\)\\.year"
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "typed conversion of a text table",
+        "source_quote": "turns whole numbers into int",
+        "target_quote": "converted to suitable Python types"
+      },
+      {
+        "feature": "month-like codes",
+        "source_quote": "SEPT2 or MARCH1",
+        "target_quote": "MAR12 or SEP3"
+      },
+      {
+        "feature": "ISO dates",
+        "source_quote": "reads ISO dates",
+        "target_quote": "YYYY-MM-DD"
+      },
+      {
+        "feature": "laboratory data files",
+        "source_quote": "a lab's plate-reader exports",
+        "target_quote": "seed-bank inventory"
+      }
+    ]
+  },
+  "relation_units": [
+    {
+      "id": "U01",
+      "what": "Convert each value by trying a fixed series of types (int, then float, then ISO date) and fall back to text",
+      "main": true
+    },
+    {
+      "id": "U02",
+      "what": "Strip thousands separators (commas) before converting numbers",
+      "main": false
+    },
+    {
+      "id": "U03",
+      "what": "Read a month abbreviation followed by a day number as a date in the current year",
+      "main": false
+    },
+    {
+      "id": "U04",
+      "what": "Log each date guess to an audit log",
+      "main": false
+    },
+    {
+      "id": "U05",
+      "what": "Read the table with a reader keyed by the header row, one dict per row",
+      "main": false
+    },
+    {
+      "id": "U06",
+      "what": "Silent automatic type guessing can damage identifiers (the spreadsheet gene-name case)",
+      "main": false
+    }
+  ],
+  "source_spans": [
+    {
+      "id": "S01",
+      "text": "In 2016 Ziemann, Eren and El-Osta reported in Genome Biology that about one fifth of papers with Excel ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S02",
+      "text": "gene",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S03",
+      "text": " lists in their supplementary files contained ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S04",
+      "text": "gene",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S05",
+      "text": "-name errors. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S06",
+      "text": "The cause was automatic type conversion: when a file is opened, spreadsheet software turns ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S07",
+      "text": "gene",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S08",
+      "text": " symbols such as ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S09",
+      "text": "SEPT2",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S10",
+      "text": " or ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S11",
+      "text": "MARCH1",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S12",
+      "text": " into dates. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S13",
+      "text": "Other identifiers that looked like numbers in scientific notation were turned into floating-point numbers. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S14",
+      "text": "The changes were silent, so researchers shared the damaged files without noticing. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S15",
+      "text": "In 2020 the HUGO ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S16",
+      "text": "Gene",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S17",
+      "text": " Nomenclature Committee renamed several genes, for example SEPT1 to SEPTIN1 and ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S18",
+      "text": "MARCH1",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S19",
+      "text": " to MARCHF1, partly to avoid this problem. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S20",
+      "text": "The loader below is a small Python version of the same guessing behaviour, written for a lab's ",
+      "kind": "context"
+    },
+    {
+      "id": "S21",
+      "text": "plate-reader",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S22",
+      "text": " exports. ",
+      "kind": "context"
+    },
+    {
+      "id": "S23",
+      "text": "It strips thousands separators, ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S24",
+      "text": "turns whole numbers into int and decimals into float, and reads ISO dates. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S25",
+      "text": "It also treats a month abbreviation followed by a day number as a date in the current year, which is how ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S26",
+      "text": "gene",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S27",
+      "text": " names were turned into dates. ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S28",
+      "text": "Every value that matches no rule stays a string. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S29",
+      "text": "The loader reads comma-separated text and ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S30",
+      "text": "logs each date guess to the ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S31",
+      "text": "plate-reader",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S32",
+      "text": " ",
+      "kind": "context"
+    },
+    {
+      "id": "S33",
+      "text": "audit",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S34",
+      "text": " log.",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S35",
+      "text": "\n\n```python\n",
+      "kind": "context"
+    },
+    {
+      "id": "S36",
+      "text": "import csv\n",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S37",
+      "text": "import datetime as dt\nimport io\n",
+      "kind": "context"
+    },
+    {
+      "id": "S38",
+      "text": "import logging",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S39",
+      "text": "\nimport re\n\n",
+      "kind": "context"
+    },
+    {
+      "id": "S40",
+      "text": "log = ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S41",
+      "text": "logging",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S42",
+      "text": ".getLogger(\"platereader.",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S43",
+      "text": "audit",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S44",
+      "text": "\")\n",
+      "kind": "context"
+    },
+    {
+      "id": "S45",
+      "text": "MONTHS",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S46",
+      "text": " = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\n",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S47",
+      "text": "MONTH_DAY",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S48",
+      "text": " = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S49",
+      "text": "\n\ndef guess(value):\n    v = value.strip()\n",
+      "kind": "context"
+    },
+    {
+      "id": "S50",
+      "text": "    s = v.replace(\",\", \"\")\n",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S51",
+      "text": "    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S52",
+      "text": "    m = ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S53",
+      "text": "MONTH_DAY",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S54",
+      "text": ".match(v)\n    if m and m.group(1).upper() in ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S55",
+      "text": "MONTHS",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S56",
+      "text": ":\n",
+      "kind": "context"
+    },
+    {
+      "id": "S57",
+      "text": "        log.info(\"read %r as a date\", v)\n",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S58",
+      "text": "        return dt.date(dt.date.",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S59",
+      "text": "today().year",
+      "kind": "detail",
+      "unit": "I5"
+    },
+    {
+      "id": "S60",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S61",
+      "text": "MONTHS",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S62",
+      "text": "[m.group(1).upper()], int(m.group(2)))\n",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S63",
+      "text": "    return v\n",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S64",
+      "text": "\n\ndef ",
+      "kind": "context"
+    },
+    {
+      "id": "S65",
+      "text": "load_plate_export",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S66",
+      "text": "(text):\n    rows = list(csv.DictReader(io.StringIO(text)))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S67",
+      "text": "```",
+      "kind": "context"
+    }
+  ],
+  "relation": "Convert each value by trying a fixed series of types (int, float, date) and fall back to text.",
+  "marker": {
+    "what": "thousands separators stripped",
+    "spec": [
+      "py_test",
+      "COMMA_STRIPPED"
+    ],
+    "units": [
+      "U02"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The loader below is what our partner lab uses. Borrow the idea for our inventory, not its details; our columns and rules are above.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "Borrow the idea"
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An audit logger is not needed by parse_rows."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "FLOAT"
+          ],
+          "what": "Decimal weights become float",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "decimals into float"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Decimal weights stay text: the type series is not used."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = raw\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3a"
+          ],
+          "origin": "model_drafted",
+          "note": "harvested stays text, against rule R3."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our partner lab sent their loader along with the first batch of files:\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "Our partner lab sent their loader along with the first batch of files",
+            "implication": "relation_transfer"
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An audit logger is not needed by parse_rows."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The logging import and the audit logger are not needed by parse_rows."
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a plate-reader name in seed-bank code is a misleading label but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: gene names in a seed-bank parser are odd, and a comment that cites the gene-name case could even be useful. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The month table serves only month-day guessing, which the target does not need (dates are YYYY-MM-DD) and rule R2 forbids for codes."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "harvested is a date written as YYYY-MM-DD",
+            "implication": "source_specific_fact",
+            "note": "The target's dates always carry their year; filling in the current year would produce false dates."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "FLOAT"
+          ],
+          "what": "Decimal weights become float",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "decimals into float"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Decimal weights stay text: the type series is not used."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = raw\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3a"
+          ],
+          "origin": "model_drafted",
+          "note": "harvested stays text, against rule R3."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Keep exactly one rule from the loader below: strip thousands separators, so 1,250 becomes 1250. Leave its names and the story around it out of our code.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Keep exactly one rule from the loader below"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "strip thousands separators, so 1,250 becomes 1250"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Required in part by target rules R3 and R4 (dates, whole numbers) and motivated by 'suitable Python types' for decimals; the one-rule restriction does not cover it."
+          },
+          "U05": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Required by target rule R1 (one dict per row keyed by the column names)."
+          },
+          "U06": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The story is not a rule of the loader, so the one-rule restriction does not cover it."
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Keep exactly one rule from the loader below"
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The logging import and the audit logger are not needed by parse_rows."
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The month table serves only month-day guessing, which the target does not need (dates are YYYY-MM-DD) and rule R2 forbids for codes."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "harvested is a date written as YYYY-MM-DD",
+            "implication": "source_specific_fact",
+            "note": "The target's dates always carry their year; filling in the current year would produce false dates."
+          },
+          "I2": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Leave its names and the story around it out of our code"
+          },
+          "I3": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Leave its names and the story around it out of our code"
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "COMMA_STRIPPED"
+          ],
+          "what": "1,250 becomes 1250",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "strip thousands separators"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"\\d{1,3}(,\\d{3})+\", v):\n        return int(v.replace(\",\", \"\"))\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                num = raw.replace(\",\", \"\")\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                num = raw\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Thousands separators are not stripped, so 1,250 stays text."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"\\d{1,3}(,\\d{3})+\", v):\n        return int(v.replace(\",\", \"\"))\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our older rows were typed by the technician who wrote the loader below, and the finance office reconciles our weights with that loader's numbers.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST",
+            "note": "v1 marked this transfer ambiguous: the cue says the weights must match the loader's numbers, which implies its comma stripping only indirectly. Proposed MUST; reviewers decide.",
+            "evidence": "the finance office reconciles our weights with that loader's numbers",
+            "implication": "named_part_transfer"
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An audit logger is not needed by parse_rows."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The logging import and the audit logger are not needed by parse_rows."
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a plate-reader name in seed-bank code is a misleading label but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: gene names in a seed-bank parser are odd, and a comment that cites the gene-name case could even be useful. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The month table serves only month-day guessing, which the target does not need (dates are YYYY-MM-DD) and rule R2 forbids for codes."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "harvested is a date written as YYYY-MM-DD",
+            "implication": "source_specific_fact",
+            "note": "The target's dates always carry their year; filling in the current year would produce false dates."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "COMMA_STRIPPED"
+          ],
+          "what": "1,250 becomes 1250",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "ambiguous",
+            "quote": "reconciles our weights with that loader's numbers"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"\\d{1,3}(,\\d{3})+\", v):\n        return int(v.replace(\",\", \"\"))\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                num = raw.replace(\",\", \"\")\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"\\d{1,3}(,\\d{3})+\", v):\n        return int(v.replace(\",\", \"\"))\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = raw\n            else:\n                num = raw.replace(\",\", \"\")\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3a"
+          ],
+          "origin": "model_drafted",
+          "note": "harvested stays text, against rule R3."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our partner in Wageningen used the loader below on our shared files, and it turned a weight written 1,5 (one and a half grams, with a decimal comma) into 15. Don't do it like this: never merge digits across a comma. Keep their names out of our code.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "never merge digits across a comma"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Only comma stripping is flagged; the type series stays free."
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An audit logger is not needed by parse_rows."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The logging import and the audit logger are not needed by parse_rows."
+          },
+          "I2": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Keep their names out of our code"
+          },
+          "I3": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Keep their names out of our code"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The month table serves only month-day guessing, which the target does not need (dates are YYYY-MM-DD) and rule R2 forbids for codes."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "harvested is a date written as YYYY-MM-DD",
+            "implication": "source_specific_fact",
+            "note": "The target's dates always carry their year; filling in the current year would produce false dates."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "COMMA_NOT_MERGED"
+          ],
+          "what": "1,5 does not become 15",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "never merge digits across a comma"
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference",
+          "uses_may": [
+            "U01"
+          ]
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U01"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                num = raw.replace(\",\", \"\")\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Strips the comma, so 1,5 becomes 15: the flagged behaviour."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "T1",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our partner in Wageningen used the loader below on our shared files, and it turned a weight written 1,5 (one and a half grams, with a decimal comma) into 15.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "it turned a weight written 1,5 (one and a half grams, with a decimal comma) into 15",
+            "implication": "avoid_flagged_feature"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Only comma stripping is flagged; the type series stays free."
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Accession codes and variety names stay text exactly as written",
+            "note": "Lure: month-day guessing turns accession codes such as MAR12 and SEP3 into dates."
+          },
+          "U04": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An audit logger is not needed by parse_rows."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The logging import and the audit logger are not needed by parse_rows."
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a plate-reader name in seed-bank code is a misleading label but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: gene names in a seed-bank parser are odd, and a comment that cites the gene-name case could even be useful. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our rice research station keeps its seed-bank inventory",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "The month table serves only month-day guessing, which the target does not need (dates are YYYY-MM-DD) and rule R2 forbids for codes."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "harvested is a date written as YYYY-MM-DD",
+            "implication": "source_specific_fact",
+            "note": "The target's dates always carry their year; filling in the current year would produce false dates."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "COMMA_NOT_MERGED"
+          ],
+          "what": "1,5 does not become 15",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "turned a weight written 1,5"
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No audit logging",
+          "units": [
+            "I1",
+            "U04"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No plate-reader names",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No gene names",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No month table",
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No current-year dates",
+          "units": [
+            "I5"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport datetime\nimport re\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "origin": "v1_reference",
+          "uses_may": [
+            "U01"
+          ]
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                try:\n                    row[name] = int(raw)\n                except ValueError:\n                    try:\n                        row[name] = float(raw)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U01"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport datetime\n\n\ndef parse_rows(text):\n    lines = [ln for ln in text.splitlines() if ln.strip()]\n    names = lines[0].split(\"\\t\")\n    rows = []\n    for ln in lines[1:]:\n        row = {}\n        for name, raw in zip(names, ln.split(\"\\t\")):\n            raw = raw.strip()\n            if name in (\"accession\", \"variety\"):\n                row[name] = raw\n            elif name == \"harvested\":\n                row[name] = datetime.date.fromisoformat(raw)\n            else:\n                num = raw.replace(\",\", \"\")\n                try:\n                    row[name] = int(num)\n                except ValueError:\n                    try:\n                        row[name] = float(num)\n                    except ValueError:\n                        row[name] = raw\n        rows.append(row)\n    return rows\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Strips the comma, so 1,5 becomes 15: the flagged behaviour."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport datetime\nimport logging\nimport re\n\nlog = logging.getLogger(\"seedbank\")\n\n\ndef _convert(value, column):\n    v = value.strip()\n    if column in (\"accession\", \"variety\"):\n        return v\n    if re.fullmatch(r\"-?\\d+\", v):\n        return int(v)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", v):\n        return float(v)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return datetime.date.fromisoformat(v)\n    return v\n\n\ndef parse_rows(text):\n    lines = [line for line in text.splitlines() if line.strip()]\n    header = lines[0].split(\"\\t\")\n    return [{h: _convert(x, h) for h, x in zip(header, line.split(\"\\t\"))} for line in lines[1:]]\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds a logger that parse_rows does not need."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport csv\nimport datetime as dt\nimport io\nimport logging\nimport re\n\nlog = logging.getLogger(\"platereader.audit\")\nMONTHS = {m: i for i, m in enumerate(\n    [\"JAN\", \"FEB\", \"MAR\", \"APR\", \"MAY\", \"JUN\", \"JUL\", \"AUG\", \"SEP\", \"OCT\", \"NOV\", \"DEC\"], 1)}\nMONTH_DAY = re.compile(r\"^([A-Za-z]{3})[A-Za-z]*-?(\\d{1,2})$\")\n\n\ndef guess(value):\n    v = value.strip()\n    s = v.replace(\",\", \"\")\n    if re.fullmatch(r\"-?\\d+\", s):\n        return int(s)\n    if re.fullmatch(r\"-?\\d+\\.\\d+\", s):\n        return float(s)\n    if re.fullmatch(r\"\\d{4}-\\d{2}-\\d{2}\", v):\n        return dt.date.fromisoformat(v)\n    m = MONTH_DAY.match(v)\n    if m and m.group(1).upper() in MONTHS:\n        log.info(\"read %r as a date\", v)\n        return dt.date(dt.date.today().year, MONTHS[m.group(1).upper()], int(m.group(2)))\n    return v\n\n\ndef parse_rows(text):\n    rows = list(csv.DictReader(io.StringIO(text), delimiter=\"\\t\"))\n    return [{k: guess(v) for k, v in row.items()} for row in rows]\n```",
+          "kind": "copy",
+          "fails": [
+            "R2a",
+            "T1",
+            "L1",
+            "L4",
+            "L5"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "Not built for this draft. The target's text-code rule already makes the source's date guessing a wrong-fit part for every role."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft. The target's text-code rule already makes the source's date guessing a wrong-fit part for every role."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "human_review": {
+    "reviewers": [],
+    "variants": {
+      "analogy-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      }
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The target says weights may contain a comma but does not say what it means, so stripping (requirement) and not merging (counter) are both target-neutral. The copy answer is the source loader switched to tabs; it breaks R2 (MAR12 and SEP3 become dates), leaks names, and strips commas. Analogy transfer (float conversion) is close to plain good practice; annotators should judge whether the seed is in the primary analogical subset. The test header keeps the fix `import datetime as _tdt` in `_DATA`. v2 migration notes: month-day guessing (U03) is a lure that breaks rule R2 in every variant, so R2a names it. The audit logger (I1, U04) and the month table (I4) are not needed by parse_rows, so the format line ('only the function and any helpers it needs') bans them directly, as C01 does for its sorting helper; the current-year assumption (I5) would give false dates for a target whose dates carry a year. Plate-reader and gene names (I2, I3) are misleading labels but harmless to run, so they are UNCLEAR wherever no ban is stated, as the identifier bans in C01 are; requirement-stated-full and counter-stated-full gained one user sentence each that states the ban. Counter T1 checks moved to must_not_transfer.",
+  "migration": {
+    "from_schema": "seed-card-v1",
+    "from_file": "data/seeds_v1_draft/C02_typed_tsv_parser.json",
+    "date": "2026-11-13",
+    "changes": [
+      "requirement-stated-full: appended the user sentence 'Leave its names and the story around it out of our code.' before the example",
+      "counter-stated-full: appended the user sentence 'Keep their names out of our code.' before the example",
+      "reference_solutions and copy_answers moved into variants; new answers are model_drafted",
+      "counter T1 moved from must_transfer to must_not_transfer (ids kept)",
+      "R2a names U03; L1 names I1 and U04",
+      "check basis records that no longer match the v2 licence (role_implied leak bans in the requirement and counter variants) were dropped; the licence entry is the authority",
+      "author -> author_id; provenance.provenance_group_id -> provenance_group_id; human_review rebuilt per variant"
+    ]
+  }
+}

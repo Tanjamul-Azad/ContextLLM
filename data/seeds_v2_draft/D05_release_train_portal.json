@@ -1,0 +1,1832 @@
+{
+  "schema": "seed-card-v2",
+  "id": "D05_release_train_portal",
+  "status": "draft",
+  "status_note": "Draft. Spans and licences are the author's proposal (drafted by a model in the v2 migration and not yet checked by the author) and are pending two blind reviewers. Not for evaluation.",
+  "created": "2026-11-05",
+  "updated": "2026-11-13",
+  "author_id": "tanjamul",
+  "model_assistance": "drafted",
+  "model_assistance_log": {
+    "model": "claude-opus-5-5",
+    "date": "2026-11-13",
+    "scope": "v2 migration: source_spans, relation_units, all licences, check-to-unit links, the format-line fix, and every answer whose origin is model_drafted.",
+    "prompt_ref": "WP0.2 migration task (MASTER-PLAN Section 4.1; docs/seed-spec-v2.md Section 13 item 7)",
+    "human_edits": null,
+    "v1_origin": "v1 card written by the author on 2026-11-05; model assistance in v1 was not recorded."
+  },
+  "family": "decision",
+  "domain": "public_sector_services",
+  "domain_note": "software release management / public data",
+  "relation_family": "fixed_cadence_release",
+  "template_group_id": "TG-D05",
+  "provenance_group_id": "PG-firefox-release-train",
+  "provenance": {
+    "source_type": "software_practice",
+    "case": "Mozilla Firefox rapid release (release train), from 2011",
+    "references": [
+      {
+        "citation": "Khomh, F., Dhaliwal, T., Zou, Y., Adams, B. (2012). Do faster releases improve software quality? An empirical case study of Mozilla Firefox. MSR 2012.",
+        "doi": "10.1109/MSR.2012.6224279"
+      },
+      {
+        "citation": "Mozilla Wiki, Rapid Release.",
+        "url": "https://wiki.mozilla.org/RapidRelease"
+      }
+    ],
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "The City of Khulna runs an open data portal. Four staff publish datasets that nine city departments send in at irregular times, and users complain that they never know when new data will appear. Plan the portal's release process for 2027.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "cadence_weeks is the planned number of weeks between releases, a whole number from 2 to 13.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "json_all_int",
+              "cadence_weeks"
+            ]
+          },
+          {
+            "id": "R1b",
+            "spec": [
+              "json_all_ge",
+              "cadence_weeks",
+              2
+            ]
+          },
+          {
+            "id": "R1c",
+            "spec": [
+              "json_all_le",
+              "cadence_weeks",
+              13
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "if_dataset_not_ready is ship_without_it or delay_release.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "json_in",
+              "if_dataset_not_ready",
+              [
+                "ship_without_it",
+                "delay_release"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "releases_in_2027 is between 4 and 26.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "json_all_ge",
+              "releases_in_2027",
+              4
+            ]
+          },
+          {
+            "id": "R3b",
+            "spec": [
+              "json_all_le",
+              "releases_in_2027",
+              26
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "List 2 to 4 stages a dataset passes through before release.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "json_len_between",
+              "stages",
+              2,
+              4
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with JSON only, in this shape: {\"cadence_weeks\": 3, \"if_dataset_not_ready\": \"...\", \"releases_in_2027\": 8, \"stages\": [\"...\"]}, where if_dataset_not_ready is exactly one of the words ship_without_it or delay_release."
+  },
+  "source_example": {
+    "text": "In 2011 Mozilla moved Firefox from a release every year or so to a rapid release cycle of six weeks. Firefox 5, shipped in June 2011, was the first version made under the new process. New code entered a channel called Nightly, moved after six weeks to Aurora, then to Beta, and finally to Release. Every six weeks each channel moved up one step, like carriages on a train that leaves on time. A feature that was not ready simply missed the train and waited for the next one, so the release date never moved. Release managers could still approve small, urgent fixes for a version already in Beta; these requests were called uplifts. The aim was to get finished work to users quickly and to make release dates predictable for users and add-on developers. Some enterprise customers complained that the fast pace left them no time to test, and Mozilla added an Extended Support Release in 2012. Google Chrome had used a six-week schedule since 2010; Firefox moved to a four-week cycle in 2020 and Chrome followed in 2021. Mozilla later replaced the Aurora channel with Developer Edition. The approach is now widely known as the release train model.",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Channel names Nightly and Aurora",
+        "leak_terms": [
+          "Nightly",
+          "Aurora"
+        ],
+        "control": {
+          "from": "Aurora",
+          "to": "Comet",
+          "leak_terms": [
+            "Nightly",
+            "Comet"
+          ]
+        }
+      },
+      {
+        "id": "I2",
+        "text": "Uplift requests",
+        "leak_terms": [
+          "uplifts"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "Product and company names",
+        "leak_terms": [
+          "Firefox",
+          "Mozilla",
+          "Chrome"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "Extended Support Release",
+        "leak_terms": [
+          "Extended Support Release"
+        ]
+      },
+      {
+        "id": "I5",
+        "text": "Add-on developers",
+        "leak_terms": [
+          "add-on"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "predictable release dates",
+        "source_quote": "make release dates predictable",
+        "target_quote": "never know when new data will appear"
+      },
+      {
+        "feature": "work arriving unready",
+        "source_quote": "A feature that was not ready",
+        "target_quote": "send in at irregular times"
+      },
+      {
+        "feature": "stages before release",
+        "source_quote": "moved after six weeks to Aurora, then to Beta",
+        "target_quote": "stages a dataset passes through"
+      },
+      {
+        "feature": "a regular release cycle",
+        "source_quote": "rapid release cycle of six weeks",
+        "target_quote": "weeks between releases"
+      }
+    ]
+  },
+  "relation_units": [
+    {
+      "id": "U01",
+      "what": "Release on a fixed date; work that is not ready misses the release and waits for the next one",
+      "main": true
+    },
+    {
+      "id": "U02",
+      "what": "A fixed release cadence of six weeks (four weeks in later years)",
+      "main": false
+    },
+    {
+      "id": "U03",
+      "what": "Staged channels: work moves one step through a series of channels each cycle",
+      "main": false
+    },
+    {
+      "id": "U04",
+      "what": "Small urgent fixes can still be approved for a version in the last stage",
+      "main": false
+    },
+    {
+      "id": "U05",
+      "what": "Aim: deliver finished work quickly and make release dates predictable",
+      "main": false
+    },
+    {
+      "id": "U06",
+      "what": "A long-term support release for users who need time to test",
+      "main": false
+    },
+    {
+      "id": "U07",
+      "what": "History: the first version under the process and the later renaming of a channel",
+      "main": false
+    }
+  ],
+  "source_spans": [
+    {
+      "id": "S01",
+      "text": "In 2011 ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S02",
+      "text": "Mozilla",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S03",
+      "text": " moved ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S04",
+      "text": "Firefox",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S05",
+      "text": " from a release every year or so to a rapid release cycle of six weeks. ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S06",
+      "text": "Firefox",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S07",
+      "text": " 5, shipped in June 2011, was the first version made under the new process. ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S08",
+      "text": "New code entered a channel called ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S09",
+      "text": "Nightly",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S10",
+      "text": ", moved after six weeks to ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S11",
+      "text": "Aurora",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S12",
+      "text": ", then to Beta, and finally to Release. ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S13",
+      "text": "Every six weeks each channel moved up one step, like carriages on a train that leaves on time. ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S14",
+      "text": "A feature that was not ready simply missed the train and waited for the next one, so the release date never moved. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S15",
+      "text": "Release managers could still approve small, urgent fixes for a version already in Beta; these requests were called ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S16",
+      "text": "uplifts",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S17",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S18",
+      "text": "The aim was to get finished work to users quickly and to make release dates predictable for users and ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S19",
+      "text": "add-on",
+      "kind": "detail",
+      "unit": "I5"
+    },
+    {
+      "id": "S20",
+      "text": " developers. ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S21",
+      "text": "Some enterprise customers complained that the fast pace left them no time to test, and ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S22",
+      "text": "Mozilla",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S23",
+      "text": " added an ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S24",
+      "text": "Extended Support Release",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S25",
+      "text": " in 2012. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S26",
+      "text": "Google ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S27",
+      "text": "Chrome",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S28",
+      "text": " had used a six-week schedule since 2010; ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S29",
+      "text": "Firefox",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S30",
+      "text": " moved to a four-week cycle in 2020 and ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S31",
+      "text": "Chrome",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S32",
+      "text": " followed in 2021. ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S33",
+      "text": "Mozilla",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S34",
+      "text": " later replaced the ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S35",
+      "text": "Aurora",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S36",
+      "text": " channel with Developer Edition. ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S37",
+      "text": "The approach is now widely known as the release train model.",
+      "kind": "relation",
+      "unit": "U01"
+    }
+  ],
+  "relation": "Release on a fixed schedule; work that is not ready waits for the next release instead of moving the date.",
+  "marker": {
+    "what": "unready work waits for the next train",
+    "spec": [
+      "json_in",
+      "if_dataset_not_ready",
+      [
+        "ship_without_it"
+      ]
+    ],
+    "units": [
+      "U01"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "I read how a browser maker ships its releases and wonder if it could help us. Borrow the idea, not its details.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "Borrow the idea"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The six-week cadence is one concrete form of the idea; the portal sets its own cadence."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "ship_without_it"
+            ]
+          ],
+          "what": "An unready dataset waits for the next release; the date does not move",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "missed the train and waited for the next one"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 13, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 6, \"stages\": [\"Submitted\", \"Validated\", \"Scheduled for the next release\"]}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 6, \"stages\": [\"Submitted\", \"Validated\", \"Scheduled for the next release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "The release waits for late data: the idea is not used."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 13, \"stages\": [\"Nightly intake from department\", \"Checked and documented\", \"Published\"]}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "The browser's channel name used for a stage."
+        },
+        {
+          "id": "X3",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 30, \"stages\": [\"Submitted\", \"Validated\", \"Scheduled for the next release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3b"
+          ],
+          "origin": "model_drafted",
+          "note": "30 releases, above the limit of 26."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "I read this about how a browser maker ships its releases when our users were complaining again:\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "when our users were complaining again",
+            "implication": "relation_transfer"
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "users complain that they never know when new data will appear",
+            "implication": "source_specific_fact",
+            "note": "The portal's users are data users; add-on developers do not exist in the target."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "ship_without_it"
+            ]
+          ],
+          "what": "An unready dataset waits for the next release; the date does not move",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "missed the train and waited for the next one"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 13, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 6, \"stages\": [\"Submitted\", \"Validated\", \"Scheduled for the next release\"]}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 6, \"stages\": [\"Submitted\", \"Validated\", \"Scheduled for the next release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "The release waits for late data: the idea is not used."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 13, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published and announced to add-on developers\"]}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Add-on developers, who do not exist for a city data portal."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our IT director wants the portal to follow the browser maker's model exactly: a six-week cadence, and a dataset that is not ready waits for the next release. Use none of the browser's names.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Use none of the browser's names"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "a six-week cadence"
+          },
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "a dataset that is not ready waits for the next release"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "users complain that they never know when new data will appear",
+            "implication": "source_specific_fact",
+            "note": "The portal's users are data users; add-on developers do not exist in the target."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_eq_num",
+            "cadence_weeks",
+            6
+          ],
+          "what": "Six-week cadence",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "a six-week cadence"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "ship_without_it"
+            ]
+          ],
+          "what": "An unready dataset waits for the next release; the date does not move",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "a dataset that is not ready waits for the next release"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "Use none of the browser's names"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "Use none of the browser's names"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "Use none of the browser's names"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "Use none of the browser's names"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 9, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 9, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Four-week cadence instead of the required six."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 9, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T2"
+          ],
+          "origin": "model_drafted",
+          "note": "The release waits for late data, against the required rule."
+        },
+        {
+          "id": "X3",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Received from department\", \"Aurora review\", \"Published\"]}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "The browser's channel name used for a stage."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our IT director has already announced to the mayor's office that the portal will run on the browser release schedule described below.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "run on the browser release schedule described below",
+            "implication": "named_part_transfer",
+            "note": "v1 marked this ambiguous because the source gives six and later four weeks; the unit covers both and T1 accepts both, so the label itself is not in doubt."
+          },
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "run on the browser release schedule described below",
+            "implication": "named_part_transfer"
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "users complain that they never know when new data will appear",
+            "implication": "source_specific_fact",
+            "note": "The portal's users are data users; add-on developers do not exist in the target."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "cadence_weeks",
+            [
+              4,
+              6
+            ]
+          ],
+          "what": "The browser cadence: six weeks, or four weeks after 2020",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "run on the browser release schedule"
+          }
+        },
+        {
+          "id": "T2",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "ship_without_it"
+            ]
+          ],
+          "what": "An unready dataset waits for the next release; the date does not move",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "run on the browser release schedule"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 13, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "origin": "model_drafted",
+          "note": "The later four-week cadence also counts as the browser schedule."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 6, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "An eight-week cadence is not the browser schedule."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 13, \"stages\": [\"Intake\", \"Quality review\", \"Release\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T2"
+          ],
+          "origin": "model_drafted",
+          "note": "The release waits for late data, unlike the browser schedule."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The state archive tried the release train below for its records portal. Several of its releases went out half-empty because the big datasets kept missing the train. Don't do it like this: a release should wait until its planned datasets are ready. Keep the browser's names out of our plan.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Keep the browser's names out of our plan"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "a release should wait until its planned datasets are ready"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Only shipping without late data is flagged; a fixed cadence stays free."
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "users complain that they never know when new data will appear",
+            "implication": "source_specific_fact",
+            "note": "The portal's users are data users; add-on developers do not exist in the target."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "delay_release"
+            ]
+          ],
+          "what": "The release waits for its planned datasets instead of shipping without them",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "a release should wait until its planned datasets are ready"
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 6, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 12, \"stages\": [\"Submitted\", \"Validated\", \"Released when complete\"]}",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U02"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 6, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Ships without the late datasets, the flagged practice."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 12, \"stages\": [\"Submitted\", \"Validated\", \"Released to users and add-on developers\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Add-on developers, who do not exist for a city data portal."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "T1",
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The state archive tried the release train below for its records portal, and several of its releases went out half-empty because the big datasets kept missing the train.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this ambiguous: half-empty releases could also be fixed by a longer cadence while still shipping without late data. Proposed MUST_NOT; reviewers decide.",
+            "evidence": "several of its releases went out half-empty because the big datasets kept missing the train",
+            "implication": "avoid_flagged_feature"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Only the half-empty releases are flagged; a fixed cadence stays free."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a browser name or term in a stage label is odd for a city data portal but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but under the v2 rule a product name or programme name in a stage label is odd, not false, so reviewers decide. Proposed MUST_NOT as a source-specific fact.",
+            "evidence": "The City of Khulna runs an open data portal",
+            "implication": "source_specific_fact"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "users complain that they never know when new data will appear",
+            "implication": "source_specific_fact",
+            "note": "The portal's users are data users; add-on developers do not exist in the target."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_in",
+            "if_dataset_not_ready",
+            [
+              "delay_release"
+            ]
+          ],
+          "what": "The release waits for its planned datasets instead of shipping without them",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "ambiguous",
+            "quote": "went out half-empty"
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Nightly/Aurora stage names",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No uplifts",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Firefox/Mozilla/Chrome",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No Extended Support Release",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No add-on developers",
+          "units": [
+            "I5"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"cadence_weeks\": 8, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 6, \"stages\": [\"Received from department\", \"Checked and documented\", \"Published\"]}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 12, \"stages\": [\"Submitted\", \"Validated\", \"Released when complete\"]}",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U02"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"cadence_weeks\": 4, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 12, \"stages\": [\"Submitted\", \"Validated\", \"Released to users and add-on developers\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Add-on developers, who do not exist for a city data portal."
+        },
+        {
+          "id": "X2",
+          "text": "{\"cadence_weeks\": 1, \"if_dataset_not_ready\": \"delay_release\", \"releases_in_2027\": 12, \"stages\": [\"Submitted\", \"Validated\", \"Released when complete\"]}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R1",
+          "fails": [
+            "R1b"
+          ],
+          "origin": "model_drafted",
+          "note": "A one-week cadence, below the allowed 2 weeks."
+        },
+        {
+          "id": "C1",
+          "text": "{\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it\", \"releases_in_2027\": 8, \"stages\": [\"Nightly\", \"Aurora\", \"Beta\", \"Release\"]}",
+          "kind": "copy",
+          "fails": [
+            "T1",
+            "L1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "Not built for this draft; a partial or wrong-fit portal (for example, a legal duty to publish each dataset within days) still needs a crisp check."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft; a partial or wrong-fit portal (for example, a legal duty to publish each dataset within days) still needs a crisp check."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "human_review": {
+    "reviewers": [],
+    "variants": {
+      "analogy-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      }
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The implied requirement is truly ambiguous on cadence because the source gives both six and four weeks; the check accepts both. The implied counter is ambiguous: 'half-empty releases' could also be fixed by a longer cadence while still shipping without late data. Stage names like Beta and Release are generic and are not checked. v2 migration notes: the format line no longer shows the placeholder 'ship_without_it or delay_release' as a value (models copied it literally); the allowed values are now given in words. Its cadence dummy changed from 6 to 3, because 6 is the source's cadence and the required value in requirement-stated-full, so a model that copied the format shape passed T1 there without using the example. Browser names and terms (I1 to I4) in a stage label are odd, not false, so they are UNCLEAR wherever no ban is stated (counter-stated-full gained one user sentence that states it); add-on developers (I5) do not exist for a city portal and stay MUST_NOT. In requirement-implied-full the cadence unit is MUST, not UNCLEAR: the unit covers both the six-week and the later four-week cadence and T1 accepts both. Counter T1 checks moved to must_not_transfer.",
+  "migration": {
+    "from_schema": "seed-card-v1",
+    "from_file": "data/seeds_v1_draft/D05_release_train_portal.json",
+    "date": "2026-11-13",
+    "changes": [
+      "target.format changed. Before: Reply with JSON only, in this shape: {\"cadence_weeks\": 6, \"if_dataset_not_ready\": \"ship_without_it or delay_release\", \"releases_in_2027\": 8, \"stages\": [\"...\"]} After: Reply with JSON only, in this shape: {\"cadence_weeks\": 3, \"if_dataset_not_ready\": \"...\", \"releases_in_2027\": 8, \"stages\": [\"...\"]}, where if_dataset_not_ready is exactly one of the words ship_without_it or delay_release.",
+      "counter-stated-full: appended the user sentence 'Keep the browser's names out of our plan.' before the example",
+      "counter T1 moved from must_transfer to must_not_transfer (ids kept)",
+      "reference_solutions and copy_answers moved into variants; new answers are model_drafted",
+      "author -> author_id; provenance.provenance_group_id -> provenance_group_id; human_review rebuilt per variant"
+    ]
+  }
+}

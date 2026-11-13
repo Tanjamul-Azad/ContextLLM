@@ -1,0 +1,1816 @@
+{
+  "schema": "seed-card-v2",
+  "id": "C05_simpson_methods",
+  "status": "draft",
+  "status_note": "Draft. Spans and licences are the author's proposal (drafted by a model in the v2 migration and not yet checked by the author) and are pending two blind reviewers. Not for evaluation.",
+  "created": "2026-11-05",
+  "updated": "2026-11-13",
+  "author_id": "tanjamul",
+  "model_assistance": "drafted",
+  "model_assistance_log": {
+    "model": "claude-opus-5-5",
+    "date": "2026-11-13",
+    "scope": "v2 migration: source_spans, relation_units, all licences, check-to-unit links, the user-sentence edits, and every answer whose origin is model_drafted.",
+    "prompt_ref": "WP0.2 migration task (MASTER-PLAN Section 4.1; docs/seed-spec-v2.md Section 13 item 7)",
+    "human_edits": null,
+    "v1_origin": "v1 card written by the author on 2026-11-05; model assistance in v1 was not recorded."
+  },
+  "family": "code",
+  "domain": "teaching_and_learning",
+  "domain_note": "statistics / education data",
+  "relation_family": "stratified_comparison",
+  "template_group_id": "TG-C05",
+  "provenance_group_id": "PG-berkeley-admissions",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "UC Berkeley 1973 graduate admissions (Simpson's paradox)",
+    "references": [
+      {
+        "citation": "Bickel, P. J., Hammel, E. A., O'Connell, J. W. (1975). Sex bias in graduate admissions: Data from Berkeley. Science 187(4175), 398-404.",
+        "doi": "10.1126/science.187.4175.398"
+      }
+    ],
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our university tried two ways of teaching first-year calculus in 2026: method A (flipped classroom) and method B (traditional lectures). Sections differ a lot in how hard their students find the course. Each row of the data is a tuple (section, method, passed, enrolled). Write a Python function better_method(rows) that returns \"A\" or \"B\" for the method with better results, or \"tie\" when neither is better.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Return exactly one of \"A\", \"B\" or \"tie\".",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "py_test",
+              "LABELS"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Rows may come in any order.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "ORDER"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "If both methods have identical pass counts and enrolment in every section, return tie.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "py_test",
+              "TIE"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "When one method has the higher pass rate in every section and overall, return that method.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "py_test",
+              "SIMPLE"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "func": "better_method",
+  "tests": {
+    "_D": "import random\nD = [('S1', 'A', 90, 100), ('S1', 'B', 19, 20), ('S2', 'A', 6, 20), ('S2', 'B', 35, 100)]\nE = [('S1', 'A', 18, 20), ('S1', 'B', 15, 20), ('S2', 'A', 12, 20), ('S2', 'B', 8, 20)]\n",
+    "LABELS": "{_D}assert better_method(D) in ('A', 'B', 'tie') and better_method(E) in ('A', 'B', 'tie')\n",
+    "SIMPLE": "{_D}assert better_method(E) == 'A'\nF = [(s, {'A': 'B', 'B': 'A'}[m], p, n) for s, m, p, n in E]\nassert better_method(F) == 'B'\n",
+    "ORDER": "{_D}x = list(D)\nrandom.Random(3).shuffle(x)\nassert better_method(x) == better_method(D)\ny = list(E)\nrandom.Random(5).shuffle(y)\nassert better_method(y) == better_method(E)\n",
+    "TIE": "{_D}T = [('S1', 'A', 10, 20), ('S1', 'B', 10, 20), ('S2', 'A', 5, 10), ('S2', 'B', 5, 10)]\nassert better_method(T) == 'tie'\n",
+    "STRATIFIED": "{_D}assert better_method(D) == 'B'\n",
+    "POOLED": "{_D}assert better_method(D) == 'A'\n"
+  },
+  "source_example": {
+    "text": "In 1973 the graduate division of the University of California, Berkeley, admitted about 44 percent of men who applied but only about 35 percent of women. The numbers looked like clear evidence of bias against women. Peter Bickel, Eugene Hammel and J. William O'Connell examined the data department by department and published the result in Science in 1975. In most departments, women were admitted at a rate similar to or higher than men. The overall gap appeared because women applied more often to departments that admitted few applicants of either sex, while men applied more often to departments with high admission rates. Pooling all departments mixed two things: who applied where, and how each department treated applicants. This is an instance of Simpson's paradox, where a pattern in every group reverses or disappears when the groups are combined. The authors concluded that the pooled table did not show bias by the departments, although it raised other questions about why applicants chose as they did. The data are often taught with six large departments labelled A to F. The code below is the simple pooled comparison that produced the original headline.\n\n```python\ndef admission_rates(applications):\n    \"\"\"applications: list of (department, sex, admitted, applied). Pooled rate per sex.\"\"\"\n    totals = {}\n    for dept, sex, admitted, applied in applications:\n        a, n = totals.get(sex, (0, 0))\n        totals[sex] = (a + admitted, n + applied)\n    return {sex: a / n for sex, (a, n) in totals.items()}\n\n\ndef favoured(applications):\n    rates = admission_rates(applications)\n    return max(rates, key=rates.get)\n```",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Berkeley",
+        "leak_terms": [
+          "Berkeley"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Sex of applicants",
+        "leak_terms": [
+          "sex",
+          "men",
+          "women"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "Admissions vocabulary",
+        "leak_terms": [
+          "admitted",
+          "admission",
+          "applied",
+          "department"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "1973 figures",
+        "leak_regex": "\\b1973\\b|\\b44 percent\\b",
+        "control": {
+          "from": "44 percent",
+          "to": "45 percent",
+          "leak_regex": "\\b1973\\b|\\b45 percent\\b"
+        }
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "comparing pass rates of two groups",
+        "source_quote": "admitted about 44 percent of men",
+        "target_quote": "method with better results"
+      },
+      {
+        "feature": "data split into subgroups",
+        "source_quote": "department by department",
+        "target_quote": "Sections differ a lot"
+      },
+      {
+        "feature": "rows of counts",
+        "source_quote": "list of (department, sex, admitted, applied)",
+        "target_quote": "(section, method, passed, enrolled)"
+      },
+      {
+        "feature": "a university setting",
+        "source_quote": "University of California",
+        "target_quote": "Our university"
+      }
+    ]
+  },
+  "relation_units": [
+    {
+      "id": "U01",
+      "what": "Compare the groups within each stratum before pooling, because pooling can reverse the answer",
+      "main": true
+    },
+    {
+      "id": "U02",
+      "what": "Pooled comparison: add the counts over all strata and compare the overall rates",
+      "main": false
+    },
+    {
+      "id": "U03",
+      "what": "Why pooling misled: the groups were spread differently over strata with different base rates",
+      "main": false
+    },
+    {
+      "id": "U04",
+      "what": "Conclusion: the pooled table does not show bias, though other questions remain",
+      "main": false
+    }
+  ],
+  "source_spans": [
+    {
+      "id": "S01",
+      "text": "In ",
+      "kind": "context"
+    },
+    {
+      "id": "S02",
+      "text": "1973",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S03",
+      "text": " the graduate division of the University of California, ",
+      "kind": "context"
+    },
+    {
+      "id": "S04",
+      "text": "Berkeley",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S05",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S06",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S07",
+      "text": " about ",
+      "kind": "context"
+    },
+    {
+      "id": "S08",
+      "text": "44 percent",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S09",
+      "text": " of ",
+      "kind": "context"
+    },
+    {
+      "id": "S10",
+      "text": "men",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S11",
+      "text": " who ",
+      "kind": "context"
+    },
+    {
+      "id": "S12",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S13",
+      "text": " but only about 35 percent of ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S14",
+      "text": "women",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S15",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S16",
+      "text": "The numbers looked like clear evidence of bias against ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S17",
+      "text": "women",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S18",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S19",
+      "text": "Peter Bickel, Eugene Hammel and J. William O'Connell examined the data ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S20",
+      "text": "department",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S21",
+      "text": " by ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S22",
+      "text": "department",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S23",
+      "text": " and published the result in Science in 1975. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S24",
+      "text": "In most departments, ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S25",
+      "text": "women",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S26",
+      "text": " were ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S27",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S28",
+      "text": " at a rate similar to or higher than ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S29",
+      "text": "men",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S30",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S31",
+      "text": "The overall gap appeared because ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S32",
+      "text": "women",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S33",
+      "text": " ",
+      "kind": "context"
+    },
+    {
+      "id": "S34",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S35",
+      "text": " more often to departments that ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S36",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S37",
+      "text": " few applicants of either ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S38",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S39",
+      "text": ", while ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S40",
+      "text": "men",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S41",
+      "text": " ",
+      "kind": "context"
+    },
+    {
+      "id": "S42",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S43",
+      "text": " more often to departments with high ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S44",
+      "text": "admission",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S45",
+      "text": " rates. ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S46",
+      "text": "Pooling all departments mixed two things: who ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S47",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S48",
+      "text": " where, and how each ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S49",
+      "text": "department",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S50",
+      "text": " treated applicants. This is an instance of Simpson's paradox, where a pattern in every group reverses or disappears when the groups are combined. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S51",
+      "text": "The authors concluded that the pooled table did not show bias by the departments, although it raised other questions about why applicants chose as they did. ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S52",
+      "text": "The data are often taught with six large departments labelled A to F. ",
+      "kind": "context"
+    },
+    {
+      "id": "S53",
+      "text": "The code below is the simple pooled comparison that produced the original headline.",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S54",
+      "text": "\n\n```python\ndef ",
+      "kind": "context"
+    },
+    {
+      "id": "S55",
+      "text": "admission",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S56",
+      "text": "_rates(applications):\n",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S57",
+      "text": "    \"\"\"applications: list of (",
+      "kind": "context"
+    },
+    {
+      "id": "S58",
+      "text": "department",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S59",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S60",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S61",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S62",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S63",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S64",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S65",
+      "text": "). Pooled rate per ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S66",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S67",
+      "text": ".\"\"\"\n",
+      "kind": "context"
+    },
+    {
+      "id": "S68",
+      "text": "    totals = {}\n    for dept, ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S69",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S70",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S71",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S72",
+      "text": ", ",
+      "kind": "context"
+    },
+    {
+      "id": "S73",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S74",
+      "text": " in applications:\n        a, n = totals.get(",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S75",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S76",
+      "text": ", (0, 0))\n        totals[",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S77",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S78",
+      "text": "] = (a + ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S79",
+      "text": "admitted",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S80",
+      "text": ", n + ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S81",
+      "text": "applied",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S82",
+      "text": ")\n    return {",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S83",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S84",
+      "text": ": a / n for ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S85",
+      "text": "sex",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S86",
+      "text": ", (a, n) in totals.items()}\n",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S87",
+      "text": "\n\n",
+      "kind": "context"
+    },
+    {
+      "id": "S88",
+      "text": "def favoured(applications):\n    rates = ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S89",
+      "text": "admission",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S90",
+      "text": "_rates(applications)\n    return max(rates, key=rates.get)\n",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S91",
+      "text": "```",
+      "kind": "context"
+    }
+  ],
+  "relation": "Compare groups within each stratum before pooling, because pooling can reverse the answer.",
+  "marker": {
+    "what": "pooled comparison",
+    "spec": [
+      "py_test",
+      "POOLED"
+    ],
+    "units": [
+      "U02"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "A statistics lecturer told me to look at the case below before comparing our methods. Borrow the idea, not its details.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "Borrow the idea"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The pooled code is the story's mistake. An answer that pools fails T1 because it does not use U01, not because U02 is banned."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "STRATIFIED"
+          ],
+          "what": "Compare within sections: B wins every section, so B",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "examined the data department by department"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(section, {}).get(method, (0, 0))\n        by_section[section][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(\"all\", {}).get(method, (0, 0))\n        by_section[\"all\"][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "All rows go into one stratum, so the comparison is pooled."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, sex, passed, enrolled in rows:\n        cells[(section, sex)][0] += passed\n        cells[(section, sex)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I2",
+          "fails": [
+            "L2"
+          ],
+          "origin": "model_drafted",
+          "note": "Names the method column 'sex', a detail of the source."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"B\" if score < 0 else \"A\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3a"
+          ],
+          "origin": "model_drafted",
+          "note": "Never returns tie, against rule R3."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef admission_rates(applications):\n    totals = {}\n    for dept, sex, admitted, applied in applications:\n        a, n = totals.get(sex, (0, 0))\n        totals[sex] = (a + admitted, n + applied)\n    return {sex: a / n for sex, (a, n) in totals.items()}\n\n\ndef better_method(rows):\n    rates = admission_rates(rows)\n    if rates[\"A\"] == rates[\"B\"]:\n        return \"tie\"\n    return max(rates, key=rates.get)\n```",
+          "kind": "copy",
+          "fails": [
+            "T1",
+            "L2",
+            "L3"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "A statistics lecturer sent me the case below when I said method A looked better overall:\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "when I said method A looked better overall",
+            "implication": "relation_transfer"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The pooled code is the story's mistake. An answer that pools fails T1 because it does not use U01, not because U02 is banned."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but a Berkeley mention in a comment is an attribution, odd but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear: naming the method column 'sex' mislabels the data, but the code still runs correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: admissions words as names for passed, enrolled and section mislabel the data but run correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact",
+            "note": "The 1973 figures are false for the 2026 calculus data."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "STRATIFIED"
+          ],
+          "what": "Compare within sections",
+          "units": [
+            "U01"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "examined the data department by department"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(section, {}).get(method, (0, 0))\n        by_section[section][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(\"all\", {}).get(method, (0, 0))\n        by_section[\"all\"][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "All rows go into one stratum, so the comparison is pooled."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0  # unlike the 1973 pooled figures\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I4",
+          "fails": [
+            "L4"
+          ],
+          "origin": "model_drafted",
+          "note": "Copies the 1973 date into a comment."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"B\" if score < 0 else \"A\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "R3",
+          "fails": [
+            "R3a"
+          ],
+          "origin": "model_drafted",
+          "note": "Never returns tie, against rule R3."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef admission_rates(applications):\n    totals = {}\n    for dept, sex, admitted, applied in applications:\n        a, n = totals.get(sex, (0, 0))\n        totals[sex] = (a + admitted, n + applied)\n    return {sex: a / n for sex, (a, n) in totals.items()}\n\n\ndef better_method(rows):\n    rates = admission_rates(rows)\n    if rates[\"A\"] == rates[\"B\"]:\n        return \"tie\"\n    return max(rates, key=rates.get)\n```",
+          "kind": "copy",
+          "fails": [
+            "T1",
+            "L2",
+            "L3"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The faculty board wants the same headline figure as the code below produces: compare the pooled pass rates across all sections, exactly as it does. Use our own names for everything in the code.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Use our own names for everything in the code"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "compare the pooled pass rates across all sections"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Use our own names for everything in the code",
+            "note": "Also false for the 2026 data."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "POOLED"
+          ],
+          "what": "Pooled comparison: A",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "compare the pooled pass rates across all sections"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    totals = {\"A\": [0, 0], \"B\": [0, 0]}\n    for section, method, passed, enrolled in rows:\n        totals[method][0] += passed\n        totals[method][1] += enrolled\n    ra = totals[\"A\"][0] / totals[\"A\"][1]\n    rb = totals[\"B\"][0] / totals[\"B\"][1]\n    return \"A\" if ra > rb else \"B\" if rb > ra else \"tie\"\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef better_method(rows):\n    passed = {\"A\": 0, \"B\": 0}\n    enrolled = {\"A\": 0, \"B\": 0}\n    for _section, method, p, n in rows:\n        passed[method] += p\n        enrolled[method] += n\n    diff = passed[\"A\"] * enrolled[\"B\"] - passed[\"B\"] * enrolled[\"A\"]\n    return \"A\" if diff > 0 else \"B\" if diff < 0 else \"tie\"\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    passed = {\"A\": 0, \"B\": 0}\n    enrolled = {\"A\": 0, \"B\": 0}\n    for _section, method, p, n in rows:\n        passed[method] += p / n\n        enrolled[method] += 1\n    diff = passed[\"A\"] * enrolled[\"B\"] - passed[\"B\"] * enrolled[\"A\"]\n    return \"A\" if diff > 0 else \"B\" if diff < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Averages the section rates instead of pooling the counts."
+        },
+        {
+          "id": "X2",
+          "text": "```python\ndef better_method(rows):\n    totals = {\"A\": [0, 0], \"B\": [0, 0]}\n    for department, method, passed, enrolled in rows:\n        totals[method][0] += passed\n        totals[method][1] += enrolled\n    ra = totals[\"A\"][0] / totals[\"A\"][1]\n    rb = totals[\"B\"][0] / totals[\"B\"][1]\n    return \"A\" if ra > rb else \"B\" if rb > ra else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I3",
+          "fails": [
+            "L3"
+          ],
+          "origin": "model_drafted",
+          "note": "Names the section column 'department', an admissions word from the source."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef admission_rates(applications):\n    totals = {}\n    for dept, sex, admitted, applied in applications:\n        a, n = totals.get(sex, (0, 0))\n        totals[sex] = (a + admitted, n + applied)\n    return {sex: a / n for sex, (a, n) in totals.items()}\n\n\ndef better_method(rows):\n    rates = admission_rates(rows)\n    if rates[\"A\"] == rates[\"B\"]:\n        return \"tie\"\n    return max(rates, key=rates.get)\n```",
+          "kind": "copy",
+          "fails": [
+            "L2",
+            "L3"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The faculty board's annual report has always used the pooled comparison in the code below, and this year's figure has to be comparable with earlier years.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "has always used the pooled comparison in the code below",
+            "implication": "named_part_transfer"
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but a Berkeley mention in a comment is an attribution, odd but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear: naming the method column 'sex' mislabels the data, but the code still runs correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: admissions words as names for passed, enrolled and section mislabel the data but run correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact",
+            "note": "The 1973 figures are false for the 2026 calculus data."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "POOLED"
+          ],
+          "what": "Pooled comparison: A",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "has to be comparable with earlier years"
+          }
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    totals = {\"A\": [0, 0], \"B\": [0, 0]}\n    for section, method, passed, enrolled in rows:\n        totals[method][0] += passed\n        totals[method][1] += enrolled\n    ra = totals[\"A\"][0] / totals[\"A\"][1]\n    rb = totals[\"B\"][0] / totals[\"B\"][1]\n    return \"A\" if ra > rb else \"B\" if rb > ra else \"tie\"\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef better_method(rows):\n    passed = {\"A\": 0, \"B\": 0}\n    enrolled = {\"A\": 0, \"B\": 0}\n    for _section, method, p, n in rows:\n        passed[method] += p\n        enrolled[method] += n\n    diff = passed[\"A\"] * enrolled[\"B\"] - passed[\"B\"] * enrolled[\"A\"]\n    return \"A\" if diff > 0 else \"B\" if diff < 0 else \"tie\"\n```",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    passed = {\"A\": 0, \"B\": 0}\n    enrolled = {\"A\": 0, \"B\": 0}\n    for _section, method, p, n in rows:\n        passed[method] += p / n\n        enrolled[method] += 1\n    diff = passed[\"A\"] * enrolled[\"B\"] - passed[\"B\"] * enrolled[\"A\"]\n    return \"A\" if diff > 0 else \"B\" if diff < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Averages the section rates instead of pooling the counts."
+        },
+        {
+          "id": "X2",
+          "text": "```python\ndef better_method(rows):\n    passed = {\"A\": 0, \"B\": 0}\n    enrolled = {\"A\": 0, \"B\": 0}\n    for _section, method, p, n in rows:\n        passed[method] += p\n        enrolled[method] += n\n    # same pooled headline as the 1973 table\n    diff = passed[\"A\"] * enrolled[\"B\"] - passed[\"B\"] * enrolled[\"A\"]\n    return \"A\" if diff > 0 else \"B\" if diff < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I4",
+          "fails": [
+            "L4"
+          ],
+          "origin": "model_drafted",
+          "note": "Copies the 1973 date into a comment."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef admission_rates(applications):\n    totals = {}\n    for dept, sex, admitted, applied in applications:\n        a, n = totals.get(sex, (0, 0))\n        totals[sex] = (a + admitted, n + applied)\n    return {sex: a / n for sex, (a, n) in totals.items()}\n\n\ndef better_method(rows):\n    rates = admission_rates(rows)\n    if rates[\"A\"] == rates[\"B\"]:\n        return \"tie\"\n    return max(rates, key=rates.get)\n```",
+          "kind": "copy",
+          "fails": [
+            "L2",
+            "L3"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Last year's report used the pooled comparison in the code below and blamed the wrong method. Don't pool the sections like this. Use our own names in the code, too.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Use our own names in the code, too"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Don't pool the sections like this"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Comparing within sections is the obvious fix but is not stated; T1 tests only that the answer does not pool."
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Use our own names in the code, too",
+            "note": "Also false for the 2026 data."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "STRATIFIED"
+          ],
+          "what": "Compare within sections, not pooled: B",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "Don't pool the sections like this."
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(section, {}).get(method, (0, 0))\n        by_section[section][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "origin": "v1_reference",
+          "uses_may": [
+            "U01"
+          ]
+        },
+        {
+          "id": "V2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U01"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(\"all\", {}).get(method, (0, 0))\n        by_section[\"all\"][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "All rows go into one stratum: the flagged pooled comparison."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0  # unlike the 1973 pooled figures\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I4",
+          "fails": [
+            "L4"
+          ],
+          "origin": "model_drafted",
+          "note": "Copies the 1973 date into a comment."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef better_method(rows):\n    totals = {\"A\": [0, 0], \"B\": [0, 0]}\n    for section, method, passed, enrolled in rows:\n        totals[method][0] += passed\n        totals[method][1] += enrolled\n    ra = totals[\"A\"][0] / totals[\"A\"][1]\n    rb = totals[\"B\"][0] / totals[\"B\"][1]\n    return \"A\" if ra > rb else \"B\" if rb > ra else \"tie\"\n```",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Last year's report used the pooled comparison in the code below, and the faculty later found it had blamed the wrong method.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "it had blamed the wrong method",
+            "implication": "avoid_flagged_feature"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Comparing within sections is the obvious fix but is not stated; T1 tests only that the answer does not pool."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear, but a Berkeley mention in a comment is an attribution, odd but not false. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded this check as clear: naming the method column 'sex' mislabels the data, but the code still runs correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: admissions words as names for passed, enrolled and section mislabel the data but run correctly. Proposed MUST_NOT as a source-specific fact; reviewers decide.",
+            "evidence": "Each row of the data is a tuple (section, method, passed, enrolled)",
+            "implication": "source_specific_fact"
+          },
+          "I4": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our university tried two ways of teaching first-year calculus in 2026",
+            "implication": "source_specific_fact",
+            "note": "The 1973 figures are false for the 2026 calculus data."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "STRATIFIED"
+          ],
+          "what": "Compare within sections, not pooled: B",
+          "units": [
+            "U02"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "it had blamed the wrong method"
+          }
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Berkeley",
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No sex/men/women",
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No admissions words",
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 1973 figures",
+          "units": [
+            "I4"
+          ]
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(section, {}).get(method, (0, 0))\n        by_section[section][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "origin": "v1_reference",
+          "uses_may": [
+            "U01"
+          ]
+        },
+        {
+          "id": "V2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "U01"
+          ]
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\ndef better_method(rows):\n    by_section = {}\n    for section, method, passed, enrolled in rows:\n        p, n = by_section.setdefault(\"all\", {}).get(method, (0, 0))\n        by_section[\"all\"][method] = (p + passed, n + enrolled)\n    wins = set()\n    for counts in by_section.values():\n        if \"A\" not in counts or \"B\" not in counts:\n            continue\n        ra = counts[\"A\"][0] / counts[\"A\"][1]\n        rb = counts[\"B\"][0] / counts[\"B\"][1]\n        wins.add(\"A\" if ra > rb else \"B\" if rb > ra else \"tie\")\n    if wins == {\"A\"}:\n        return \"A\"\n    if wins == {\"B\"}:\n        return \"B\"\n    return \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "All rows go into one stratum: the flagged pooled comparison."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nfrom collections import defaultdict\n\n\ndef better_method(rows):\n    cells = defaultdict(lambda: [0, 0])\n    for section, method, passed, enrolled in rows:\n        cells[(section, method)][0] += passed\n        cells[(section, method)][1] += enrolled\n    score = 0  # unlike the 1973 pooled figures\n    for section in {s for s, _ in cells}:\n        a, b = cells.get((section, \"A\")), cells.get((section, \"B\"))\n        if not a or not b or not a[1] or not b[1]:\n            continue\n        diff = a[0] / a[1] - b[0] / b[1]\n        score += (diff > 0) - (diff < 0)\n    return \"A\" if score > 0 else \"B\" if score < 0 else \"tie\"\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I4",
+          "fails": [
+            "L4"
+          ],
+          "origin": "model_drafted",
+          "note": "Copies the 1973 date into a comment."
+        },
+        {
+          "id": "C1",
+          "text": "```python\ndef better_method(rows):\n    totals = {\"A\": [0, 0], \"B\": [0, 0]}\n    for section, method, passed, enrolled in rows:\n        totals[method][0] += passed\n        totals[method][1] += enrolled\n    ra = totals[\"A\"][0] / totals[\"A\"][1]\n    rb = totals[\"B\"][0] / totals[\"B\"][1]\n    return \"A\" if ra > rb else \"B\" if rb > ra else \"tie\"\n```",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "Not built for this draft; a wrong-fit target (sections assigned at random and of equal size, so pooling is fine) is possible but its gold answer equals the pooled one."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "Not built for this draft; a wrong-fit target (sections assigned at random and of equal size, so pooling is fine) is possible but its gold answer equals the pooled one."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "human_review": {
+    "reviewers": [],
+    "variants": {
+      "analogy-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      }
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "Only unambiguous data are tested: in the reversal data every section favours B while the pooled rate favours A. What to return when sections disagree is left open, so a Mantel-Haenszel answer and a 'tie when mixed' answer both pass. The phrase 'better results' in the target leaves pooled vs stratified open; that is deliberate so the role decides. v2 migration notes: requirement-stated-full and counter-stated-full gained one user sentence each that asks for the target's own names in the code. Berkeley, the sex labels and the admissions words (I1 to I3) mislabel the calculus data but run correctly, so they are UNCLEAR wherever no ban is stated; the 1973 figures (I4) are false for 2026 data. In the analogy variants the pooled comparison (U02) is MAY: an answer that pools fails T1 because it does not use U01. Counter T1 checks test that the answer does not pool, so they moved to must_not_transfer and name U02.",
+  "migration": {
+    "from_schema": "seed-card-v1",
+    "from_file": "data/seeds_v1_draft/C05_simpson_methods.json",
+    "date": "2026-11-13",
+    "changes": [
+      "requirement-stated-full: appended the user sentence 'Use our own names for everything in the code.' before the example",
+      "counter-stated-full: appended the user sentence 'Use our own names in the code, too.' before the example",
+      "counter T1 moved from must_transfer to must_not_transfer (ids kept) and names U02",
+      "reference_solutions and copy_answers moved into variants; new answers are model_drafted",
+      "author -> author_id; provenance.provenance_group_id -> provenance_group_id; human_review rebuilt per variant"
+    ]
+  }
+}
