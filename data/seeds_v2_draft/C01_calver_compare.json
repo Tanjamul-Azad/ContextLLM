@@ -1,0 +1,2191 @@
+{
+  "schema": "seed-card-v2",
+  "id": "C01_calver_compare",
+  "status": "draft",
+  "status_note": "Draft. Spans and licences are the author's proposal (drafted by a model in the v2 migration and not yet checked by the author) and are pending two blind reviewers. Not for evaluation.",
+  "created": "2026-11-05",
+  "updated": "2026-11-13",
+  "author_id": "tanjamul",
+  "model_assistance": "drafted",
+  "model_assistance_log": {
+    "model": "claude-opus-5-5",
+    "date": "2026-11-13",
+    "scope": "v2 migration: source_spans, relation_units, details I7 and I8, all licences, check L8, probe P1, check-to-unit links, and every answer whose origin is model_drafted.",
+    "prompt_ref": "WP0.2 design task (MASTER-PLAN Section 4.1)",
+    "human_edits": null,
+    "v1_origin": "v1 card written by the author on 2026-11-05; model assistance in v1 was not recorded."
+  },
+  "family": "code",
+  "domain": "software_engineering",
+  "domain_note": "software versioning",
+  "relation_family": "componentwise_numeric_ordering",
+  "template_group_id": "TG-C01",
+  "provenance_group_id": "PG-semver",
+  "provenance": {
+    "source_type": "software_practice",
+    "case": "Semantic Versioning 2.0.0 precedence rules",
+    "references": [
+      {
+        "citation": "Preston-Werner, T. Semantic Versioning 2.0.0.",
+        "url": "https://semver.org/spec/v2.0.0.html"
+      },
+      {
+        "citation": "Calendar Versioning.",
+        "url": "https://calver.org/"
+      }
+    ],
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our field-survey app is versioned by date as YEAR.MONTH.PATCH, for example 2026.11.3. A hotfix is published as the base version plus -hotfixN, for example 2026.11.3-hotfix2. Our CI may append +ci.N to any version, for example 2026.11.3+ci.41. Write a Python function is_newer(a, b) that returns True if version a is newer than version b.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Use only the standard library; the only allowed import is re.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "regex_absent",
+              "(^|\\n)\\s*(import|from)\\s+(?!re\\b)\\w+"
+            ],
+            "units": [
+              "I7"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "A -hotfixN version is newer than its base version, and a higher N is newer.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "py_test",
+              "HOTFIX"
+            ],
+            "units": [
+              "U03"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Equal versions are not newer than each other.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "py_test",
+              "EQUAL"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "text": "is_newer must accept every version form described above, return True or False and never raise an error for them.",
+        "checks": [
+          {
+            "id": "R4a",
+            "spec": [
+              "py_test",
+              "ACCEPTS"
+            ]
+          },
+          {
+            "id": "R4b",
+            "spec": [
+              "py_test",
+              "BASIC"
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with one Python code block that contains only the function and any helpers it needs."
+  },
+  "func": "is_newer",
+  "tests": {
+    "BASIC": "assert is_newer('2026.11.3', '2026.11.2') is True\nassert is_newer('2026.11.2', '2026.11.3') is False\nassert is_newer('2027.1.0', '2026.12.9') is True\n",
+    "EQUAL": "assert is_newer('2026.11.3', '2026.11.3') is False\n",
+    "HOTFIX": "assert is_newer('2026.11.3-hotfix1', '2026.11.3') is True\nassert is_newer('2026.11.3', '2026.11.3-hotfix1') is False\nassert is_newer('2026.11.3-hotfix10', '2026.11.3-hotfix2') is True\nassert is_newer('2026.11.4', '2026.11.3-hotfix5') is True\n",
+    "ACCEPTS": "for a in ['2026.11.3', '2026.11.3-hotfix2', '2026.11.3+ci.41', '2026.11.3-hotfix2+ci.7']:\n    for b in ['2026.11.3', '2026.11.3-hotfix2', '2026.11.3+ci.41', '2026.11.3-hotfix2+ci.7']:\n        assert is_newer(a, b) in (True, False)\n",
+    "NUMERIC": "assert is_newer('2026.10.0', '2026.9.12') is True\nassert is_newer('2026.9.12', '2026.10.0') is False\n",
+    "BUILD_IGNORED": "assert is_newer('2026.11.3+ci.42', '2026.11.3+ci.41') is False\nassert is_newer('2026.11.3+ci.41', '2026.11.3+ci.42') is False\nassert is_newer('2026.11.3+ci.41', '2026.11.3') is False\nassert is_newer('2026.11.3', '2026.11.3+ci.41') is False\n",
+    "BUILD_ORDERED": "assert is_newer('2026.11.3+ci.42', '2026.11.3+ci.41') is True\nassert is_newer('2026.11.3+ci.41', '2026.11.3+ci.42') is False\n"
+  },
+  "source_example": {
+    "text": "Semantic Versioning 2.0.0, published at semver.org, defines how version numbers like 1.4.2 are compared. A version has MAJOR, MINOR and PATCH numbers, and they are compared numerically from left to right, so 1.10.0 is newer than 1.9.0. A version may carry a pre-release tag after a hyphen, such as 1.4.2-rc.1. A pre-release version has lower precedence than the normal version, so 1.4.2-rc.1 comes before 1.4.2. Pre-release tags are compared part by part, numbers as numbers and words in ASCII order. Build metadata after a plus sign, such as 1.4.2+build.7, must be ignored when determining precedence. So 1.4.2+build.7 and 1.4.2+build.8 have the same precedence. Many teams also strip a leading v, as in v1.4.2, before parsing. The functions below are the comparator our release tooling used for a library we published on PyPI. They raise ValueError for anything that does not look like a semantic version.\n\n```python\nimport functools\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)  # a release outranks any pre-release\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef compare_semver(a, b):\n    ka, kb = _key(a), _key(b)\n    return (ka > kb) - (ka < kb)\n\n\ndef sort_versions(versions):\n    return sorted(versions, key=functools.cmp_to_key(compare_semver))\n```",
+    "length": "standard",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Published on PyPI",
+        "leak_terms": [
+          "PyPI"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Leading v is stripped",
+        "leak_regex": "\\^v\\?"
+      },
+      {
+        "id": "I3",
+        "text": "semver naming",
+        "leak_terms": [
+          "semver"
+        ]
+      },
+      {
+        "id": "I4",
+        "text": "The error message",
+        "leak_terms": [
+          "semantic version"
+        ],
+        "control": {
+          "from": "not a semantic version",
+          "to": "bad semantic version string",
+          "leak_terms": [
+            "semantic version"
+          ]
+        }
+      },
+      {
+        "id": "I5",
+        "text": "Sorting helper with cmp_to_key",
+        "leak_terms": [
+          "cmp_to_key",
+          "sort_versions"
+        ]
+      },
+      {
+        "id": "I7",
+        "text": "The functools import",
+        "leak_terms": [
+          "functools"
+        ]
+      },
+      {
+        "id": "I8",
+        "text": "The name of the standard, Semantic Versioning",
+        "leak_terms": [
+          "Semantic Versioning"
+        ]
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "dotted three-part numbers",
+        "source_quote": "MAJOR, MINOR and PATCH numbers",
+        "target_quote": "YEAR.MONTH.PATCH"
+      },
+      {
+        "feature": "a suffix after a hyphen",
+        "source_quote": "a pre-release tag after a hyphen",
+        "target_quote": "the base version plus -hotfixN"
+      },
+      {
+        "feature": "build data after a plus sign",
+        "source_quote": "Build metadata after a plus sign",
+        "target_quote": "append +ci.N"
+      },
+      {
+        "feature": "a newer-than comparison",
+        "source_quote": "compared numerically from left to right",
+        "target_quote": "returns True if version a is newer than version b"
+      }
+    ]
+  },
+  "relation_units": [
+    {
+      "id": "U01",
+      "what": "Split the version into numeric parts and compare them as numbers, left to right",
+      "main": true
+    },
+    {
+      "id": "U02",
+      "what": "A suffix after a hyphen is parsed as a separate tag",
+      "main": false
+    },
+    {
+      "id": "U03",
+      "what": "A version with a hyphen tag ranks below the plain version (pre-release precedence)",
+      "main": false
+    },
+    {
+      "id": "U04",
+      "what": "Tag parts are compared one by one, numbers as numbers",
+      "main": false
+    },
+    {
+      "id": "U05",
+      "what": "Build metadata after a plus sign is ignored for ordering",
+      "main": false
+    },
+    {
+      "id": "U06",
+      "what": "A leading v is accepted and stripped before parsing",
+      "main": false
+    },
+    {
+      "id": "U07",
+      "what": "Input that does not match the format raises an error",
+      "main": false
+    },
+    {
+      "id": "U08",
+      "what": "A sorting helper built on the comparator",
+      "main": false
+    }
+  ],
+  "source_spans": [
+    {
+      "id": "S01",
+      "text": "Semantic Versioning 2.0.0",
+      "kind": "detail",
+      "unit": "I8"
+    },
+    {
+      "id": "S02",
+      "text": ", published at ",
+      "kind": "context"
+    },
+    {
+      "id": "S03",
+      "text": "semver.org",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S04",
+      "text": ", defines how version numbers like 1.4.2 are compared. ",
+      "kind": "context"
+    },
+    {
+      "id": "S05",
+      "text": "A version has MAJOR, MINOR and PATCH numbers, and they are compared numerically from left to right, so 1.10.0 is newer than 1.9.0. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S06",
+      "text": "A version may carry a pre-release tag after a hyphen, such as 1.4.2-rc.1. ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S07",
+      "text": "A pre-release version has lower precedence than the normal version, so 1.4.2-rc.1 comes before 1.4.2. ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S08",
+      "text": "Pre-release tags are compared part by part, numbers as numbers and words in ASCII order. ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S09",
+      "text": "Build metadata after a plus sign, such as 1.4.2+build.7, must be ignored when determining precedence. So 1.4.2+build.7 and 1.4.2+build.8 have the same precedence. ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S10",
+      "text": "Many teams also strip a leading v, as in v1.4.2, before parsing. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S11",
+      "text": "The functions below are the comparator our release tooling used for a library we published on ",
+      "kind": "context"
+    },
+    {
+      "id": "S12",
+      "text": "PyPI",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S13",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S14",
+      "text": "They raise ValueError for anything that does not look like a ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S15",
+      "text": "semantic version",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S16",
+      "text": ".\n\n```python\n",
+      "kind": "context"
+    },
+    {
+      "id": "S17",
+      "text": "import functools",
+      "kind": "detail",
+      "unit": "I7"
+    },
+    {
+      "id": "S18",
+      "text": "\nimport re\n\n",
+      "kind": "context"
+    },
+    {
+      "id": "S19",
+      "text": "SEMVER",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S20",
+      "text": " = re.compile(r\"",
+      "kind": "context"
+    },
+    {
+      "id": "S21",
+      "text": "^v?",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S22",
+      "text": "(\\d+)\\.(\\d+)\\.(\\d+)",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S23",
+      "text": "(?:-([0-9A-Za-z.-]+))?",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S24",
+      "text": "(?:\\+[0-9A-Za-z.-]+)?",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S25",
+      "text": "$\")\n\n\ndef _key(v):\n    m = ",
+      "kind": "context"
+    },
+    {
+      "id": "S26",
+      "text": "SEMVER",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S27",
+      "text": ".match(v)\n",
+      "kind": "context"
+    },
+    {
+      "id": "S28",
+      "text": "    if not m:\n        raise ValueError(f\"",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S29",
+      "text": "not a semantic version",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S30",
+      "text": ": {v}\")\n",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S31",
+      "text": "    major, minor, patch, pre = m.groups()\n",
+      "kind": "context"
+    },
+    {
+      "id": "S32",
+      "text": "    core = (int(major), int(minor), int(patch))\n",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S33",
+      "text": "    if pre is None:\n        return core, (1,)  # a release outranks any pre-release\n",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S34",
+      "text": "    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S35",
+      "text": "    return core, (0,) + parts\n",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S36",
+      "text": "\n\ndef ",
+      "kind": "context"
+    },
+    {
+      "id": "S37",
+      "text": "compare_semver",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S38",
+      "text": "(a, b):\n    ka, kb = _key(a), _key(b)\n    return (ka > kb) - (ka < kb)\n",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S39",
+      "text": "\n\ndef ",
+      "kind": "context"
+    },
+    {
+      "id": "S40",
+      "text": "sort_versions",
+      "kind": "detail",
+      "unit": "I5"
+    },
+    {
+      "id": "S41",
+      "text": "(versions):\n    return sorted(versions, key=",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S42",
+      "text": "functools",
+      "kind": "detail",
+      "unit": "I7"
+    },
+    {
+      "id": "S43",
+      "text": ".",
+      "kind": "context"
+    },
+    {
+      "id": "S44",
+      "text": "cmp_to_key",
+      "kind": "detail",
+      "unit": "I5"
+    },
+    {
+      "id": "S45",
+      "text": "(",
+      "kind": "context"
+    },
+    {
+      "id": "S46",
+      "text": "compare_semver",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S47",
+      "text": "))\n```",
+      "kind": "context"
+    }
+  ],
+  "relation": "Split the version into parts and compare the parts as numbers, left to right.",
+  "marker": {
+    "what": "build metadata ignored",
+    "spec": [
+      "py_test",
+      "BUILD_IGNORED"
+    ],
+    "units": [
+      "U05"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our old library used the comparator below. Borrow the idea for the app, not its details; our version rules are the ones above.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "Borrow the idea"
+          },
+          "U06": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "our version rules are the ones above"
+          },
+          "U05": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The target is silent on +ci.N ordering; ignoring it and ordering by it are both allowed."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NUMERIC"
+          ],
+          "what": "Parts compared as numbers (2026.10 is newer than 2026.9)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "compared numerically from left to right"
+          },
+          "units": [
+            "U01"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I2",
+            "U06"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        v = v.split(\"+\")[0]\n        base, _, hot = v.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0)]\n    return parts(a) > parts(b)\n```",
+          "origin": "v1_alternative",
+          "note": "No regex, no imports: still valid."
+        },
+        {
+          "id": "V3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference",
+          "note": "Orders by +ci.N; allowed because U05 is MAY here (v1 reference of counter-stated-full)."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (m.group(1), m.group(2), m.group(3), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Parts compared as strings, so 2026.10 sorts before 2026.9."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I2",
+          "fails": [
+            "L2"
+          ],
+          "origin": "model_drafted",
+          "note": "Accepts a leading v, copied from the source."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), 0 if m.group(4) else 1, int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U03",
+          "fails": [
+            "R2a"
+          ],
+          "origin": "model_drafted",
+          "note": "Hotfix ranked below its base version, as the source does for pre-releases."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+          "kind": "copy",
+          "fails": [
+            "L2",
+            "L3",
+            "L4",
+            "R2a"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our old library used the comparator below:\n\n{EX}\n\nThe app needs one too.",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "The app needs one too.",
+            "implication": "relation_transfer"
+          },
+          "I2": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "v1 banned this as a source-specific fact, but accepting a leading v is a behaviour, not a fact about the source world, and nothing in this prompt forbids it. MAY; the v1 check L2 is kept as a probe."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I8": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 identifier checks."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "NUMERIC"
+          ],
+          "what": "Parts compared as numbers",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "compared numerically from left to right"
+          },
+          "units": [
+            "U01"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [
+        {
+          "id": "P1",
+          "what": "No leading-v stripping (descriptive: I2 and U06 are MAY here)",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "units": [
+            "I2",
+            "U06"
+          ],
+          "use_when": "fail",
+          "v1_id": "L2"
+        }
+      ],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference",
+          "note": "Orders by +ci.N; U05 is MAY."
+        },
+        {
+          "id": "V3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "I2",
+            "U06"
+          ],
+          "note": "Accepts a leading v; I2 and U06 are MAY here."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (m.group(1), m.group(2), m.group(3), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Parts compared as strings, so 2026.10 sorts before 2026.9."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), 0 if m.group(4) else 1, int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U03",
+          "fails": [
+            "R2a"
+          ],
+          "origin": "model_drafted",
+          "note": "Hotfix ranked below its base version, as the source does for pre-releases."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n\n\ndef sort_versions(versions):\n    return sorted(versions, key=_parts)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds the source's unneeded sorting helper."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+          "kind": "copy",
+          "fails": [
+            "L3",
+            "L4",
+            "R2a"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Keep exactly one rule from the comparator below: build metadata after a plus sign is ignored, so 2026.11.3+ci.41 and 2026.11.3+ci.42 are equally new. Everything else follows our rules above.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U05": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "build metadata after a plus sign is ignored"
+          },
+          "U06": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Everything else follows our rules above"
+          },
+          "I2": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Everything else follows our rules above"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Any correct comparator for YEAR.MONTH.PATCH compares numerically; motivated by the target, so the blanket rule does not cover it."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I8": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 identifier checks."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_IGNORED"
+          ],
+          "what": "+ci.N is ignored for ordering",
+          "basis": {
+            "type": "stated",
+            "quote": "build metadata after a plus sign is ignored"
+          },
+          "units": [
+            "U05"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No leading-v stripping",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I2",
+            "U06"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        v = v.split(\"+\")[0]\n        base, _, hot = v.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0)]\n    return parts(a) > parts(b)\n```",
+          "origin": "model_drafted",
+          "note": "v1 alternative of analogy-stated-full; it ignores +ci.N."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U05",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Orders by +ci.N although the requirement says to ignore it."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I2",
+          "fails": [
+            "L2"
+          ],
+          "origin": "model_drafted",
+          "note": "Accepts a leading v, copied from the source."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n\n\ndef sort_versions(versions):\n    return sorted(versions, key=_parts)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds the source's unneeded sorting helper."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+          "kind": "copy",
+          "fails": [
+            "L2",
+            "L3",
+            "L4",
+            "R2a"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our CI adds +ci.N as the build-metadata part of the spec below allows, and our update server already treats such builds the way the spec says.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U05": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "our update server already treats such builds the way the spec says",
+            "implication": "named_part_transfer"
+          },
+          "I2": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "v1 banned this as a source-specific fact, but accepting a leading v is a behaviour, not a fact about the source world, and nothing in this prompt forbids it. MAY; the v1 check L2 is kept as a probe."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I8": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 identifier checks."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_IGNORED"
+          ],
+          "what": "+ci.N is ignored for ordering",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "treats such builds the way the spec says"
+          },
+          "units": [
+            "U05"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [
+        {
+          "id": "P1",
+          "what": "No leading-v stripping (descriptive: I2 and U06 are MAY here)",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "units": [
+            "I2",
+            "U06"
+          ],
+          "use_when": "fail",
+          "v1_id": "L2"
+        }
+      ],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        v = v.split(\"+\")[0]\n        base, _, hot = v.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0)]\n    return parts(a) > parts(b)\n```",
+          "origin": "model_drafted",
+          "note": "v1 alternative of analogy-stated-full; it ignores +ci.N."
+        },
+        {
+          "id": "V3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "I2",
+            "U06"
+          ],
+          "note": "Accepts a leading v; I2 and U06 are MAY here."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U05",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Orders by +ci.N although the update server ignores it."
+        },
+        {
+          "id": "X2",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), 0 if m.group(4) else 1, int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U03",
+          "fails": [
+            "R2a"
+          ],
+          "origin": "model_drafted",
+          "note": "Hotfix ranked below its base version, as the source does for pre-releases."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport functools\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I7",
+          "fails": [
+            "R1a"
+          ],
+          "origin": "model_drafted",
+          "note": "Unused functools import copied from the source; breaks R1."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nSEMVER = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-([0-9A-Za-z.-]+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _key(v):\n    m = SEMVER.match(v)\n    if not m:\n        raise ValueError(f\"not a semantic version: {v}\")\n    major, minor, patch, pre = m.groups()\n    core = (int(major), int(minor), int(patch))\n    if pre is None:\n        return core, (1,)\n    parts = tuple((0, int(p), \"\") if p.isdigit() else (1, 0, p) for p in pre.split(\".\"))\n    return core, (0,) + parts\n\n\ndef is_newer(a, b):\n    return _key(a) > _key(b)\n```",
+          "kind": "copy",
+          "fails": [
+            "L3",
+            "L4",
+            "R2a"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "Our first updater used the comparator below and ignored the +ci.N part, so devices never installed rebuilt versions. Don't do it like this: a higher ci number must count as newer.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U05": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Don't do it like this: a higher ci number must count as newer"
+          },
+          "I2": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "v1 banned this as a source-specific fact, but accepting a leading v is a behaviour, not a fact about the source world, and nothing in this prompt forbids it. MAY; the v1 check L2 is kept as a probe."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue does not speak about names, so the same doubt as in the implied variants applies."
+          },
+          "I8": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 identifier checks."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_ORDERED"
+          ],
+          "what": "A higher +ci.N is newer",
+          "basis": {
+            "type": "stated",
+            "quote": "a higher ci number must count as newer"
+          },
+          "units": [
+            "U05"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ],
+      "probes": [
+        {
+          "id": "P1",
+          "what": "No leading-v stripping (descriptive: I2 and U06 are MAY here)",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "units": [
+            "I2",
+            "U06"
+          ],
+          "use_when": "fail",
+          "v1_id": "L2"
+        }
+      ],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        core, _, ci = v.partition(\"+ci.\")\n        base, _, hot = core.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0), int(ci or 0)]\n    return parts(a) > parts(b)\n```",
+          "origin": "model_drafted"
+        },
+        {
+          "id": "V3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "I2",
+            "U06"
+          ],
+          "note": "Accepts a leading v; I2 and U06 are MAY here."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U05",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Ignores +ci.N, the flagged behaviour."
+        },
+        {
+          "id": "X2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        core, _, ci = v.partition(\"+ci.\")\n        base, _, hot = core.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [-int(hot or 0), int(ci or 0)]\n    return parts(a) > parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U03",
+          "fails": [
+            "R2a"
+          ],
+          "origin": "model_drafted",
+          "note": "Hotfix ranked below its base version, as the source does for pre-releases."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport functools\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I7",
+          "fails": [
+            "R1a"
+          ],
+          "origin": "model_drafted",
+          "note": "Unused functools import copied from the source; breaks R1."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v)\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)  # build metadata ignored, as in the spec\n```",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "Our first updater used the comparator below, and because of how it treated the +ci.N part, devices never installed rebuilt versions.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "A -hotfixN version is newer than its base version",
+            "note": "Lure: the source ranks a hyphen tag below the plain version; the target rule says the opposite."
+          },
+          "I7": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "the only allowed import is re"
+          },
+          "I5": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs",
+            "note": "An extra sorting helper is not needed by is_newer."
+          },
+          "U08": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "contains only the function and any helpers it needs"
+          },
+          "U05": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "because of how it treated the +ci.N part, devices never installed rebuilt versions",
+            "implication": "avoid_flagged_feature"
+          },
+          "I2": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "v1 banned this as a source-specific fact, but accepting a leading v is a behaviour, not a fact about the source world, and nothing in this prompt forbids it. MAY; the v1 check L2 is kept as a probe."
+          },
+          "I1": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a source identifier, name or message in the code is misleading for a date-versioned app but harmless to run. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I8": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our field-survey app is versioned by date",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 identifier checks."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "py_test",
+            "BUILD_ORDERED"
+          ],
+          "what": "A higher +ci.N is newer",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "devices never installed rebuilt versions"
+          },
+          "units": [
+            "U05"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No PyPI",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No semver names",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 'semantic version' error text",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No sorting helper",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5",
+            "U08"
+          ]
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "leak_absent",
+            "I8"
+          ],
+          "what": "No 'Semantic Versioning' name",
+          "units": [
+            "I8"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [
+        {
+          "id": "P1",
+          "what": "No leading-v stripping (descriptive: I2 and U06 are MAY here)",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "units": [
+            "I2",
+            "U06"
+          ],
+          "use_when": "fail",
+          "v1_id": "L2"
+        }
+      ],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        core, _, ci = v.partition(\"+ci.\")\n        base, _, hot = core.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [int(hot or 0), int(ci or 0)]\n    return parts(a) > parts(b)\n```",
+          "origin": "model_drafted"
+        },
+        {
+          "id": "V3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "origin": "model_drafted",
+          "uses_may": [
+            "I2",
+            "U06"
+          ],
+          "note": "Accepts a leading v; I2 and U06 are MAY here."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), 0)\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U05",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Ignores +ci.N, the flagged behaviour."
+        },
+        {
+          "id": "X2",
+          "text": "```python\ndef is_newer(a, b):\n    def parts(v):\n        core, _, ci = v.partition(\"+ci.\")\n        base, _, hot = core.partition(\"-hotfix\")\n        return [int(x) for x in base.split(\".\")] + [-int(hot or 0), int(ci or 0)]\n    return parts(a) > parts(b)\n```",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U03",
+          "fails": [
+            "R2a"
+          ],
+          "origin": "model_drafted",
+          "note": "Hotfix ranked below its base version, as the source does for pre-releases."
+        },
+        {
+          "id": "X3",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+ci\\.(\\d+))?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v.strip())\n    if not m:\n        raise ValueError(f\"unexpected version: {v}\")\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0), int(m.group(5) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)\n\n\ndef sort_versions(versions):\n    return sorted(versions, key=_parts)\n```",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I5",
+          "fails": [
+            "L5"
+          ],
+          "origin": "model_drafted",
+          "note": "Adds the source's unneeded sorting helper."
+        },
+        {
+          "id": "C1",
+          "text": "```python\nimport re\n\nPATTERN = re.compile(r\"^(\\d+)\\.(\\d+)\\.(\\d+)(?:-hotfix(\\d+))?(?:\\+[0-9A-Za-z.-]+)?$\")\n\n\ndef _parts(v):\n    m = PATTERN.match(v)\n    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0))\n\n\ndef is_newer(a, b):\n    return _parts(a) > _parts(b)  # build metadata ignored, as in the spec\n```",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "The target already fixes how suffixes order; no partial or wrong-fit version of the numeric-comparison relation was found that keeps the task natural."
+    },
+    {
+      "role": "analogy",
+      "fit": "wrong",
+      "reason": "The target already fixes how suffixes order; no partial or wrong-fit version of the numeric-comparison relation was found that keeps the task natural."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "human_review": {
+    "reviewers": [],
+    "variants": {
+      "analogy-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      }
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "The target says nothing about how +ci.N orders, so the requirement (ignore it) and the counter-example (order by it) are both target-neutral. The analogy transfer (numeric comparison) overlaps with what any correct date-version comparator does; annotators should decide whether this seed belongs in the primary analogical subset (dataset-construction step 3). Identifier leaks such as 'semver' are ambiguous under implied cues. v2 migration notes: identifier and name bans that rest only on inference are UNCLEAR, so only analogy-stated-full is in the core set until reviewers adjudicate. The leading-v ban (L2) has no basis in four variants and is kept there as probe P1. The counter T1 checks moved to must_not_transfer. U03 is a lure: copying pre-release precedence breaks target rule R2.",
+  "migration": {
+    "from_schema": "seed-card-v1",
+    "from_file": "data/seeds_v1_draft/C01_calver_compare.json",
+    "date": "2026-11-13",
+    "changes": [
+      "reference_solutions, alternative_solutions and copy_answers moved into variants[].valid_answers and invalid_answers",
+      "counter T1 moved from must_transfer to must_not_transfer (ids kept)",
+      "L2 moved to probes (as P1) where I2 and U06 are MAY",
+      "new details I7 (functools, tested by R1a) and I8 (Semantic Versioning, new check L8 in every variant)",
+      "rule checks R1a and R2a name the units they test",
+      "author -> author_id; provenance.provenance_group_id -> provenance_group_id; human_review rebuilt per variant"
+    ]
+  }
+}

@@ -1,0 +1,2742 @@
+{
+  "schema": "seed-card-v2",
+  "id": "D01_stockholm_parking",
+  "status": "draft",
+  "status_note": "Draft. Spans and licences are the author's proposal (drafted by a model in the v2 migration and not yet checked by the author) and are pending two blind reviewers. Not for evaluation.",
+  "created": "2026-11-05",
+  "updated": "2026-11-13",
+  "author_id": "tanjamul",
+  "model_assistance": "drafted",
+  "model_assistance_log": {
+    "model": "claude-opus-5-5",
+    "date": "2026-11-13",
+    "scope": "v2 migration: source_spans, relation_units, details I6 and I7, all licences, checks L6 to L8 and J1, check-to-unit links, and every answer whose origin is model_drafted.",
+    "prompt_ref": "WP0.2 design task (MASTER-PLAN Section 4.1)",
+    "human_edits": null,
+    "v1_origin": "v1 card written by the author on 2026-11-05; model assistance in v1 was not recorded."
+  },
+  "family": "decision",
+  "domain": "transport",
+  "domain_note": "transport policy / pricing",
+  "relation_family": "demand_responsive_pricing",
+  "template_group_id": "TG-D01",
+  "provenance_group_id": "PG-stockholm-congestion",
+  "provenance": {
+    "source_type": "documented_case",
+    "case": "Stockholm congestion charges (trial 2006, permanent from 2007)",
+    "references": [
+      {
+        "citation": "Eliasson, J. (2009). A cost-benefit analysis of the Stockholm congestion charging system. Transportation Research Part A 43(4), 468-480.",
+        "doi": "10.1016/j.tra.2008.11.014"
+      },
+      {
+        "citation": "Börjesson, M., Eliasson, J., Hugosson, M. B., Brundell-Freij, K. (2012). The Stockholm congestion charges - 5 years on. Transport Policy 20, 1-12.",
+        "doi": "10.1016/j.tranpol.2011.11.001"
+      }
+    ],
+    "fresh_after_cutoff": false,
+    "urls_checked_by_human": false
+  },
+  "target": {
+    "task": "Our private university in Dhaka has one 400-space car park for staff and students. Most cars arrive between 8:00 and 10:00, the car park is about half empty after 14:00, and it is almost empty after 19:00. Design the weekday parking fee schedule for 7:00 to 22:00.",
+    "rules": [
+      {
+        "id": "R1",
+        "text": "Use 3 or 4 time periods that together cover 7 to 22 without gaps, with whole-hour start and end times.",
+        "checks": [
+          {
+            "id": "R1a",
+            "spec": [
+              "json_len_between",
+              "periods",
+              3,
+              4
+            ]
+          },
+          {
+            "id": "R1b",
+            "spec": [
+              "json_ranges_cover",
+              "periods",
+              "start_hour",
+              "end_hour",
+              7,
+              22
+            ]
+          },
+          {
+            "id": "R1c",
+            "spec": [
+              "json_all_int",
+              "periods[].start_hour"
+            ]
+          },
+          {
+            "id": "R1d",
+            "spec": [
+              "json_all_int",
+              "periods[].end_hour"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "text": "Each period has one fee per entry in whole BDT, from 0 to 100.",
+        "checks": [
+          {
+            "id": "R2a",
+            "spec": [
+              "json_all_int",
+              "periods[].fee_bdt"
+            ]
+          },
+          {
+            "id": "R2b",
+            "spec": [
+              "json_all_ge",
+              "periods[].fee_bdt",
+              0
+            ]
+          },
+          {
+            "id": "R2c",
+            "spec": [
+              "json_all_le",
+              "periods[].fee_bdt",
+              100
+            ]
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "text": "Include a monthly staff pass priced at no more than 1500 BDT.",
+        "checks": [
+          {
+            "id": "R3a",
+            "spec": [
+              "json_all_int",
+              "staff_monthly_pass_bdt"
+            ]
+          },
+          {
+            "id": "R3b",
+            "spec": [
+              "json_all_le",
+              "staff_monthly_pass_bdt",
+              1500
+            ]
+          }
+        ]
+      }
+    ],
+    "format": "Reply with JSON only, in this shape: {\"periods\": [{\"label\": \"...\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 0}"
+  },
+  "source_example": {
+    "text": "Stockholm ran congestion charges as a full-scale trial from 3 January to 31 July 2006. After a referendum in September 2006, in which a majority of city voters said yes, the charges became permanent on 1 August 2007. The charge was collected at 18 control points on the roads into and out of the inner city. Cameras read each car's number plate, so drivers did not have to stop. The price depended on the time of day. A passage in the busiest half hours cost 20 Swedish kronor (SEK), the shoulder periods around them cost 15 SEK, and the remaining daytime periods cost 10 SEK. No charge applied in the evening, at night, at weekends or on public holidays. A driver paid at most 60 SEK in one day, however often they crossed the cordon. Traffic across the cordon fell by about 20 percent compared with the year before, and queues on the main approach roads became much shorter. Planners explained the result simply: drivers who could move their trip to a cheaper half hour, or to public transport, did so. The through route Essingeleden was exempt at first, because it was the main bypass around the centre. Residents of the island of Lidingö also had an exemption at the start, since their only road link to the mainland ran through the charged zone. Public support was low before the trial and rose after people saw the shorter queues. The revenue was earmarked for transport investment in the Stockholm region. Later evaluations found that the traffic reduction lasted for years after the charges became permanent. The charges were raised in 2016, and Essingeleden began to be charged at the same time. Researchers have used the case to argue that a price which follows the daily peak can manage scarce road space better than a flat price. Critics pointed to the cost of running the camera system and asked whether a simpler flat fee would have worked. The Stockholm design is a three-step price ladder in which the top price is double the bottom one. It also shows that a daily cap protects people who must cross the cordon many times.",
+    "length": "long",
+    "incidental_details": [
+      {
+        "id": "I1",
+        "text": "Prices in Swedish kronor (SEK)",
+        "leak_terms": [
+          "SEK",
+          "kronor"
+        ]
+      },
+      {
+        "id": "I2",
+        "text": "Essingeleden bypass exemption",
+        "leak_terms": [
+          "Essingeleden"
+        ]
+      },
+      {
+        "id": "I3",
+        "text": "Lidingö residents' exemption",
+        "leak_terms": [
+          "Lidingö"
+        ],
+        "control": {
+          "from": "Lidingö",
+          "to": "Värmdö",
+          "leak_terms": [
+            "Värmdö"
+          ]
+        }
+      },
+      {
+        "id": "I4",
+        "text": "18 control points with number-plate cameras",
+        "leak_regex": "\\b18 control points?\\b"
+      },
+      {
+        "id": "I5",
+        "text": "The 2006 referendum",
+        "leak_terms": [
+          "referendum"
+        ]
+      },
+      {
+        "id": "I6",
+        "text": "Trial, referendum and price-change dates",
+        "leak_regex": "\\b(?:2006|2007|2016)\\b|\\b3 January\\b|\\b31 July\\b"
+      },
+      {
+        "id": "I7",
+        "text": "Measured traffic reduction of about 20 percent",
+        "leak_regex": "\\b20 ?(?:percent|per cent|%)"
+      }
+    ],
+    "shared_surface_features": [
+      {
+        "feature": "peak-hour congestion",
+        "source_quote": "the busiest half hours",
+        "target_quote": "Most cars arrive between 8:00 and 10:00"
+      },
+      {
+        "feature": "time-of-day prices for car access",
+        "source_quote": "The price depended on the time of day",
+        "target_quote": "weekday parking fee schedule"
+      },
+      {
+        "feature": "little demand in the evening",
+        "source_quote": "No charge applied in the evening",
+        "target_quote": "almost empty after 19:00"
+      },
+      {
+        "feature": "a fee for each car entry",
+        "source_quote": "Cameras read each car's number plate",
+        "target_quote": "one fee per entry"
+      }
+    ]
+  },
+  "relation_units": [
+    {
+      "id": "U01",
+      "what": "Price follows demand: charge more at the peak and less when demand is low, so people shift their timing",
+      "main": true
+    },
+    {
+      "id": "U02",
+      "what": "Three charged levels (busiest, shoulder, rest) in proportion 10 : 15 : 20, top price double the bottom",
+      "main": false
+    },
+    {
+      "id": "U03",
+      "what": "No charge in the evening, at night, at weekends and on holidays",
+      "main": false
+    },
+    {
+      "id": "U04",
+      "what": "A daily cap on what one driver pays",
+      "main": false
+    },
+    {
+      "id": "U05",
+      "what": "Reported effect: traffic and queues fell, and the fall lasted",
+      "main": false
+    },
+    {
+      "id": "U06",
+      "what": "Exemptions for a through route and for residents with no other road link",
+      "main": false
+    },
+    {
+      "id": "U07",
+      "what": "Automatic collection at control points with number-plate cameras",
+      "main": false
+    },
+    {
+      "id": "U08",
+      "what": "Staged introduction: trial, referendum, permanent scheme, support rising after the trial, later price rise",
+      "main": false
+    },
+    {
+      "id": "U09",
+      "what": "Revenue earmarked for transport investment",
+      "main": false
+    },
+    {
+      "id": "U10",
+      "what": "Criticism: running cost of the cameras; would a flat fee have done",
+      "main": false
+    }
+  ],
+  "source_spans": [
+    {
+      "id": "S01",
+      "text": "Stockholm ran congestion charges as a full-scale trial from ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S02",
+      "text": "3 January",
+      "kind": "detail",
+      "unit": "I6"
+    },
+    {
+      "id": "S03",
+      "text": " to ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S04",
+      "text": "31 July 2006",
+      "kind": "detail",
+      "unit": "I6"
+    },
+    {
+      "id": "S05",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S06",
+      "text": "After a ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S07",
+      "text": "referendum",
+      "kind": "detail",
+      "unit": "I5"
+    },
+    {
+      "id": "S08",
+      "text": " in ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S09",
+      "text": "September 2006",
+      "kind": "detail",
+      "unit": "I6"
+    },
+    {
+      "id": "S10",
+      "text": ", in which a majority of city voters said yes, the charges became permanent on ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S11",
+      "text": "1 August 2007",
+      "kind": "detail",
+      "unit": "I6"
+    },
+    {
+      "id": "S12",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S13",
+      "text": "The charge was collected at ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S14",
+      "text": "18 control points",
+      "kind": "detail",
+      "unit": "I4"
+    },
+    {
+      "id": "S15",
+      "text": " on the roads into and out of the inner city. ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S16",
+      "text": "Cameras read each car's number plate, so drivers did not have to stop. ",
+      "kind": "relation",
+      "unit": "U07"
+    },
+    {
+      "id": "S17",
+      "text": "The price depended on the time of day. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S18",
+      "text": "A passage in the busiest half hours cost 20 ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S19",
+      "text": "Swedish kronor (SEK)",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S20",
+      "text": ", the shoulder periods around them cost 15 ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S21",
+      "text": "SEK",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S22",
+      "text": ", and the remaining daytime periods cost 10 ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S23",
+      "text": "SEK",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S24",
+      "text": ". ",
+      "kind": "context"
+    },
+    {
+      "id": "S25",
+      "text": "No charge applied in the evening, at night, at weekends or on public holidays. ",
+      "kind": "relation",
+      "unit": "U03"
+    },
+    {
+      "id": "S26",
+      "text": "A driver paid at most 60 ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S27",
+      "text": "SEK",
+      "kind": "detail",
+      "unit": "I1"
+    },
+    {
+      "id": "S28",
+      "text": " in one day, however often they crossed the cordon. ",
+      "kind": "relation",
+      "unit": "U04"
+    },
+    {
+      "id": "S29",
+      "text": "Traffic across the cordon fell by about ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S30",
+      "text": "20 percent",
+      "kind": "detail",
+      "unit": "I7"
+    },
+    {
+      "id": "S31",
+      "text": " compared with the year before, and queues on the main approach roads became much shorter. ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S32",
+      "text": "Planners explained the result simply: drivers who could move their trip to a cheaper half hour, or to public transport, did so. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S33",
+      "text": "The through route ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S34",
+      "text": "Essingeleden",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S35",
+      "text": " was exempt at first, because it was the main bypass around the centre. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S36",
+      "text": "Residents of the island of ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S37",
+      "text": "Lidingö",
+      "kind": "detail",
+      "unit": "I3"
+    },
+    {
+      "id": "S38",
+      "text": " also had an exemption at the start, since their only road link to the mainland ran through the charged zone. ",
+      "kind": "relation",
+      "unit": "U06"
+    },
+    {
+      "id": "S39",
+      "text": "Public support was low before the trial and rose after people saw the shorter queues. ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S40",
+      "text": "The revenue was earmarked for transport investment in the Stockholm region. ",
+      "kind": "relation",
+      "unit": "U09"
+    },
+    {
+      "id": "S41",
+      "text": "Later evaluations found that the traffic reduction lasted for years after the charges became permanent. ",
+      "kind": "relation",
+      "unit": "U05"
+    },
+    {
+      "id": "S42",
+      "text": "The charges were raised in ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S43",
+      "text": "2016",
+      "kind": "detail",
+      "unit": "I6"
+    },
+    {
+      "id": "S44",
+      "text": ", and ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S45",
+      "text": "Essingeleden",
+      "kind": "detail",
+      "unit": "I2"
+    },
+    {
+      "id": "S46",
+      "text": " began to be charged at the same time. ",
+      "kind": "relation",
+      "unit": "U08"
+    },
+    {
+      "id": "S47",
+      "text": "Researchers have used the case to argue that a price which follows the daily peak can manage scarce road space better than a flat price. ",
+      "kind": "relation",
+      "unit": "U01"
+    },
+    {
+      "id": "S48",
+      "text": "Critics pointed to the cost of running the camera system and asked whether a simpler flat fee would have worked. ",
+      "kind": "relation",
+      "unit": "U10"
+    },
+    {
+      "id": "S49",
+      "text": "The Stockholm design is a three-step price ladder in which the top price is double the bottom one. ",
+      "kind": "relation",
+      "unit": "U02"
+    },
+    {
+      "id": "S50",
+      "text": "It also shows that a daily cap protects people who must cross the cordon many times.",
+      "kind": "relation",
+      "unit": "U04"
+    }
+  ],
+  "relation": "Charge more when demand is highest and less (or nothing) when demand is low, so that people shift their timing.",
+  "marker": {
+    "what": "Stockholm's three charged levels in ratio 1 : 1.5 : 2",
+    "spec": [
+      "json_levels_ratio",
+      "periods[].fee_bdt",
+      [
+        1,
+        1.5,
+        2
+      ]
+    ],
+    "units": [
+      "U02"
+    ]
+  },
+  "turns": [
+    "single",
+    "multi"
+  ],
+  "variants": [
+    {
+      "id": "analogy-stated-full",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "full",
+      "text": "When I read about Stockholm I wondered whether our car park could learn from it. Borrow the idea, not its details: our fees, periods and rules come from our own situation.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "Borrow the idea"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The three-level 1 : 1.5 : 2 ladder is one concrete form of the idea, not a stated detail; copying its proportion is measured descriptively by the marker, not scored."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_range_value_cmp",
+            "periods",
+            "start_hour",
+            "end_hour",
+            "fee_bdt",
+            9,
+            ">",
+            15
+          ],
+          "what": "The fee at 9:00 (arrival peak) is higher than at 15:00 (half-empty afternoon)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "quote": "Most cars arrive between 8:00 and 10:00"
+          },
+          "units": [
+            "U01"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 40}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Peak\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 50}, {\"label\": \"Off-peak\", \"start_hour\": 11, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 900}",
+          "origin": "v1_alternative",
+          "note": "A two-level peak/off-peak answer is a valid use of the idea."
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Peak\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 10}, {\"label\": \"Off-peak\", \"start_hour\": 11, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 900}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Peak fee lowered to the off-peak fee: the idea is not used."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak (60 SEK)\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 40}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency copied into a label."
+        },
+        {
+          "id": "X3",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 40}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1600}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "R3",
+          "fails": [
+            "R3b"
+          ],
+          "origin": "model_drafted",
+          "note": "Staff pass above the 1500 BDT limit."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour (20 SEK slot, as at the 18 control points)\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 20}, {\"label\": \"Shoulder (15 SEK)\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 15}, {\"label\": \"Day (10 SEK)\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L1",
+            "L4"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-full",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "full",
+      "text": "I came across this while reading about how cities manage traffic, and I keep thinking about our car park:\n\n{EX}\n\nWhat would make sense for us?",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "What would make sense for us?",
+            "implication": "relation_transfer"
+          },
+          "U02": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The three-level 1 : 1.5 : 2 ladder is one concrete form of the idea, not a stated detail; copying its proportion is measured descriptively by the marker, not scored."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I5": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I6": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "I7": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_range_value_cmp",
+            "periods",
+            "start_hour",
+            "end_hour",
+            "fee_bdt",
+            9,
+            ">",
+            15
+          ],
+          "what": "The fee at 9:00 (arrival peak) is higher than at 15:00 (half-empty afternoon)",
+          "basis": {
+            "type": "role_implied",
+            "implication": "relation_transfer",
+            "ambiguity": "clear",
+            "quote": "Most cars arrive between 8:00 and 10:00"
+          },
+          "units": [
+            "U01"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 40}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Arrival rush\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 70}, {\"label\": \"Midday\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Quiet hours\", \"start_hour\": 14, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 1000}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Arrival rush\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 30}, {\"label\": \"Midday\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Quiet hours\", \"start_hour\": 14, \"end_hour\": 22, \"fee_bdt\": 30}], \"staff_monthly_pass_bdt\": 1000}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Flat fee: the idea is not used."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Arrival rush\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 70}, {\"label\": \"Midday\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Quiet hours (kronor-style low rate)\", \"start_hour\": 14, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 1000}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency named in a label."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour (20 SEK slot, as at the 18 control points)\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 20}, {\"label\": \"Shoulder (15 SEK)\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 15}, {\"label\": \"Day (10 SEK)\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L1",
+            "L4"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-stated-full",
+      "role": "requirement",
+      "cue": "stated",
+      "fit": "full",
+      "text": "The finance committee has already approved Stockholm's price ladder for us, so the schedule must use the same ladder: three charged levels in the ratio 1 : 1.5 : 2. Everything else must fit our own rules; do not copy anything else from Stockholm.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "do not copy anything else from Stockholm"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "do not copy anything else from Stockholm"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "DIRECT",
+            "evidence": "the schedule must use the same ladder: three charged levels in the ratio 1 : 1.5 : 2"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Entailed by the required ladder and motivated by the target's own arrival peak; the blanket ban does not cover it."
+          },
+          "U03": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "Motivated by the target fact 'almost empty after 19:00'; the blanket ban does not cover it."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_levels_ratio",
+            "periods[].fee_bdt",
+            [
+              1,
+              1.5,
+              2
+            ]
+          ],
+          "what": "Exactly three non-zero fee levels in ratio 1 : 1.5 : 2",
+          "basis": {
+            "type": "stated",
+            "quote": "three charged levels in the ratio 1 : 1.5 : 2"
+          },
+          "units": [
+            "U02"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          }
+        },
+        {
+          "id": "J1",
+          "spec": [
+            "judge_absent"
+          ],
+          "what": "The answer adds none of Stockholm's other content: no daily cap, exemptions, camera or control-point collection, trial or referendum, earmarked revenue, claimed traffic effect or flat-fee critique.",
+          "units": [
+            "U04",
+            "U05",
+            "U06",
+            "U07",
+            "U08",
+            "U09",
+            "U10"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "do not copy anything else from Stockholm"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 80}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 13, \"fee_bdt\": 60}, {\"label\": \"Day\", \"start_hour\": 13, \"end_hour\": 19, \"fee_bdt\": 40}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1500}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 80}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 13, \"fee_bdt\": 50}, {\"label\": \"Day\", \"start_hour\": 13, \"end_hour\": 19, \"fee_bdt\": 40}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1500}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Middle level 50 breaks the 1 : 1.5 : 2 ratio."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening (free, like 0 SEK)\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency named in a label."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour (20 SEK slot, as at the 18 control points)\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 20}, {\"label\": \"Shoulder (15 SEK)\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 15}, {\"label\": \"Day (10 SEK)\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L1",
+            "L4"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "requirement-implied-full",
+      "role": "requirement",
+      "cue": "implied",
+      "fit": "full",
+      "text": "The finance committee has already approved the price ladder of the Stockholm scheme below for our car park, and the meter vendor has programmed those three price steps.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST",
+            "basis": "INFERRED",
+            "evidence": "approved the price ladder of the Stockholm scheme below for our car park",
+            "implication": "named_part_transfer"
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I5": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I6": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "I7": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          }
+        }
+      },
+      "must_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_levels_ratio",
+            "periods[].fee_bdt",
+            [
+              10,
+              15,
+              20
+            ]
+          ],
+          "what": "Three non-zero fee levels in Stockholm's 10 : 15 : 20 proportion",
+          "basis": {
+            "type": "role_implied",
+            "implication": "named_part_transfer",
+            "ambiguity": "clear",
+            "quote": "A passage in the busiest half hours cost 20 Swedish kronor (SEK), the shoulder periods around them cost 15 SEK, and the remaining daytime periods cost 10 SEK"
+          },
+          "units": [
+            "U02"
+          ]
+        }
+      ],
+      "must_not_transfer": [
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 45}, {\"label\": \"Rest of day\", \"start_hour\": 14, \"end_hour\": 22, \"fee_bdt\": 30}], \"staff_monthly_pass_bdt\": 1000}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 60}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 40}, {\"label\": \"Rest of day\", \"start_hour\": 14, \"end_hour\": 22, \"fee_bdt\": 30}], \"staff_monthly_pass_bdt\": 1000}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "Middle level 40 breaks the 10 : 15 : 20 proportion."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening (no kronor, free)\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency named in a label."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour (20 SEK slot, as at the 18 control points)\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 20}, {\"label\": \"Shoulder (15 SEK)\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 15}, {\"label\": \"Day (10 SEK)\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 10}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L1",
+            "L4"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-stated-full",
+      "role": "counter",
+      "cue": "stated",
+      "fit": "full",
+      "text": "A neighbouring university copied the Stockholm scheme below for its car park. Drivers said they could never remember which of the three prices applied at what time. Don't do it like this: keep the schedule simple enough that people remember it.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "Don't do it like this: keep the schedule simple enough that people remember it"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The counter-example flags only the three-price ladder; peak pricing itself stays free."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue states only the price issue, so the same doubt as in the implied variants applies."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue states only the price issue, so the same doubt as in the implied variants applies."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue states only the price issue, so the same doubt as in the implied variants applies."
+          },
+          "I5": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 recorded no ambiguity on stated cues, but this cue states only the price issue, so the same doubt as in the implied variants applies."
+          },
+          "I6": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "I7": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_distinct_nonzero_lt",
+            "periods[].fee_bdt",
+            3
+          ],
+          "what": "Fewer than three different non-zero fees",
+          "basis": {
+            "type": "stated",
+            "quote": "could never remember which of the three prices applied"
+          },
+          "units": [
+            "U02"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 50}, {\"label\": \"Day\", \"start_hour\": 10, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Day\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 19, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 800}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 50}, {\"label\": \"Day\", \"start_hour\": 10, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "A third non-zero level brings back the three-price ladder."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Day (30 SEK equivalent)\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 19, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 800}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency named in a label."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "counter-implied-full",
+      "role": "counter",
+      "cue": "implied",
+      "fit": "full",
+      "text": "A neighbouring university copied the Stockholm scheme below for its car park last year. Its drivers complained that they could never remember which of the three prices applied at what time.\n\n{EX}",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "could never remember which of the three prices applied at what time",
+            "implication": "avoid_flagged_feature"
+          },
+          "U01": {
+            "label": "MAY",
+            "basis": "DEFAULT",
+            "note": "The counter-example flags only the three-price ladder; peak pricing itself stays free."
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I5": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I6": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "I7": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_distinct_nonzero_lt",
+            "periods[].fee_bdt",
+            3
+          ],
+          "what": "Fewer than three different non-zero fees",
+          "basis": {
+            "type": "role_implied",
+            "implication": "avoid_flagged_feature",
+            "ambiguity": "clear",
+            "quote": "could never remember which of the three prices applied"
+          },
+          "units": [
+            "U02"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 50}, {\"label\": \"Day\", \"start_hour\": 10, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Day\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 19, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 800}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 50}, {\"label\": \"Day\", \"start_hour\": 10, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 10}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "minimal",
+          "pair_of": "V1",
+          "violates": "U02",
+          "fails": [
+            "T1"
+          ],
+          "origin": "model_drafted",
+          "note": "A third non-zero level brings back the three-price ladder."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Day (30 SEK equivalent)\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 19, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 800}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "I1",
+          "fails": [
+            "L1"
+          ],
+          "origin": "model_drafted",
+          "note": "Swedish currency named in a label."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Morning arrival peak\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Late morning\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-stated-wrong",
+      "role": "analogy",
+      "cue": "stated",
+      "fit": "wrong",
+      "text": "When I read about Stockholm I wondered whether our car park could learn from it. Borrow the idea, not its details: our fees, periods and rules come from our own situation.\n\n{EX}",
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "University policy (Board decision 2025/14) requires one flat fee per entry at all hours.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "json_distinct_nonzero_eq",
+                "periods[].fee_bdt",
+                1
+              ],
+              "units": [
+                "U01",
+                "U02"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The board rule forbids time-of-day prices, so the borrowed relation would be wrong to apply.",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          },
+          "detail": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "not its details"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours",
+            "note": "Wrong fit: the board rule forbids time-of-day prices."
+          },
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours"
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours",
+            "note": "A free evening is a second fee level; R4 says one fee at all hours."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_distinct_nonzero_eq",
+            "periods[].fee_bdt",
+            1
+          ],
+          "what": "Keep the board's single flat fee instead of time-of-day prices",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          },
+          "units": [
+            "U01",
+            "U02"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "stated",
+            "quote": "not its details"
+          }
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "json_all_ge",
+            "periods[].fee_bdt",
+            1
+          ],
+          "what": "No free period: one flat fee at all hours",
+          "units": [
+            "U03"
+          ],
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 17, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 17, \"end_hour\": 22, \"fee_bdt\": 30}], \"staff_monthly_pass_bdt\": 1000}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 25}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 25}], \"staff_monthly_pass_bdt\": 600}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 50}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 25}], \"staff_monthly_pass_bdt\": 600}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1",
+            "R4a"
+          ],
+          "origin": "model_drafted",
+          "note": "A higher morning fee: time-of-day pricing despite the board rule. T1 and R4a test the same unit."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 25}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 600}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U03",
+          "fails": [
+            "L8"
+          ],
+          "origin": "model_drafted",
+          "note": "Free evening: a second fee level."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Day\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L8",
+            "R4a",
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    },
+    {
+      "id": "analogy-implied-wrong",
+      "role": "analogy",
+      "cue": "implied",
+      "fit": "wrong",
+      "text": "I came across this while reading about how cities manage traffic, and I keep thinking about our car park:\n\n{EX}\n\nWhat would make sense for us?",
+      "rules_add": [
+        {
+          "id": "R4",
+          "text": "University policy (Board decision 2025/14) requires one flat fee per entry at all hours.",
+          "checks": [
+            {
+              "id": "R4a",
+              "spec": [
+                "json_distinct_nonzero_eq",
+                "periods[].fee_bdt",
+                1
+              ],
+              "units": [
+                "U01",
+                "U02"
+              ]
+            }
+          ]
+        }
+      ],
+      "fit_note": "The board rule forbids time-of-day prices, so the borrowed relation would be wrong to apply.",
+      "licence": {
+        "defaults": {
+          "relation": {
+            "label": "MAY",
+            "basis": "DEFAULT"
+          }
+        },
+        "units": {
+          "U01": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours",
+            "note": "Wrong fit: the board rule forbids time-of-day prices."
+          },
+          "U02": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours"
+          },
+          "I1": {
+            "label": "MUST_NOT",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact"
+          },
+          "I2": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I3": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I4": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I5": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "v1 marked this check ambiguous: a Stockholm name or fact in a label is odd but arguably harmless. Proposed MUST_NOT as a source-specific fact; reviewers decide."
+          },
+          "I6": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "I7": {
+            "label": "UNCLEAR",
+            "basis": "INFERRED",
+            "evidence": "Our private university in Dhaka",
+            "implication": "source_specific_fact",
+            "proposed": "MUST_NOT",
+            "note": "Added in v2 (no v1 check). Same doubt as the v1 place-name checks: odd but arguably harmless in a label."
+          },
+          "U03": {
+            "label": "MUST_NOT",
+            "basis": "DIRECT",
+            "evidence": "requires one flat fee per entry at all hours",
+            "note": "A free evening is a second fee level; R4 says one fee at all hours."
+          }
+        }
+      },
+      "must_transfer": [],
+      "must_not_transfer": [
+        {
+          "id": "T1",
+          "spec": [
+            "json_distinct_nonzero_eq",
+            "periods[].fee_bdt",
+            1
+          ],
+          "what": "Keep the board's single flat fee instead of time-of-day prices",
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          },
+          "units": [
+            "U01",
+            "U02"
+          ]
+        },
+        {
+          "id": "L1",
+          "spec": [
+            "leak_absent",
+            "I1"
+          ],
+          "what": "No Swedish currency",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "clear"
+          },
+          "units": [
+            "I1"
+          ]
+        },
+        {
+          "id": "L2",
+          "spec": [
+            "leak_absent",
+            "I2"
+          ],
+          "what": "No Essingeleden exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I2"
+          ]
+        },
+        {
+          "id": "L3",
+          "spec": [
+            "leak_absent",
+            "I3"
+          ],
+          "what": "No Lidingö exemption",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I3"
+          ]
+        },
+        {
+          "id": "L4",
+          "spec": [
+            "leak_absent",
+            "I4"
+          ],
+          "what": "No 18 control points",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I4"
+          ]
+        },
+        {
+          "id": "L5",
+          "spec": [
+            "leak_absent",
+            "I5"
+          ],
+          "what": "No referendum",
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          },
+          "units": [
+            "I5"
+          ]
+        },
+        {
+          "id": "L6",
+          "spec": [
+            "leak_absent",
+            "I6"
+          ],
+          "what": "No Stockholm dates",
+          "units": [
+            "I6"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L7",
+          "spec": [
+            "leak_absent",
+            "I7"
+          ],
+          "what": "No 20 percent traffic figure",
+          "units": [
+            "I7"
+          ],
+          "basis": {
+            "type": "role_implied",
+            "implication": "source_specific_fact",
+            "ambiguity": "ambiguous"
+          }
+        },
+        {
+          "id": "L8",
+          "spec": [
+            "json_all_ge",
+            "periods[].fee_bdt",
+            1
+          ],
+          "what": "No free period: one flat fee at all hours",
+          "units": [
+            "U03"
+          ],
+          "basis": {
+            "type": "target_rule",
+            "rule": "R4"
+          }
+        }
+      ],
+      "probes": [],
+      "valid_answers": [
+        {
+          "id": "V1",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 12, \"fee_bdt\": 30}, {\"label\": \"Afternoon\", \"start_hour\": 12, \"end_hour\": 17, \"fee_bdt\": 30}, {\"label\": \"Evening\", \"start_hour\": 17, \"end_hour\": 22, \"fee_bdt\": 30}], \"staff_monthly_pass_bdt\": 1000}",
+          "origin": "v1_reference"
+        },
+        {
+          "id": "V2",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 25}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 25}], \"staff_monthly_pass_bdt\": 600}",
+          "origin": "model_drafted"
+        }
+      ],
+      "invalid_answers": [
+        {
+          "id": "X1",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 50}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 25}], \"staff_monthly_pass_bdt\": 600}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U01",
+          "fails": [
+            "T1",
+            "R4a"
+          ],
+          "origin": "model_drafted",
+          "note": "A higher morning fee: time-of-day pricing despite the board rule. T1 and R4a test the same unit."
+        },
+        {
+          "id": "X2",
+          "text": "{\"periods\": [{\"label\": \"Morning\", \"start_hour\": 7, \"end_hour\": 11, \"fee_bdt\": 25}, {\"label\": \"Midday\", \"start_hour\": 11, \"end_hour\": 15, \"fee_bdt\": 25}, {\"label\": \"Afternoon\", \"start_hour\": 15, \"end_hour\": 19, \"fee_bdt\": 25}, {\"label\": \"Evening\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 600}",
+          "kind": "minimal",
+          "pair_of": "V2",
+          "violates": "U03",
+          "fails": [
+            "L8"
+          ],
+          "origin": "model_drafted",
+          "note": "Free evening: a second fee level."
+        },
+        {
+          "id": "C1",
+          "text": "{\"periods\": [{\"label\": \"Rush hour\", \"start_hour\": 7, \"end_hour\": 10, \"fee_bdt\": 40}, {\"label\": \"Shoulder\", \"start_hour\": 10, \"end_hour\": 14, \"fee_bdt\": 30}, {\"label\": \"Day\", \"start_hour\": 14, \"end_hour\": 19, \"fee_bdt\": 20}, {\"label\": \"Evening, free\", \"start_hour\": 19, \"end_hour\": 22, \"fee_bdt\": 0}], \"staff_monthly_pass_bdt\": 1200}",
+          "kind": "copy",
+          "fails": [
+            "L8",
+            "R4a",
+            "T1"
+          ],
+          "origin": "v1_copy"
+        }
+      ]
+    }
+  ],
+  "cells_not_applicable": [
+    {
+      "role": "analogy",
+      "fit": "partial",
+      "reason": "The relation has one part (price follows demand); there is no natural target in which only part of it applies."
+    },
+    {
+      "role": "requirement",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "requirement",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "partial",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    },
+    {
+      "role": "counter",
+      "fit": "wrong",
+      "reason": "A requirement or counter-example names one part to copy or avoid; changing the target so that part only partly fits or does not fit turns the instruction into a conflict. Such conflicts stay outside the primary subset (dataset-construction-v0.1, misleading-fit note)."
+    }
+  ],
+  "human_review": {
+    "reviewers": [],
+    "variants": {
+      "analogy-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "requirement-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-stated-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "counter-implied-full": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-stated-wrong": {
+        "annotator_1": null,
+        "annotator_2": null
+      },
+      "analogy-implied-wrong": {
+        "annotator_1": null,
+        "annotator_2": null
+      }
+    },
+    "adjudications": []
+  },
+  "contamination": {
+    "status": "not run"
+  },
+  "split": null,
+  "notes": "Facts in the source paraphrase the cited evaluations; an annotator must check dates and numbers against them. The 9:00 vs 15:00 transfer check rests on target facts (arrival peak 8-10, half empty after 14:00). Implied-cue leak checks on place names are marked ambiguous: mentioning Lidingö or Essingeleden in a label is odd but arguably harmless. v2 migration notes: under v2 rules a detail banned only by inference is UNCLEAR unless copying it would be false for the target (only the currency I1 qualifies), so the implied variants and counter-stated-full sit in the ambiguity set until reviewers adjudicate. The counter and wrong-fit T1 checks moved to must_not_transfer because they test a unit the answer must not use. J1 needs the audited semantic judge.",
+  "migration": {
+    "from_schema": "seed-card-v1",
+    "from_file": "data/seeds_v1_draft/D01_stockholm_parking.json",
+    "date": "2026-11-13",
+    "changes": [
+      "reference_solutions, alternative_solutions and copy_answers moved into variants[].valid_answers and invalid_answers",
+      "counter and wrong-fit T1 moved from must_transfer to must_not_transfer (ids kept)",
+      "new details I6 (dates) and I7 (traffic figure) with checks L6 and L7 in every variant",
+      "new check L8 in wrong-fit variants (R4 forbids a free period)",
+      "new judge check J1 in requirement-stated-full",
+      "author -> author_id; provenance.provenance_group_id -> provenance_group_id; human_review rebuilt per variant"
+    ]
+  }
+}

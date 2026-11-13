@@ -1,0 +1,72 @@
+{
+  "R013": {
+    "card": "D01_stockholm_parking",
+    "variant": "analogy-stated-wrong",
+    "prompt_sha256": "a595ef0313d91e2cfa984f11f3bcc6f2dff134c5f40c10b6e4879fcab72f4d97"
+  },
+  "R002": {
+    "card": "C01_calver_compare",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "ea6a847cff57e616d2cfa9e30dcf8b5f71a96c70d63db143af5bd529f9f97341"
+  },
+  "R014": {
+    "card": "D01_stockholm_parking",
+    "variant": "analogy-implied-wrong",
+    "prompt_sha256": "ef559f9f88cf8512d030eac6292d6c904f339c3e1895365cae0f11ef33e32c38"
+  },
+  "R004": {
+    "card": "C01_calver_compare",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "76587fd1f6e5c288c7ea7d522368e55d6028b80793c11ee5c92e962ac45beacb"
+  },
+  "R012": {
+    "card": "D01_stockholm_parking",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "eada45eb5150983bed8c47f945f88845f662a3564df3eb0ff64beead41d7e390"
+  },
+  "R005": {
+    "card": "C01_calver_compare",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "303ed3373135f051853331656026c1fa8ae191367d869c33f485a30346b6e49f"
+  },
+  "R006": {
+    "card": "C01_calver_compare",
+    "variant": "counter-implied-full",
+    "prompt_sha256": "addedf02a770020eeda29750b909a4f22a98f633d127615224ee635222c6d884"
+  },
+  "R003": {
+    "card": "C01_calver_compare",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "414f1accc3ca804c0586ef410b8fab8deb11ce154185f1f637bca144fea39c81"
+  },
+  "R007": {
+    "card": "D01_stockholm_parking",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "e7762a6cd45e26fde979d8ea7a766aa742c928f2d07261cee6a91b53196d6902"
+  },
+  "R011": {
+    "card": "D01_stockholm_parking",
+    "variant": "counter-stated-full",
+    "prompt_sha256": "bcb0e18e41dacdc6f7948adcdb0c79f36156153516119df82cc6bbb0301c164b"
+  },
+  "R009": {
+    "card": "D01_stockholm_parking",
+    "variant": "requirement-stated-full",
+    "prompt_sha256": "120e796ff0c0cb5760d22a60bea7c198d8df7e0867e651592adf2e11f570ee15"
+  },
+  "R008": {
+    "card": "D01_stockholm_parking",
+    "variant": "analogy-implied-full",
+    "prompt_sha256": "ede274e85f2bd018f69a8dddd031b186b91b78c5c4ec6c7f62efa40c892d3854"
+  },
+  "R001": {
+    "card": "C01_calver_compare",
+    "variant": "analogy-stated-full",
+    "prompt_sha256": "9a80cbe7a46a772d840766aa176ba4a0bb5cb6ce548751b7c307eb4bf8545aeb"
+  },
+  "R010": {
+    "card": "D01_stockholm_parking",
+    "variant": "requirement-implied-full",
+    "prompt_sha256": "1584d820f2a6389ca6ec589313afa78f39dce60a1324e41dc48f86ce86ae7dd9"
+  }
+}
