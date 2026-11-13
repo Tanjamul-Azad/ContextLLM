@@ -86,6 +86,21 @@ NOTEBOOKS = {
         [SETUP, ["!python -I src/wildchat_mine.py 150 qwen2.5-3b wildchat\n", "!python -I src/wildchat_mine.py 150 qwen2.5-3b oasst\n"],
          ["import json\n", "for s in ['wildchat', 'oasst']: print(s, json.load(open(f'results/E1_{s}/summary.json'))['by_role'])\n"],
          save_cell("results/E1_wildchat", "E1_wildchat"), save_cell("results/E1_oasst", "E1_oasst")]),
+    "07_kill_test_validation.ipynb": nb(
+        "07 Kill test 1: does the failure survive validation?",
+        "Runs the v1 seed cards under four conditions (no example, plain, scope-inference prompt, oracle) and prints the gate inputs. "
+        "Only human-validated cards count; --dev runs on draft cards and is a pipeline check only. Rules: docs/goal-and-kill-tests.md section 2.\n",
+        [SETUP, ["MODEL = 'qwen2.5-7b-4bit'  # open model; for API models add the key as in notebook 03\n",
+                 "!python -I src/run_validation.py $MODEL --dev\n"],
+         save_cell("results/validation_dev", "validation_dev")]),
+    "08_kill_test_probe_patch.ipynb": nb(
+        "08 Kill test 2: role probe and activation patching (development cards only)",
+        "Collects last-token hidden states for every variant, trains a role probe on stated cues and tests it on implied cues "
+        "(with a bag-of-words baseline), types each failure as inference or execution, then patches the stated-variant state into "
+        "failing implied runs, with different-role and random-direction controls. Rules: docs/goal-and-kill-tests.md section 3.\n",
+        [SETUP, ["!python -I src/role_probe_patch.py collect\n", "!python -I src/role_probe_patch.py probe\n"],
+         ["!python -I src/role_probe_patch.py patch --layers 16,20,24,26,28\n", "!python -I src/role_probe_patch.py report\n"],
+         save_cell("results/probe_patch_dev", "probe_patch_dev")]),
 }
 
 OUT.mkdir(exist_ok=True)
